@@ -1,0 +1,16 @@
+// onshape to robot config file
+{
+    // Onshape URL of the assembly
+    "url": "https://https://cad.onshape.com/documents/b36124d5af2122816059b47e/w/a841b9e213fb45aaaf3ccb90/e/7f46e26306718293dd50d8e4",
+    
+    // Output format
+    "output_format": "urdf",
+    "output_filename": "urdf/qbert",
+    "assets_directory": "meshes",
+
+    "robot_name": "qbert",
+    "post_import_commands": [
+        // we could possibly do some postprocessing in here
+        "echo 'Import done'"
+    ]
+}

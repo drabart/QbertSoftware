@@ -1,0 +1,13 @@
+{
+    "configuration": "default",
+    "documentId": "b36124d5af2122816059b47e",
+    "documentMicroversion": "a131ea77bb26ac34556bf0be",
+    "elementId": "12f52e82747f79fc71ebbe4a",
+    "fullConfiguration": "default",
+    "id": "MspZcVSzbLOdYfHaF",
+    "isStandardContent": false,
+    "name": "top extruder disk <1>",
+    "partId": "JHD",
+    "suppressed": false,
+    "type": "Part"
+}
