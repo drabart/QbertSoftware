@@ -2,30 +2,6 @@
 <!-- Generated using onshape-to-robot -->
 <!-- Onshape https://cad.onshape.com/documents/b36124d5af2122816059b47e/w/a841b9e213fb45aaaf3ccb90/e/4491014b8b2b8eb18a8ad47f -->
 <robot name="qbert">
-  <!-- Link linear_gantry__configuration_festo -->
-  <link name="linear_gantry__configuration_festo">
-    <inertial>
-      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 0 0"/>
-      <mass value="0.374514"/>
-      <inertia ixx="0.00442844" ixy="5.42101e-20" ixz="-1.01644e-19" iyy="0.00910556" iyz="-1.71996e-06" izz="0.0129786"/>
-    </inertial>
-    <!-- Part linear_gantry__configuration_festo_parts -->
-    <visual>
-      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/merged/linear_gantry__configuration_festo_visual.stl"/>
-      </geometry>
-      <material name="linear_gantry__configuration_festo_parts_material">
-        <color rgba="0.600252 0.584671 0.539481 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/merged/linear_gantry__configuration_festo_collision.stl"/>
-      </geometry>
-    </collision>
-  </link>
   <!-- Frame Origin (dummy link + fixed joint) -->
   <link name="Origin">
     <origin xyz="0 0 0" rpy="0 -0 0"/>
@@ -37,10 +13,34 @@
   </link>
   <joint name="Origin_frame" type="fixed">
     <origin xyz="-0.145903 0.362264 0.452465" rpy="-1.5708 -0 0"/>
-    <parent link="linear_gantry__configuration_festo"/>
-    <child link="Origin"/>
+    <parent link="Origin"/>
+    <child link="linear_gantry__configuration_festo"/>
     <axis xyz="0 0 0"/>
   </joint>
+  <!-- Link linear_gantry__configuration_festo -->
+  <link name="linear_gantry__configuration_festo">
+    <inertial>
+      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 0 0"/>
+      <mass value="0.374514"/>
+      <inertia ixx="0.00442844" ixy="5.42101e-20" ixz="-1.01644e-19" iyy="0.00910556" iyz="-1.71996e-06" izz="0.0129786"/>
+    </inertial>
+    <!-- Part linear_gantry__configuration_festo_parts -->
+    <visual>
+      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/merged/linear_gantry__configuration_festo_visual.stl"/>
+      </geometry>
+      <material name="linear_gantry__configuration_festo_parts_material">
+        <color rgba="0.600252 0.584671 0.539481 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="package://robot_description/meshes/merged/linear_gantry__configuration_festo_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
   <!-- Link stator -->
   <link name="stator">
     <inertial>
@@ -52,7 +52,7 @@
     <visual>
       <origin xyz="0.27825 -0.14 -0.188372" rpy="-1.5708 -3.6585e-14 -1.5708"/>
       <geometry>
-        <mesh filename="package://meshes/merged/stator_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/stator_visual.stl"/>
       </geometry>
       <material name="stator_parts_material">
         <color rgba="0.634436 0.650486 0.663849 1"/>
@@ -61,7 +61,7 @@
     <collision>
       <origin xyz="0.27825 -0.14 -0.188372" rpy="-1.5708 -3.6585e-14 -1.5708"/>
       <geometry>
-        <mesh filename="package://meshes/merged/stator_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/stator_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -76,7 +76,7 @@
     <visual>
       <origin xyz="4.44089e-16 5.55112e-16 0.0433903" rpy="1.5708 3.92647e-14 -0.00433337"/>
       <geometry>
-        <mesh filename="package://meshes/merged/rot_disc_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/rot_disc_visual.stl"/>
       </geometry>
       <material name="rot_disc_parts_material">
         <color rgba="0.717004 0.740583 0.760258 1"/>
@@ -85,7 +85,7 @@
     <collision>
       <origin xyz="4.44089e-16 5.55112e-16 0.0433903" rpy="1.5708 3.92647e-14 -0.00433337"/>
       <geometry>
-        <mesh filename="package://meshes/merged/rot_disc_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/rot_disc_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -130,7 +130,7 @@
     <visual>
       <origin xyz="-0.00632037 -0.180912 -0.251556" rpy="1.5708 4.0149e-14 0.781065"/>
       <geometry>
-        <mesh filename="package://meshes/merged/tooling_disc_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/tooling_disc_visual.stl"/>
       </geometry>
       <material name="tooling_disc_parts_material">
         <color rgba="0.663519 0.696383 0.72357 1"/>
@@ -139,7 +139,7 @@
     <collision>
       <origin xyz="-0.00632037 -0.180912 -0.251556" rpy="1.5708 4.0149e-14 0.781065"/>
       <geometry>
-        <mesh filename="package://meshes/merged/tooling_disc_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/tooling_disc_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -169,7 +169,7 @@
     <visual>
       <origin xyz="-0.0534015 -0.00511464 -0.0611991" rpy="-7.90508e-12 1.56646 3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/unstrander_2_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/unstrander_2_visual.stl"/>
       </geometry>
       <material name="unstrander_2_parts_material">
         <color rgba="0.641194 0.647338 0.650968 1"/>
@@ -178,7 +178,7 @@
     <collision>
       <origin xyz="-0.0534015 -0.00511464 -0.0611991" rpy="-7.90508e-12 1.56646 3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/unstrander_2_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/unstrander_2_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -224,7 +224,7 @@
     <visual>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="1.54515e-14 -0.00433337 -8.26873e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_visual.stl"/>
       </geometry>
       <material name="compressor_parts_material">
         <color rgba="0.57434 0.605618 0.639126 1"/>
@@ -233,7 +233,7 @@
     <collision>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="1.54515e-14 -0.00433337 -8.26873e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -256,7 +256,7 @@
     <visual>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="3.14159 -1.56646 -3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_2_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_2_visual.stl"/>
       </geometry>
       <material name="compressor_2_parts_material">
         <color rgba="0.57434 0.605618 0.639126 1"/>
@@ -265,7 +265,7 @@
     <collision>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="3.14159 -1.56646 -3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_2_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_2_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -288,7 +288,7 @@
     <visual>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="6.09046e-13 1.56646 -3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_3_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_3_visual.stl"/>
       </geometry>
       <material name="compressor_3_parts_material">
         <color rgba="0.57434 0.605618 0.639126 1"/>
@@ -297,7 +297,7 @@
     <collision>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="6.09046e-13 1.56646 -3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_3_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_3_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -321,7 +321,7 @@
     <visual>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="-3.14159 0.00433337 7.49258e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_4_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_4_visual.stl"/>
       </geometry>
       <material name="compressor_4_parts_material">
         <color rgba="0.57434 0.605618 0.639126 1"/>
@@ -330,7 +330,7 @@
     <collision>
       <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="-3.14159 0.00433337 7.49258e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/compressor_4_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/compressor_4_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -362,7 +362,7 @@
     <visual>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 -7.46793e-14 -3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_visual.stl"/>
       </geometry>
       <material name="solid_gripper_parts_material">
         <color rgba="0.547041 0.58449 0.621749 1"/>
@@ -371,7 +371,7 @@
     <collision>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 -7.46793e-14 -3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -394,7 +394,7 @@
     <visual>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.25851e-15 -1.5708 0"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_2_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_2_visual.stl"/>
       </geometry>
       <material name="solid_gripper_2_parts_material">
         <color rgba="0.547041 0.58449 0.621749 1"/>
@@ -403,7 +403,7 @@
     <collision>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.25851e-15 -1.5708 0"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_2_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_2_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -427,7 +427,7 @@
     <visual>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 1.5708 0"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_3_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_3_visual.stl"/>
       </geometry>
       <material name="solid_gripper_3_parts_material">
         <color rgba="0.547041 0.58449 0.621749 1"/>
@@ -436,7 +436,7 @@
     <collision>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 1.5708 0"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_3_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_3_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -460,7 +460,7 @@
     <visual>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="1.69099e-14 9.1368e-14 3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_4_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_4_visual.stl"/>
       </geometry>
       <material name="solid_gripper_4_parts_material">
         <color rgba="0.547041 0.58449 0.621749 1"/>
@@ -469,7 +469,7 @@
     <collision>
       <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="1.69099e-14 9.1368e-14 3.14159"/>
       <geometry>
-        <mesh filename="package://meshes/merged/solid_gripper_4_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/solid_gripper_4_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -493,7 +493,7 @@
     <visual>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-3.14159 0.785398 5.91473e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_visual.stl"/>
       </geometry>
       <material name="roller_gripper_parts_material">
         <color rgba="0.764746 0.774397 0.770547 1"/>
@@ -502,7 +502,7 @@
     <collision>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-3.14159 0.785398 5.91473e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -525,7 +525,7 @@
     <visual>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="3.14159 -0.785398 5.35124e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_2_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_2_visual.stl"/>
       </geometry>
       <material name="roller_gripper_2_parts_material">
         <color rgba="0.764746 0.774397 0.770547 1"/>
@@ -534,7 +534,7 @@
     <collision>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="3.14159 -0.785398 5.35124e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_2_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_2_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -558,7 +558,7 @@
     <visual>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="5.07794e-14 -0.785398 -5.6309e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_3_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_3_visual.stl"/>
       </geometry>
       <material name="roller_gripper_3_parts_material">
         <color rgba="0.764746 0.774397 0.770547 1"/>
@@ -567,7 +567,7 @@
     <collision>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="5.07794e-14 -0.785398 -5.6309e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_3_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_3_collision.stl"/>
       </geometry>
     </collision>
   </link>
@@ -591,7 +591,7 @@
     <visual>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-2.16831e-14 0.785398 -5.58778e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_4_visual.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_4_visual.stl"/>
       </geometry>
       <material name="roller_gripper_4_parts_material">
         <color rgba="0.764746 0.774397 0.770547 1"/>
@@ -600,7 +600,7 @@
     <collision>
       <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-2.16831e-14 0.785398 -5.58778e-14"/>
       <geometry>
-        <mesh filename="package://meshes/merged/roller_gripper_4_collision.stl"/>
+        <mesh filename="package://robot_description/meshes/merged/roller_gripper_4_collision.stl"/>
       </geometry>
     </collision>
   </link>
