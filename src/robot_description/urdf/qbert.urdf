@@ -5,11 +5,6 @@
   <!-- Frame Origin (dummy link + fixed joint) -->
   <link name="Origin">
     <origin xyz="0 0 0" rpy="0 -0 0"/>
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="1e-9"/>
-      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
-    </inertial>
   </link>
   <joint name="Origin_frame" type="fixed">
     <origin xyz="-0.145903 0.362264 0.452465" rpy="-1.5708 -0 0"/>
