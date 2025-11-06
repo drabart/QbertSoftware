@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /RobotModel1/Description Topic1
       Splitter Ratio: 0.5
     Tree Height: 739
   - Class: rviz_common/Selection
@@ -51,14 +52,14 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
-      Description File: /home/drabart/Documents/QbertSoftware/src/robot_description/urdf/qbert.urdf
-      Description Source: File
+      Description File: ""
+      Description Source: Topic
       Description Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: ""
+        Value: /robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -66,111 +67,6 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        Origin:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        axe:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_left:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_right:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        compressor:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        compressor_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        compressor_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        compressor_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        linear_gantry__configuration_festo:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        roller_gripper:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        roller_gripper_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        roller_gripper_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        roller_gripper_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rot_disc:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        solid_gripper:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        solid_gripper_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        solid_gripper_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        solid_gripper_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        stator:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tooling_disc:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        unstrander:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        unstrander_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -225,7 +121,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.6457011699676514
+      Distance: 12.859976768493652
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -240,10 +136,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.18539854884147644
+      Pitch: 0.5653982162475586
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.1404043585062027
+      Yaw: 4.453549861907959
     Saved: ~
 Window Geometry:
   Displays:
