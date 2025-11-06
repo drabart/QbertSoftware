@@ -1,12 +1,12 @@
 {
     "configuration": "default",
     "documentId": "b36124d5af2122816059b47e",
-    "documentMicroversion": "a131ea77bb26ac34556bf0be",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
     "elementId": "1d52c5c5d62d73ed325cad17",
     "fullConfiguration": "default",
-    "id": "MDCAg0GAy8gBgB7sn",
+    "id": "MrbGGu97GM0kOMXx3",
     "isStandardContent": false,
-    "name": "bearing pt1 <1>",
+    "name": "bearing pt1 <5>",
     "partId": "JHD",
     "suppressed": false,
     "type": "Part"

@@ -1,13 +1,13 @@
 {
     "configuration": "default",
     "documentId": "b36124d5af2122816059b47e",
-    "documentMicroversion": "a131ea77bb26ac34556bf0be",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
     "elementId": "38aaffcb920b6852bfeffbaf",
     "fullConfiguration": "default",
     "id": "IOZYhNeFkjqIXkkEP",
     "isStandardContent": false,
     "name": "Cavolab sidepanel <4>",
-    "partId": "RWHP",
+    "partId": "RYHP",
     "suppressed": false,
     "type": "Part"
 }

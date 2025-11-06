@@ -1,13 +1,13 @@
 {
     "configuration": "default",
     "documentId": "b36124d5af2122816059b47e",
-    "documentMicroversion": "a131ea77bb26ac34556bf0be",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
     "elementId": "38aaffcb920b6852bfeffbaf",
     "fullConfiguration": "default",
     "id": "IPXzzKK4ODg5tPRMH",
     "isStandardContent": false,
     "name": "Motor Mounting Plate <1>",
-    "partId": "RWID",
+    "partId": "R8HD",
     "suppressed": false,
     "type": "Part"
 }

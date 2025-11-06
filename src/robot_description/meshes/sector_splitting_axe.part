@@ -1,13 +1,13 @@
 {
     "configuration": "default",
     "documentId": "b36124d5af2122816059b47e",
-    "documentMicroversion": "a131ea77bb26ac34556bf0be",
-    "elementId": "12c4bf7a245b663bb46d0ef2",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
+    "elementId": "517259ed9268725364728ed4",
     "fullConfiguration": "default",
-    "id": "MhM28B+f7YKu346zq",
+    "id": "MbOIiN9iHlMoeFYKZ",
     "isStandardContent": false,
     "name": "sector splitting axe <1>",
-    "partId": "JKD",
+    "partId": "JID",
     "suppressed": false,
     "type": "Part"
 }

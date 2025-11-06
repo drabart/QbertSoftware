@@ -1,12 +1,12 @@
 {
     "configuration": "default",
     "documentId": "b36124d5af2122816059b47e",
-    "documentMicroversion": "a131ea77bb26ac34556bf0be",
-    "elementId": "ca2882e7963a0f390d92db15",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
+    "elementId": "4b8c40c6f8aba63ecd76a5f3",
     "fullConfiguration": "default",
-    "id": "M0ANES3bctDkrp++X",
+    "id": "M8SGso7eRKwUFz00g",
     "isStandardContent": false,
-    "name": "gripper cup rubber <1>",
+    "name": "gripper cup rubber <2>",
     "partId": "JMD",
     "suppressed": false,
     "type": "Part"

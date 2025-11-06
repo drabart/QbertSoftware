@@ -1,13 +1,13 @@
 {
     "configuration": "default",
     "documentId": "b36124d5af2122816059b47e",
-    "documentMicroversion": "a131ea77bb26ac34556bf0be",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
     "elementId": "38aaffcb920b6852bfeffbaf",
     "fullConfiguration": "default",
     "id": "I6f3ltBp4BY7Er7wF",
     "isStandardContent": false,
     "name": "Cavolab sidepanel <1>",
-    "partId": "RVHL",
+    "partId": "RXHL",
     "suppressed": false,
     "type": "Part"
 }

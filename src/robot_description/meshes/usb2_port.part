@@ -1,0 +1,13 @@
+{
+    "configuration": "default",
+    "documentId": "b36124d5af2122816059b47e",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
+    "elementId": "ac13963d84e1b5b83187a2a4",
+    "fullConfiguration": "default",
+    "id": "ISJRx9g8tBRKzsWBz",
+    "isStandardContent": false,
+    "name": "usb2-port <3>",
+    "partId": "KF7F",
+    "suppressed": false,
+    "type": "Part"
+}

@@ -1,13 +1,13 @@
 {
     "configuration": "default",
     "documentId": "b36124d5af2122816059b47e",
-    "documentMicroversion": "a131ea77bb26ac34556bf0be",
-    "elementId": "10945b48f4ce402e3d72dbcd",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
+    "elementId": "ac13963d84e1b5b83187a2a4",
     "fullConfiguration": "default",
-    "id": "IMGTMwuPqHLbR7S4j",
+    "id": "IrgmxtsizaK+EV9it",
     "isStandardContent": false,
-    "name": "switch <4>",
-    "partId": "JFL",
+    "name": "switch <6>",
+    "partId": "KFrF",
     "suppressed": false,
     "type": "Part"
 }

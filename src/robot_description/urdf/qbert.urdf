@@ -1,2349 +1,624 @@
 <?xml version="1.0" ?>
 <!-- Generated using onshape-to-robot -->
-<!-- Onshape https://https://cad.onshape.com/documents/b36124d5af2122816059b47e/w/a841b9e213fb45aaaf3ccb90/e/7f46e26306718293dd50d8e4 -->
+<!-- Onshape https://cad.onshape.com/documents/b36124d5af2122816059b47e/w/a841b9e213fb45aaaf3ccb90/e/4491014b8b2b8eb18a8ad47f -->
 <robot name="qbert">
   <!-- Link linear_gantry__configuration_festo -->
   <link name="linear_gantry__configuration_festo">
     <inertial>
-      <origin xyz="-0.0709033 -0.0647361 0.0998444" rpy="0 0 0"/>
-      <mass value="1.22887"/>
-      <inertia ixx="0.0278821" ixy="-1.30104e-18" ixz="5.2516e-20" iyy="0.0422538" iyz="3.38813e-21" izz="0.0680789"/>
+      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 0 0"/>
+      <mass value="0.374514"/>
+      <inertia ixx="0.00442844" ixy="5.42101e-20" ixz="-1.01644e-19" iyy="0.00910556" iyz="-1.71996e-06" izz="0.0129786"/>
     </inertial>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e -->
+    <!-- Part linear_gantry__configuration_festo_parts -->
     <visual>
-      <origin xyz="-0.414203 0.345264 0.205515" rpy="-1.5708 -0 1.5708"/>
+      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 -0 0"/>
       <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
+        <mesh filename="package://meshes/merged/linear_gantry__configuration_festo_visual.stl"/>
       </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
+      <material name="linear_gantry__configuration_festo_parts_material">
+        <color rgba="0.600252 0.584671 0.539481 1"/>
       </material>
     </visual>
     <collision>
-      <origin xyz="-0.414203 0.345264 0.205515" rpy="-1.5708 -0 1.5708"/>
+      <origin xyz="-0.145903 -0.0648003 0.0860613" rpy="0 -0 0"/>
       <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 82100_10_2410240 -->
-    <visual>
-      <origin xyz="-0.296903 -0.403769 -0.040185" rpy="-6.97105e-47 4.1156e-16 1.69381e-31"/>
-      <geometry>
-        <mesh filename="package://meshes/82100_10_2410240.stl"/>
-      </geometry>
-      <material name="82100_10_2410240_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.296903 -0.403769 -0.040185" rpy="-6.97105e-47 4.1156e-16 1.69381e-31"/>
-      <geometry>
-        <mesh filename="package://meshes/82100_10_2410240.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_2 -->
-    <visual>
-      <origin xyz="-0.414203 0.345264 -0.044485" rpy="-1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_2_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.414203 0.345264 -0.044485" rpy="-1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_3 -->
-    <visual>
-      <origin xyz="0.272397 0.345264 0.205515" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_3_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.272397 0.345264 0.205515" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_4 -->
-    <visual>
-      <origin xyz="0.272397 0.345264 -0.044485" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_4_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.272397 0.345264 -0.044485" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_5 -->
-    <visual>
-      <origin xyz="-0.414203 -0.474736 0.205515" rpy="-1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_5_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.414203 -0.474736 0.205515" rpy="-1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part dnr274_100 -->
-    <visual>
-      <origin xyz="0.159097 -0.338069 -0.053485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/dnr274_100.stl"/>
-      </geometry>
-      <material name="dnr274_100_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.159097 -0.338069 -0.053485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/dnr274_100.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_6 -->
-    <visual>
-      <origin xyz="0.272397 -0.474736 0.205515" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_6_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.272397 -0.474736 0.205515" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part atl_v2display -->
-    <visual>
-      <origin xyz="-0.447897 -0.0647361 0.153158" rpy="0.523599 4.16334e-17 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/atl_v2display.stl"/>
-      </geometry>
-      <material name="atl_v2display_material">
-        <color rgba="0.917647 0.917647 0.917647 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.447897 -0.0647361 0.153158" rpy="0.523599 4.16334e-17 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/atl_v2display.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_7 -->
-    <visual>
-      <origin xyz="-0.414203 -0.474736 -0.044485" rpy="-1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_7_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.414203 -0.474736 -0.044485" rpy="-1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1 -->
-    <visual>
-      <origin xyz="-0.0709033 0.390264 0.203515" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1.stl"/>
-      </geometry>
-      <material name="part_1_material">
-        <color rgba="0.701961 0.682353 0.623529 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0709033 0.390264 0.203515" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_8 -->
-    <visual>
-      <origin xyz="0.272397 -0.474736 -0.044485" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-      <material name="hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e_8_material">
-        <color rgba="0.603922 0.647059 0.686275 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.272397 -0.474736 -0.044485" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/hex_socket_head_cap_screw_m4x0_70_x_20__832e47d784177ea3f1dabbaab534416e.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part badf20_2 -->
-    <visual>
-      <origin xyz="-0.0709033 0.360264 0.203515" rpy="1.5708 1.5708 0"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_2.stl"/>
-      </geometry>
-      <material name="badf20_2_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0709033 0.360264 0.203515" rpy="1.5708 1.5708 0"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part badf20_1 -->
-    <visual>
-      <origin xyz="-0.0709033 0.360264 0.203515" rpy="0 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_1.stl"/>
-      </geometry>
-      <material name="badf20_1_material">
-        <color rgba="0.25098 0.501961 0.501961 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0709033 0.360264 0.203515" rpy="0 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_1.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 82100_10_2410240_2 -->
-    <visual>
-      <origin xyz="-0.221903 -0.403769 -0.040185" rpy="-6.97105e-47 4.1156e-16 1.69381e-31"/>
-      <geometry>
-        <mesh filename="package://meshes/82100_10_2410240.stl"/>
-      </geometry>
-      <material name="82100_10_2410240_2_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.221903 -0.403769 -0.040185" rpy="-6.97105e-47 4.1156e-16 1.69381e-31"/>
-      <geometry>
-        <mesh filename="package://meshes/82100_10_2410240.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 82100_10_2410240_3 -->
-    <visual>
-      <origin xyz="-0.146903 -0.403769 -0.040185" rpy="-6.97105e-47 4.1156e-16 1.69381e-31"/>
-      <geometry>
-        <mesh filename="package://meshes/82100_10_2410240.stl"/>
-      </geometry>
-      <material name="82100_10_2410240_3_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.146903 -0.403769 -0.040185" rpy="-6.97105e-47 4.1156e-16 1.69381e-31"/>
-      <geometry>
-        <mesh filename="package://meshes/82100_10_2410240.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 1509036_emca_ec_67_m_1te__dio______mot -->
-    <visual>
-      <origin xyz="-0.0709033 0.360264 0.026515" rpy="1.5708 -1.0842e-16 3.14159"/>
-      <geometry>
-        <mesh filename="package://meshes/1509036_emca_ec_67_m_1te__dio______mot.stl"/>
-      </geometry>
-      <material name="1509036_emca_ec_67_m_1te__dio______mot_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0709033 0.360264 0.026515" rpy="1.5708 -1.0842e-16 3.14159"/>
-      <geometry>
-        <mesh filename="package://meshes/1509036_emca_ec_67_m_1te__dio______mot.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 1720828_emca____part -->
-    <visual>
-      <origin xyz="-0.0409393 0.256915 0.084615" rpy="1.5708 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-      <material name="1720828_emca____part_material">
-        <color rgba="0.309804 0.309804 0.309804 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0409393 0.256915 0.084615" rpy="1.5708 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 1720828_emca____part_2 -->
-    <visual>
-      <origin xyz="-0.0409393 0.240715 0.084615" rpy="1.5708 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-      <material name="1720828_emca____part_2_material">
-        <color rgba="0.309804 0.309804 0.309804 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0409393 0.240715 0.084615" rpy="1.5708 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 2038641_emca____part -->
-    <visual>
-      <origin xyz="-0.100867 0.273115 0.084615" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/2038641_emca____part.stl"/>
-      </geometry>
-      <material name="2038641_emca____part_material">
-        <color rgba="0.309804 0.309804 0.309804 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.100867 0.273115 0.084615" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/2038641_emca____part.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 2038641_emca____part_2 -->
-    <visual>
-      <origin xyz="-0.0409393 0.273115 0.084615" rpy="1.5708 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/2038641_emca____part.stl"/>
-      </geometry>
-      <material name="2038641_emca____part_2_material">
-        <color rgba="0.309804 0.309804 0.309804 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0409393 0.273115 0.084615" rpy="1.5708 -0 -1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/2038641_emca____part.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 1720828_emca____part_3 -->
-    <visual>
-      <origin xyz="-0.100867 0.240715 0.084615" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-      <material name="1720828_emca____part_3_material">
-        <color rgba="0.309804 0.309804 0.309804 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.100867 0.240715 0.084615" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 1720828_emca____part_4 -->
-    <visual>
-      <origin xyz="-0.100867 0.256915 0.084615" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-      <material name="1720828_emca____part_4_material">
-        <color rgba="0.309804 0.309804 0.309804 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.100867 0.256915 0.084615" rpy="1.5708 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/1720828_emca____part.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part 1509036_emca____part -->
-    <visual>
-      <origin xyz="-0.0709033 0.257389 0.092615" rpy="1.5708 -1.0842e-16 3.14159"/>
-      <geometry>
-        <mesh filename="package://meshes/1509036_emca____part.stl"/>
-      </geometry>
-      <material name="1509036_emca____part_material">
-        <color rgba="0.309804 0.309804 0.309804 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0709033 0.257389 0.092615" rpy="1.5708 -1.0842e-16 3.14159"/>
-      <geometry>
-        <mesh filename="package://meshes/1509036_emca____part.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part badf20_2_2 -->
-    <visual>
-      <origin xyz="-0.0709033 -0.489736 0.203515" rpy="-1.5708 -1.5708 0"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_2.stl"/>
-      </geometry>
-      <material name="badf20_2_2_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0709033 -0.489736 0.203515" rpy="-1.5708 -1.5708 0"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part badf20_1_2 -->
-    <visual>
-      <origin xyz="-0.0709033 -0.489736 0.203515" rpy="3.14159 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_1.stl"/>
-      </geometry>
-      <material name="badf20_1_2_material">
-        <color rgba="0.25098 0.501961 0.501961 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.0709033 -0.489736 0.203515" rpy="3.14159 -0 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/badf20_1.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket.stl"/>
-      </geometry>
-      <material name="bracket_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_13 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_13.stl"/>
-      </geometry>
-      <material name="part_13_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_13.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_2 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__2.stl"/>
-      </geometry>
-      <material name="bracket_2_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_3 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__3.stl"/>
-      </geometry>
-      <material name="bracket_3_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__3.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part connector_sidepanel -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel.stl"/>
-      </geometry>
-      <material name="connector_sidepanel_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_8 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_8.stl"/>
-      </geometry>
-      <material name="part_8_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_8.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_7 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_7.stl"/>
-      </geometry>
-      <material name="part_7_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_7.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_2 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__2.stl"/>
-      </geometry>
-      <material name="part_1_2_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_90 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_90.stl"/>
-      </geometry>
-      <material name="part_90_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_90.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_4 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__4.stl"/>
-      </geometry>
-      <material name="bracket_4_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__4.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part cavolab_sidepanel -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel.stl"/>
-      </geometry>
-      <material name="cavolab_sidepanel_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_5 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__5.stl"/>
-      </geometry>
-      <material name="bracket_5_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__5.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_64 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_64.stl"/>
-      </geometry>
-      <material name="part_64_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_64.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_92 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_92.stl"/>
-      </geometry>
-      <material name="part_92_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_92.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_6 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__6.stl"/>
-      </geometry>
-      <material name="bracket_6_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__6.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part connector_sidepanel_2 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel__2.stl"/>
-      </geometry>
-      <material name="connector_sidepanel_2_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel__2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_11 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_11.stl"/>
-      </geometry>
-      <material name="part_11_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_11.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_7 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__7.stl"/>
-      </geometry>
-      <material name="bracket_7_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__7.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_63 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_63.stl"/>
-      </geometry>
-      <material name="part_63_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_63.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_8 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__8.stl"/>
-      </geometry>
-      <material name="bracket_8_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__8.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_24 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_24.stl"/>
-      </geometry>
-      <material name="part_24_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_24.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_95 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_95.stl"/>
-      </geometry>
-      <material name="part_95_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_95.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_23 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_23.stl"/>
-      </geometry>
-      <material name="part_23_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_23.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_3 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__3.stl"/>
-      </geometry>
-      <material name="part_1_3_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__3.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part sbr_rail_2 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/sbr_rail_2.stl"/>
-      </geometry>
-      <material name="sbr_rail_2_material">
-        <color rgba="0.917647 0.917647 0.917647 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/sbr_rail_2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_9 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__9.stl"/>
-      </geometry>
-      <material name="bracket_9_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__9.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part connector_sidepanel_3 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel__3.stl"/>
-      </geometry>
-      <material name="connector_sidepanel_3_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel__3.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_94 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_94.stl"/>
-      </geometry>
-      <material name="part_94_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_94.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_4 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__4.stl"/>
-      </geometry>
-      <material name="part_1_4_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__4.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_89 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_89.stl"/>
-      </geometry>
-      <material name="part_89_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_89.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_62 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_62.stl"/>
-      </geometry>
-      <material name="part_62_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_62.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_10 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__10.stl"/>
-      </geometry>
-      <material name="bracket_10_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__10.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_15 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_15.stl"/>
-      </geometry>
-      <material name="part_15_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_15.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_5 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__5.stl"/>
-      </geometry>
-      <material name="part_1_5_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__5.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_14 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_14.stl"/>
-      </geometry>
-      <material name="part_14_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_14.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_11 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__11.stl"/>
-      </geometry>
-      <material name="bracket_11_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__11.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bottom_plate -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bottom_plate.stl"/>
-      </geometry>
-      <material name="bottom_plate_material">
-        <color rgba="0.647059 0.647059 0.647059 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bottom_plate.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part cavolab_sidepanel_2 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel__2.stl"/>
-      </geometry>
-      <material name="cavolab_sidepanel_2_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel__2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part motor_mounting_plate -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/motor_mounting_plate.stl"/>
-      </geometry>
-      <material name="motor_mounting_plate_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/motor_mounting_plate.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_12 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__12.stl"/>
-      </geometry>
-      <material name="bracket_12_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__12.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_13 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__13.stl"/>
-      </geometry>
-      <material name="bracket_13_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__13.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_14 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__14.stl"/>
-      </geometry>
-      <material name="bracket_14_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__14.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_15 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__15.stl"/>
-      </geometry>
-      <material name="bracket_15_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__15.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_16 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__16.stl"/>
-      </geometry>
-      <material name="bracket_16_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__16.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_4 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_4.stl"/>
-      </geometry>
-      <material name="part_4_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_4.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part cavolab_sidepanel_3 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel__3.stl"/>
-      </geometry>
-      <material name="cavolab_sidepanel_3_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel__3.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_19 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_19.stl"/>
-      </geometry>
-      <material name="part_19_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_19.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_20 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_20.stl"/>
-      </geometry>
-      <material name="part_20_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_20.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_17 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__17.stl"/>
-      </geometry>
-      <material name="bracket_17_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__17.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_93 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_93.stl"/>
-      </geometry>
-      <material name="part_93_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_93.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_18 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__18.stl"/>
-      </geometry>
-      <material name="bracket_18_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__18.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_19 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__19.stl"/>
-      </geometry>
-      <material name="bracket_19_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__19.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_20 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__20.stl"/>
-      </geometry>
-      <material name="bracket_20_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__20.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_21 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__21.stl"/>
-      </geometry>
-      <material name="bracket_21_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__21.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_6 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__6.stl"/>
-      </geometry>
-      <material name="part_1_6_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__6.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part connector_sidepanel_4 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel__4.stl"/>
-      </geometry>
-      <material name="connector_sidepanel_4_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/connector_sidepanel__4.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_5 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_5.stl"/>
-      </geometry>
-      <material name="part_5_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_5.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_22 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__22.stl"/>
-      </geometry>
-      <material name="bracket_22_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__22.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_9 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_9.stl"/>
-      </geometry>
-      <material name="part_9_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_9.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_23 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__23.stl"/>
-      </geometry>
-      <material name="bracket_23_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__23.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_27 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_27.stl"/>
-      </geometry>
-      <material name="part_27_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_27.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_6 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_6.stl"/>
-      </geometry>
-      <material name="part_6_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_6.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_26 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_26.stl"/>
-      </geometry>
-      <material name="part_26_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_26.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_25 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_25.stl"/>
-      </geometry>
-      <material name="part_25_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_25.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_67 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_67.stl"/>
-      </geometry>
-      <material name="part_67_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_67.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_24 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__24.stl"/>
-      </geometry>
-      <material name="bracket_24_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__24.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_7 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__7.stl"/>
-      </geometry>
-      <material name="part_1_7_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__7.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_25 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__25.stl"/>
-      </geometry>
-      <material name="bracket_25_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__25.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_26 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__26.stl"/>
-      </geometry>
-      <material name="bracket_26_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__26.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_27 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__27.stl"/>
-      </geometry>
-      <material name="bracket_27_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__27.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_65 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_65.stl"/>
-      </geometry>
-      <material name="part_65_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_65.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_28 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__28.stl"/>
-      </geometry>
-      <material name="bracket_28_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__28.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_3 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_3.stl"/>
-      </geometry>
-      <material name="part_3_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_3.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_29 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__29.stl"/>
-      </geometry>
-      <material name="bracket_29_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__29.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_30 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__30.stl"/>
-      </geometry>
-      <material name="bracket_30_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__30.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_31 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__31.stl"/>
-      </geometry>
-      <material name="bracket_31_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__31.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_8 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__8.stl"/>
-      </geometry>
-      <material name="part_1_8_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__8.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_32 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__32.stl"/>
-      </geometry>
-      <material name="bracket_32_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__32.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_1_9 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__9.stl"/>
-      </geometry>
-      <material name="part_1_9_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_1__9.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_69 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_69.stl"/>
-      </geometry>
-      <material name="part_69_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_69.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_16 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_16.stl"/>
-      </geometry>
-      <material name="part_16_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_16.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_33 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__33.stl"/>
-      </geometry>
-      <material name="bracket_33_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__33.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_34 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__34.stl"/>
-      </geometry>
-      <material name="bracket_34_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__34.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bearing_mounting_plate -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bearing_mounting_plate.stl"/>
-      </geometry>
-      <material name="bearing_mounting_plate_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bearing_mounting_plate.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part cavolab_sidepanel_4 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel__4.stl"/>
-      </geometry>
-      <material name="cavolab_sidepanel_4_material">
-        <color rgba="0.231373 0.380392 0.705882 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/cavolab_sidepanel__4.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_35 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__35.stl"/>
-      </geometry>
-      <material name="bracket_35_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__35.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_36 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__36.stl"/>
-      </geometry>
-      <material name="bracket_36_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__36.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_17 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_17.stl"/>
-      </geometry>
-      <material name="part_17_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_17.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_37 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__37.stl"/>
-      </geometry>
-      <material name="bracket_37_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__37.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part sbr_rail_1 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/sbr_rail_1.stl"/>
-      </geometry>
-      <material name="sbr_rail_1_material">
-        <color rgba="0.917647 0.917647 0.917647 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/sbr_rail_1.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_91 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_91.stl"/>
-      </geometry>
-      <material name="part_91_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_91.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_68 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_68.stl"/>
-      </geometry>
-      <material name="part_68_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_68.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_66 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_66.stl"/>
-      </geometry>
-      <material name="part_66_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_66.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_38 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__38.stl"/>
-      </geometry>
-      <material name="bracket_38_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__38.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_39 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__39.stl"/>
-      </geometry>
-      <material name="bracket_39_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__39.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_10 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_10.stl"/>
-      </geometry>
-      <material name="part_10_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_10.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_40 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__40.stl"/>
-      </geometry>
-      <material name="bracket_40_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__40.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_41 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__41.stl"/>
-      </geometry>
-      <material name="bracket_41_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__41.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_42 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__42.stl"/>
-      </geometry>
-      <material name="bracket_42_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__42.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_2 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_2.stl"/>
-      </geometry>
-      <material name="part_2_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part part_88 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_88.stl"/>
-      </geometry>
-      <material name="part_88_material">
-        <color rgba="0.713725 0.760784 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/part_88.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_43 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__43.stl"/>
-      </geometry>
-      <material name="bracket_43_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__43.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part bracket_44 -->
-    <visual>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__44.stl"/>
-      </geometry>
-      <material name="bracket_44_material">
-        <color rgba="0.6 0.580392 0.529412 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.395903 -0.0647361 -0.083485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/bracket__44.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part dnr274_100_2 -->
-    <visual>
-      <origin xyz="0.159097 -0.0380695 -0.053485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/dnr274_100.stl"/>
-      </geometry>
-      <material name="dnr274_100_2_material">
-        <color rgba="0.690196 0.690196 0.690196 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.159097 -0.0380695 -0.053485" rpy="0 -0 0"/>
-      <geometry>
-        <mesh filename="package://meshes/dnr274_100.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part cpu_un_v1 -->
-    <visual>
-      <origin xyz="-0.310924 -0.0420695 -0.054785" rpy="1.41409e-16 -1.83429e-16 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/cpu_un_v1.stl"/>
-      </geometry>
-      <material name="cpu_un_v1_material">
-        <color rgba="0.627451 0.627451 0.627451 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="-0.310924 -0.0420695 -0.054785" rpy="1.41409e-16 -1.83429e-16 1.5708"/>
-      <geometry>
-        <mesh filename="package://meshes/cpu_un_v1.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part case -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/case.stl"/>
-      </geometry>
-      <material name="case_material">
-        <color rgba="0.0980392 0.0980392 0.0980392 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/case.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part switch -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/switch.stl"/>
-      </geometry>
-      <material name="switch_material">
-        <color rgba="0.768627 0.207843 0.152941 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/switch.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks.stl"/>
-      </geometry>
-      <material name="jacks_material">
-        <color rgba="0.627451 0.627451 0.627451 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_2 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__2.stl"/>
-      </geometry>
-      <material name="jacks_2_material">
-        <color rgba="0.960784 0.960784 0.964706 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_3 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__3.stl"/>
-      </geometry>
-      <material name="jacks_3_material">
-        <color rgba="0.960784 0.960784 0.964706 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__3.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_4 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__4.stl"/>
-      </geometry>
-      <material name="jacks_4_material">
-        <color rgba="0.627451 0.627451 0.627451 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__4.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_5 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__5.stl"/>
-      </geometry>
-      <material name="jacks_5_material">
-        <color rgba="0.960784 0.960784 0.964706 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__5.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part switch_2 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/switch__2.stl"/>
-      </geometry>
-      <material name="switch_2_material">
-        <color rgba="0.964706 0.964706 0.952941 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/switch__2.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_6 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__6.stl"/>
-      </geometry>
-      <material name="jacks_6_material">
-        <color rgba="0.627451 0.627451 0.627451 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__6.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_7 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__7.stl"/>
-      </geometry>
-      <material name="jacks_7_material">
-        <color rgba="0.960784 0.960784 0.964706 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__7.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_8 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__8.stl"/>
-      </geometry>
-      <material name="jacks_8_material">
-        <color rgba="0.960784 0.960784 0.964706 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__8.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part switch_3 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/switch__3.stl"/>
-      </geometry>
-      <material name="switch_3_material">
-        <color rgba="0.964706 0.964706 0.952941 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/switch__3.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_9 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__9.stl"/>
-      </geometry>
-      <material name="jacks_9_material">
-        <color rgba="0.960784 0.960784 0.964706 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__9.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_10 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__10.stl"/>
-      </geometry>
-      <material name="jacks_10_material">
-        <color rgba="0.960784 0.960784 0.964706 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__10.stl"/>
-      </geometry>
-    </collision>
-    <!-- Part jacks_11 -->
-    <visual>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__11.stl"/>
-      </geometry>
-      <material name="jacks_11_material">
-        <color rgba="0.627451 0.627451 0.627451 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0.200347 -0.499736 0.00841498" rpy="1.5708 -0 1.0289e-15"/>
-      <geometry>
-        <mesh filename="package://meshes/jacks__11.stl"/>
+        <mesh filename="package://meshes/merged/linear_gantry__configuration_festo_collision.stl"/>
       </geometry>
     </collision>
   </link>
+  <!-- Frame Origin (dummy link + fixed joint) -->
+  <link name="Origin">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="Origin_frame" type="fixed">
+    <origin xyz="-0.145903 0.362264 0.452465" rpy="-1.5708 -0 0"/>
+    <parent link="linear_gantry__configuration_festo"/>
+    <child link="Origin"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link stator -->
+  <link name="stator">
+    <inertial>
+      <origin xyz="0.27825 -0.14 -0.188372" rpy="0 0 0"/>
+      <mass value="4.59951"/>
+      <inertia ixx="0.0883615" ixy="-3.22064e-16" ixz="-2.7663e-16" iyy="0.0883615" iyz="-1.57033e-17" izz="0.154432"/>
+    </inertial>
+    <!-- Part stator_parts -->
+    <visual>
+      <origin xyz="0.27825 -0.14 -0.188372" rpy="-1.5708 -3.6585e-14 -1.5708"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/stator_visual.stl"/>
+      </geometry>
+      <material name="stator_parts_material">
+        <color rgba="0.634436 0.650486 0.663849 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.27825 -0.14 -0.188372" rpy="-1.5708 -3.6585e-14 -1.5708"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/stator_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link rot_disc -->
+  <link name="rot_disc">
+    <inertial>
+      <origin xyz="3.76583e-16 4.20947e-16 0.0433903" rpy="0 0 0"/>
+      <mass value="10.8297"/>
+      <inertia ixx="0.220879" ixy="-0.0478953" ixz="-2.74674e-16" iyy="0.206073" iyz="-2.67905e-16" izz="0.337874"/>
+    </inertial>
+    <!-- Part rot_disc_parts -->
+    <visual>
+      <origin xyz="4.44089e-16 5.55112e-16 0.0433903" rpy="1.5708 3.92647e-14 -0.00433337"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/rot_disc_visual.stl"/>
+      </geometry>
+      <material name="rot_disc_parts_material">
+        <color rgba="0.717004 0.740583 0.760258 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="4.44089e-16 5.55112e-16 0.0433903" rpy="1.5708 3.92647e-14 -0.00433337"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/rot_disc_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Frame camera_right (dummy link + fixed joint) -->
+  <link name="camera_right">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="camera_right_frame" type="fixed">
+    <origin xyz="-0.0325 -0.24505 -0.0825" rpy="-1.5708 -7.38925e-20 1.68627e-16"/>
+    <parent link="rot_disc"/>
+    <child link="camera_right"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Frame camera_left (dummy link + fixed joint) -->
+  <link name="camera_left">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="camera_left_frame" type="fixed">
+    <origin xyz="0.0175 -0.24505 -0.0825" rpy="-1.5708 -7.38925e-20 1.68627e-16"/>
+    <parent link="rot_disc"/>
+    <child link="camera_left"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link tooling_disc -->
+  <link name="tooling_disc">
+    <inertial>
+      <origin xyz="-0.00632037 -0.180912 -0.251556" rpy="0 0 0"/>
+      <mass value="7.26529"/>
+      <inertia ixx="0.207571" ixy="-0.00471527" ixz="-0.00286734" iyy="0.168334" iyz="-0.00279748" izz="0.202238"/>
+    </inertial>
+    <!-- Part tooling_disc_parts -->
+    <visual>
+      <origin xyz="-0.00632037 -0.180912 -0.251556" rpy="1.5708 4.0149e-14 0.781065"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/tooling_disc_visual.stl"/>
+      </geometry>
+      <material name="tooling_disc_parts_material">
+        <color rgba="0.663519 0.696383 0.72357 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.00632037 -0.180912 -0.251556" rpy="1.5708 4.0149e-14 0.781065"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/tooling_disc_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Frame axe (dummy link + fixed joint) -->
+  <link name="axe">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="axe_frame" type="fixed">
+    <origin xyz="-1.02696e-15 -0.17475 -0.323467" rpy="4.59948e-16 8.65217e-16 -1.5708"/>
+    <parent link="tooling_disc"/>
+    <child link="axe"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Link unstrander_2 -->
+  <link name="unstrander_2">
+    <inertial>
+      <origin xyz="-0.0534015 -0.00511464 -0.0611991" rpy="0 0 0"/>
+      <mass value="0.0687236"/>
+      <inertia ixx="5.72962e-06" ixy="6.89149e-14" ixz="-7.51891e-14" iyy="0.000107346" iyz="-7.02239e-08" izz="0.000109963"/>
+    </inertial>
+    <!-- Part unstrander_2_parts -->
+    <visual>
+      <origin xyz="-0.0534015 -0.00511464 -0.0611991" rpy="-7.90508e-12 1.56646 3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/unstrander_2_visual.stl"/>
+      </geometry>
+      <material name="unstrander_2_parts_material">
+        <color rgba="0.641194 0.647338 0.650968 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0534015 -0.00511464 -0.0611991" rpy="-7.90508e-12 1.56646 3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/unstrander_2_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Frame unstrander (dummy link + fixed joint) -->
+  <link name="unstrander">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="unstrander_frame" type="fixed">
+    <origin xyz="-0.0534015 -0.0232676 -0.0560611" rpy="1.5708 -1.5708 0"/>
+    <parent link="unstrander_2"/>
+    <child link="unstrander"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <!-- Joint from tooling_disc to unstrander_2 -->
+  <joint name="J4_unstrander" type="prismatic">
+    <origin xyz="-0.131984 -0.231215 -0.298562" rpy="-1.5708 4.06796e-16 2.35619"/>
+    <parent link="tooling_disc"/>
+    <child link="unstrander_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="0.0"/>
+  </joint>
+  <!-- Joint from rot_disc to tooling_disc -->
+  <joint name="joint_J3_A_tool_disc" type="prismatic">
+    <origin xyz="0.123567 0.123567 0.1805" rpy="1.25607e-15 -1.12739e-23 -0.785398"/>
+    <parent link="rot_disc"/>
+    <child link="tooling_disc"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.2" upper="0"/>
+  </joint>
+  <!-- Link compressor -->
+  <link name="compressor">
+    <inertial>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="0 0 0"/>
+      <mass value="0.601925"/>
+      <inertia ixx="0.000939728" ixy="1.50607e-05" ixz="-5.97162e-11" iyy="0.00119535" iyz="-1.20544e-07" izz="0.000454779"/>
+    </inertial>
+    <!-- Part compressor_parts -->
+    <visual>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="1.54515e-14 -0.00433337 -8.26873e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_visual.stl"/>
+      </geometry>
+      <material name="compressor_parts_material">
+        <color rgba="0.57434 0.605618 0.639126 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="1.54515e-14 -0.00433337 -8.26873e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from rot_disc to compressor -->
+  <joint name="J3_B_compressor_1" type="prismatic">
+    <origin xyz="3.88578e-16 -0.1911 0.081" rpy="1.5708 -4.34328e-14 -1.84623e-15"/>
+    <parent link="rot_disc"/>
+    <child link="compressor"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="0.0"/>
+  </joint>
+  <!-- Link compressor_2 -->
+  <link name="compressor_2">
+    <inertial>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="0 0 0"/>
+      <mass value="0.601925"/>
+      <inertia ixx="0.000939728" ixy="1.50607e-05" ixz="-5.97162e-11" iyy="0.00119535" iyz="-1.20544e-07" izz="0.000454779"/>
+    </inertial>
+    <!-- Part compressor_2_parts -->
+    <visual>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="3.14159 -1.56646 -3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_2_visual.stl"/>
+      </geometry>
+      <material name="compressor_2_parts_material">
+        <color rgba="0.57434 0.605618 0.639126 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="3.14159 -1.56646 -3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_2_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from rot_disc to compressor_2 -->
+  <joint name="J3_B_compressor_2" type="prismatic">
+    <origin xyz="0.1911 4.996e-16 0.037" rpy="1.5708 -3.30585e-15 1.5708"/>
+    <parent link="rot_disc"/>
+    <child link="compressor_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="0.0"/>
+  </joint>
+  <!-- Link compressor_3 -->
+  <link name="compressor_3">
+    <inertial>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="0 0 0"/>
+      <mass value="0.601925"/>
+      <inertia ixx="0.000939728" ixy="1.50607e-05" ixz="-5.97162e-11" iyy="0.00119535" iyz="-1.20544e-07" izz="0.000454779"/>
+    </inertial>
+    <!-- Part compressor_3_parts -->
+    <visual>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="6.09046e-13 1.56646 -3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_3_visual.stl"/>
+      </geometry>
+      <material name="compressor_3_parts_material">
+        <color rgba="0.57434 0.605618 0.639126 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="6.09046e-13 1.56646 -3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_3_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from rot_disc to compressor_3 -->
+  <joint name="J3_B_compressor_3" type="prismatic">
+    <origin xyz="-0.1911 -1.55431e-15 0.037" rpy="-1.5708 6.20095e-15 1.5708"/>
+    <parent link="rot_disc"/>
+    <child link="compressor_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="0"/>
+    <mimic joint="J3_B_compressor_2" multiplier="1.0"/>
+  </joint>
+  <!-- Link compressor_4 -->
+  <link name="compressor_4">
+    <inertial>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="0 0 0"/>
+      <mass value="0.601925"/>
+      <inertia ixx="0.000939728" ixy="1.50607e-05" ixz="-5.97162e-11" iyy="0.00119535" iyz="-1.20544e-07" izz="0.000454779"/>
+    </inertial>
+    <!-- Part compressor_4_parts -->
+    <visual>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="-3.14159 0.00433337 7.49258e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_4_visual.stl"/>
+      </geometry>
+      <material name="compressor_4_parts_material">
+        <color rgba="0.57434 0.605618 0.639126 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-4.50688e-09 -0.000135462 -0.0882216" rpy="-3.14159 0.00433337 7.49258e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/compressor_4_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from rot_disc to compressor_4 -->
+  <joint name="J3_B_compressor_4" type="prismatic">
+    <origin xyz="3.88578e-16 0.1911 0.081" rpy="-1.5708 -3.56609e-14 6.32771e-15"/>
+    <parent link="rot_disc"/>
+    <child link="compressor_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="0.0"/>
+    <mimic joint="J3_B_compressor_1" multiplier="1.0"/>
+  </joint>
+  <!-- Joint from stator to rot_disc -->
+  <joint name="J2_A_rotor" type="revolute">
+    <origin xyz="0.27825 -0.14 0.2" rpy="-3.14159 2.69849e-15 -1.57513"/>
+    <parent link="stator"/>
+    <child link="rot_disc"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.14593" upper="3.13726"/>
+  </joint>
+  <!-- Link solid_gripper -->
+  <link name="solid_gripper">
+    <inertial>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="0 0 0"/>
+      <mass value="0.940003"/>
+      <inertia ixx="0.000819605" ixy="1.09678e-05" ixz="4.4508e-11" iyy="0.00142861" iyz="5.44922e-07" izz="0.00119778"/>
+    </inertial>
+    <!-- Part solid_gripper_parts -->
+    <visual>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 -7.46793e-14 -3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_visual.stl"/>
+      </geometry>
+      <material name="solid_gripper_parts_material">
+        <color rgba="0.547041 0.58449 0.621749 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 -7.46793e-14 -3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to solid_gripper -->
+  <joint name="J2_B_solid_gripper_1" type="prismatic">
+    <origin xyz="0.10415 -0.14 -0.153" rpy="-1.5708 7.21582e-15 1.5708"/>
+    <parent link="stator"/>
+    <child link="solid_gripper"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="0"/>
+  </joint>
+  <!-- Link solid_gripper_2 -->
+  <link name="solid_gripper_2">
+    <inertial>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="0 0 0"/>
+      <mass value="0.940003"/>
+      <inertia ixx="0.000819605" ixy="1.09678e-05" ixz="4.4508e-11" iyy="0.00142861" iyz="5.44922e-07" izz="0.00119778"/>
+    </inertial>
+    <!-- Part solid_gripper_2_parts -->
+    <visual>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.25851e-15 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_2_visual.stl"/>
+      </geometry>
+      <material name="solid_gripper_2_parts_material">
+        <color rgba="0.547041 0.58449 0.621749 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.25851e-15 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_2_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to solid_gripper_2 -->
+  <joint name="J2_B_solid_gripper_2" type="prismatic">
+    <origin xyz="0.27825 -0.3141 -0.153" rpy="-1.5708 2.27583e-14 -3.14159"/>
+    <parent link="stator"/>
+    <child link="solid_gripper_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="-6.38378e-16"/>
+    <mimic joint="J2_B_solid_gripper_1" multiplier="1.0"/>
+  </joint>
+  <!-- Link solid_gripper_3 -->
+  <link name="solid_gripper_3">
+    <inertial>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="0 0 0"/>
+      <mass value="0.940003"/>
+      <inertia ixx="0.000819605" ixy="1.09678e-05" ixz="4.4508e-11" iyy="0.00142861" iyz="5.44922e-07" izz="0.00119778"/>
+    </inertial>
+    <!-- Part solid_gripper_3_parts -->
+    <visual>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_3_visual.stl"/>
+      </geometry>
+      <material name="solid_gripper_3_parts_material">
+        <color rgba="0.547041 0.58449 0.621749 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_3_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to solid_gripper_3 -->
+  <joint name="J2_B_solid_gripper_3" type="prismatic">
+    <origin xyz="0.27825 0.0341 -0.153" rpy="1.5708 -4.08537e-14 -3.14159"/>
+    <parent link="stator"/>
+    <child link="solid_gripper_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="-3.88578e-16"/>
+    <mimic joint="J2_B_solid_gripper_1" multiplier="1.0"/>
+  </joint>
+  <!-- Link solid_gripper_4 -->
+  <link name="solid_gripper_4">
+    <inertial>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="0 0 0"/>
+      <mass value="0.940003"/>
+      <inertia ixx="0.000819605" ixy="1.09678e-05" ixz="4.4508e-11" iyy="0.00142861" iyz="5.44922e-07" izz="0.00119778"/>
+    </inertial>
+    <!-- Part solid_gripper_4_parts -->
+    <visual>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="1.69099e-14 9.1368e-14 3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_4_visual.stl"/>
+      </geometry>
+      <material name="solid_gripper_4_parts_material">
+        <color rgba="0.547041 0.58449 0.621749 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="3.37134e-09 -8.22904e-05 -0.0767445" rpy="1.69099e-14 9.1368e-14 3.14159"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/solid_gripper_4_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to solid_gripper_4 -->
+  <joint name="J2_B_solid_gripper_4" type="prismatic">
+    <origin xyz="0.45235 -0.14 -0.153" rpy="1.5708 -4.82829e-14 1.5708"/>
+    <parent link="stator"/>
+    <child link="solid_gripper_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="-4.44089e-16"/>
+    <mimic joint="J2_B_solid_gripper_1" multiplier="1.0"/>
+  </joint>
+  <!-- Link roller_gripper -->
+  <link name="roller_gripper">
+    <inertial>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="0 0 0"/>
+      <mass value="0.549326"/>
+      <inertia ixx="0.000773949" ixy="1.16498e-05" ixz="1.03502e-05" iyy="0.000822966" iyz="4.6822e-07" izz="0.000434012"/>
+    </inertial>
+    <!-- Part roller_gripper_parts -->
+    <visual>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-3.14159 0.785398 5.91473e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_visual.stl"/>
+      </geometry>
+      <material name="roller_gripper_parts_material">
+        <color rgba="0.764746 0.774397 0.770547 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-3.14159 0.785398 5.91473e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to roller_gripper -->
+  <joint name="J2_C_roller_gripper_1" type="prismatic">
+    <origin xyz="0.131101 0.00714892 -0.229" rpy="1.5708 8.34931e-15 -2.35619"/>
+    <parent link="stator"/>
+    <child link="roller_gripper"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="1.15402e-14"/>
+  </joint>
+  <!-- Link roller_gripper_2 -->
+  <link name="roller_gripper_2">
+    <inertial>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="0 0 0"/>
+      <mass value="0.549326"/>
+      <inertia ixx="0.000773949" ixy="1.16498e-05" ixz="1.03502e-05" iyy="0.000822966" iyz="4.6822e-07" izz="0.000434012"/>
+    </inertial>
+    <!-- Part roller_gripper_2_parts -->
+    <visual>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="3.14159 -0.785398 5.35124e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_2_visual.stl"/>
+      </geometry>
+      <material name="roller_gripper_2_parts_material">
+        <color rgba="0.764746 0.774397 0.770547 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="3.14159 -0.785398 5.35124e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_2_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to roller_gripper_2 -->
+  <joint name="J2_C_roller_gripper_2" type="prismatic">
+    <origin xyz="0.131101 -0.287149 -0.229" rpy="1.5708 8.75838e-16 -0.785398"/>
+    <parent link="stator"/>
+    <child link="roller_gripper_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="1.15426e-14"/>
+    <mimic joint="J2_C_roller_gripper_1" multiplier="1.0"/>
+  </joint>
+  <!-- Link roller_gripper_3 -->
+  <link name="roller_gripper_3">
+    <inertial>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="0 0 0"/>
+      <mass value="0.549326"/>
+      <inertia ixx="0.000773949" ixy="1.16498e-05" ixz="1.03502e-05" iyy="0.000822966" iyz="4.6822e-07" izz="0.000434012"/>
+    </inertial>
+    <!-- Part roller_gripper_3_parts -->
+    <visual>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="5.07794e-14 -0.785398 -5.6309e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_3_visual.stl"/>
+      </geometry>
+      <material name="roller_gripper_3_parts_material">
+        <color rgba="0.764746 0.774397 0.770547 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="5.07794e-14 -0.785398 -5.6309e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_3_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to roller_gripper_3 -->
+  <joint name="J2_C_roller_gripper_3" type="prismatic">
+    <origin xyz="0.425399 -0.287149 -0.229" rpy="-1.5708 8.38912e-15 -2.35619"/>
+    <parent link="stator"/>
+    <child link="roller_gripper_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="1.16236e-14"/>
+    <mimic joint="J2_C_roller_gripper_1" multiplier="1.0"/>
+  </joint>
+  <!-- Link roller_gripper_4 -->
+  <link name="roller_gripper_4">
+    <inertial>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="0 0 0"/>
+      <mass value="0.549326"/>
+      <inertia ixx="0.000773949" ixy="1.16498e-05" ixz="1.03502e-05" iyy="0.000822966" iyz="4.6822e-07" izz="0.000434012"/>
+    </inertial>
+    <!-- Part roller_gripper_4_parts -->
+    <visual>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-2.16831e-14 0.785398 -5.58778e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_4_visual.stl"/>
+      </geometry>
+      <material name="roller_gripper_4_parts_material">
+        <color rgba="0.764746 0.774397 0.770547 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000712425 -0.000140815 -0.0757529" rpy="-2.16831e-14 0.785398 -5.58778e-14"/>
+      <geometry>
+        <mesh filename="package://meshes/merged/roller_gripper_4_collision.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from stator to roller_gripper_4 -->
+  <joint name="J2_C_roller_gripper_4" type="prismatic">
+    <origin xyz="0.425399 0.00714892 -0.229" rpy="-1.5708 6.60057e-16 -0.785398"/>
+    <parent link="stator"/>
+    <child link="roller_gripper_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.04" upper="1.14617e-14"/>
+    <mimic joint="J2_C_roller_gripper_1" multiplier="1.0"/>
+  </joint>
+  <!-- Joint from linear_gantry__configuration_festo to stator -->
+  <joint name="J1_gantry" type="prismatic">
+    <origin xyz="-0.285903 -0.0647361 0.174215" rpy="1.5708 -1.5708 0"/>
+    <parent link="linear_gantry__configuration_festo"/>
+    <child link="stator"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.27" upper="0.27"/>
+  </joint>
 </robot>

@@ -1,0 +1,13 @@
+{
+    "configuration": "default",
+    "documentId": "b36124d5af2122816059b47e",
+    "documentMicroversion": "40c89c7f88e505dc743311fe",
+    "elementId": "ac13963d84e1b5b83187a2a4",
+    "fullConfiguration": "default",
+    "id": "I6UlBTuqn3TndcSHM",
+    "isStandardContent": false,
+    "name": "gpio <50>",
+    "partId": "KFHB",
+    "suppressed": false,
+    "type": "Part"
+}
