@@ -1,28 +1,72 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="qbert">
 
-  <xacro:include filename="$(find robot_description)/urdf/qbert_base.xacro"/>
+    <xacro:include filename="$(find robot_description)/urdf/qbert_base.xacro"/>
 
-  <!-- Add your limit switch
-  <link name="limit_switch_link">
-    ...
-  </link>
+    <link name="limit_switch1_link">
+        <visual>
+            <geometry>
+                <box size="0.02 0.01 0.01"/>
+            </geometry>
+            <material name="limit_switch_red">
+                <color rgba="1 0 0 1"/>
+            </material>
+        </visual>
+        <collision name="limit_switch1_collision">
+            <geometry>
+                <box size="0.02 0.01 0.01"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.001"/>
+            <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </link>
 
-  <joint name="limit_switch_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="limit_switch_link"/>
-    <origin xyz="0.1 0 0"/>
-  </joint>
+    <joint name="limit_switch1_joint" type="fixed">
+        <parent link="rot_disc"/>
+        <child link="limit_switch1_link"/>
+        <origin xyz="0.21 0 0.005"/>
+    </joint>
 
-  <gazebo reference="limit_switch_link">
+    <link name="limit_switch11_link">
+        <visual>
+            <geometry>
+                <box size="0.01 0.02 0.01"/>
+            </geometry>
+            <material name="limit_switch_green">
+                <color rgba="0 1 0 1"/>
+            </material>
+        </visual>
+        <collision name="limit_switch11_collision">
+            <geometry>
+                <box size="0.01 0.02 0.01"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.001"/>
+            <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/>
+        </inertial>
+    </link>
+
+    <joint name="limit_switch11_joint" type="fixed">
+        <parent link="stator"/>
+        <child link="limit_switch11_link"/>
+        <origin xyz="0.28 0.08 0.20"/>
+    </joint>
+
+    <gazebo reference="limit_switch1_link">
     <sensor name="limit_switch" type="contact">
-      <update_rate>50</update_rate>
-      <always_on>true</always_on>
-      <contact>
+        <contact>
         <collision>limit_switch_collision</collision>
-      </contact>
-      <plugin name="gazebo_ros_contact" filename="libgazebo_ros_contact.so"/>
+        </contact>
+        <plugin name="gazebo_ros_contact" filename="libgazebo_ros_contact.so">
+        <ros>
+            <namespace>/qbert</namespace>
+            <remapping>contacts:=limit_switch</remapping>
+        </ros>
+        </plugin>
     </sensor>
-  </gazebo> -->
+    </gazebo>
 
 </robot>
