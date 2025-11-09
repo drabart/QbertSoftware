@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="qbert">
+
+  <xacro:include filename="$(find robot_description)/urdf/qbert_base.xacro"/>
+
+  <!-- Add your limit switch
+  <link name="limit_switch_link">
+    ...
+  </link>
+
+  <joint name="limit_switch_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="limit_switch_link"/>
+    <origin xyz="0.1 0 0"/>
+  </joint>
+
+  <gazebo reference="limit_switch_link">
+    <sensor name="limit_switch" type="contact">
+      <update_rate>50</update_rate>
+      <always_on>true</always_on>
+      <contact>
+        <collision>limit_switch_collision</collision>
+      </contact>
+      <plugin name="gazebo_ros_contact" filename="libgazebo_ros_contact.so"/>
+    </sensor>
+  </gazebo> -->
+
+</robot>

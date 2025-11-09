@@ -1,29 +1,32 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
-import os
+from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import Command, PathJoinSubstitution
+
 
 def generate_launch_description():
-    pkg_path = get_package_share_directory('robot_description')
-    urdf_path = os.path.join(pkg_path, 'urdf', 'qbert.urdf')
+    pkg_path = FindPackageShare('robot_description')
+    xacro_path = PathJoinSubstitution([pkg_path, 'urdf', 'qbert.xacro'])
 
-    # Read URDF file
-    with open(urdf_path, 'r') as infp:
-        robot_desc = infp.read()
+    # Use xacro command to expand the file into URDF text
+    robot_description = Command(['xacro ', xacro_path])
+
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher',
+        parameters=[{
+            'robot_description': robot_description,
+            'use_sim_time': False
+        }],
+    )
 
     rviz2_node = Node(
         package='rviz2',
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', os.path.join(pkg_path, 'config', 'display.rviz')]
-    )
-
-    robot_state_publisher_node = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        parameters=[{'robot_description': robot_desc, 'use_sim_time': False}]
+        arguments=['-d', PathJoinSubstitution([pkg_path, 'config', 'display.rviz'])]
     )
     
     joint_state_publisher_node = Node(
@@ -33,5 +36,9 @@ def generate_launch_description():
         output='screen'
     )
 
-    return LaunchDescription([rviz2_node, robot_state_publisher_node, joint_state_publisher_node])
+    return LaunchDescription([
+        rviz2_node, 
+        robot_state_publisher_node, 
+        joint_state_publisher_node
+    ])
 
