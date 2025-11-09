@@ -17,6 +17,13 @@ def generate_launch_description():
         output='screen'
     )
 
+    joint_gui_node = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui',
+        name='joint_state_publisher_gui',
+        output='screen'
+    )
+
     robot_state_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -26,5 +33,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         rviz_node,
+        joint_gui_node,
         robot_state_node,
     ])
