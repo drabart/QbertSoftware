@@ -1,7 +1,7 @@
 # !/bin/bash
 
 export GZ_VERSION=harmonic
-export GZ_SIM_RESOURCE_PATH="$GZ_SIM_RESOURCE_PATH:$(pwd)/install/robot_description/share"
+export GZ_SIM_RESOURCE_PATH="$GZ_SIM_RESOURCE_PATH:$(pwd)/install/qbert_description/share"
 
 source /opt/ros/jazzy/setup.bash
 source .venv/bin/activate

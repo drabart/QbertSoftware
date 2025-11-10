@@ -5,7 +5,7 @@ from launch.substitutions import Command
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    pkg_description = get_package_share_directory('robot_description')
+    pkg_description = get_package_share_directory('qbert_description')
     urdf_file = os.path.join(pkg_description, 'urdf', 'qbert.xacro')
     robot_desc = Command(['xacro ', urdf_file])
 

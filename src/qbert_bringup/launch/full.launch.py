@@ -7,7 +7,7 @@ from launch.substitutions import Command
 import os
 
 def generate_launch_description():
-    pkg_description = get_package_share_directory('robot_description')
+    pkg_description = get_package_share_directory('qbert_description')
     pkg_gazebo = get_package_share_directory('qbert_gazebo')
     urdf_file = os.path.join(pkg_description, 'urdf', 'qbert.xacro')
     robot_desc = Command(['xacro ', urdf_file])
@@ -43,11 +43,34 @@ def generate_launch_description():
         ],
     )
 
+    ros2_control_path = os.path.join(pkg_description, 'config', 'qbert_controllers.yaml')
+
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_state_broadcaster",
+            "--switch-timeout", "1000000",
+        ],
+    )
+
+    rotor_controller_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=[
+            'rotor_position_controller',
+            "--param-file", ros2_control_path,
+            "--switch-timeout", "1000000",
+        ],
+    )
+
     nodes = [
         robot_desc_launch,
         gazebo_launch,
         mock_limit_switches,
         mock_distance_sensors,
+        joint_state_broadcaster_spawner,
+        rotor_controller_spawner,
     ]
 
     return LaunchDescription(nodes)

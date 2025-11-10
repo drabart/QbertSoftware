@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="qbert">
+    <!-- Load the base model -->
+    <xacro:include filename="$(find qbert_description)/urdf/qbert_base.xacro"/>
 
-    <xacro:include filename="$(find robot_description)/urdf/qbert_base.xacro"/>
+    <!-- Load the ros 2 control parameters -->
+    <xacro:include filename="$(find qbert_description)/urdf/qbert_ros2control.xacro"/>
 
+    <!-- Load gazebo plugin -->
     <gazebo>
         <plugin
             filename="gz-sim-joint-state-publisher-system"
@@ -22,12 +26,12 @@
 
     <gazebo reference="camera_left">
         <sensor name="camera" type="camera">
-            <pose> 0 0 0 0 0 0 </pose>
+            <pose> 0 0 0 -${pi/2} -${pi/2} 0 </pose>
             <visualize>true</visualize>
-            <update_rate>1</update_rate>
+            <update_rate>30</update_rate>
             <camera>
                 <camera_info_topic>camera/camera_info</camera_info_topic>
-                <horizontal_fov>1.089</horizontal_fov>
+                <horizontal_fov>${pi/2}</horizontal_fov>
                 <image>
                     <format>R8G8B8</format>
                     <width>640</width>
@@ -40,6 +44,13 @@
             </camera>
             <topic>camera/image_raw</topic>
         </sensor>
+    </gazebo>
+
+    <gazebo>
+        <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>$(find qbert_description)/config/qbert_controllers.yaml</parameters>
+            <controller_manager_prefix_node_name>controller_manager</controller_manager_prefix_node_name>
+        </plugin>
     </gazebo>
 
 </robot>

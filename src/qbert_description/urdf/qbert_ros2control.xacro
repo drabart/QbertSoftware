@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot name="qbert">
+    <ros2_control name="qbert" type="position_controllers/JointGroupPositionController">
+        <hardware>
+            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </hardware>
+        <joint name="J2_A_rotor">
+            <command_interface name="position">
+                <param name="min">-3.1415</param>
+                <param name="max">3.1415</param>
+            </command_interface>
+            <state_interface name="position"/>
+        </joint>
+    </ros2_control>
+</robot>

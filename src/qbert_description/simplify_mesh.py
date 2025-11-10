@@ -1,8 +1,8 @@
 import open3d as o3d
 import os
 
-input_dir = "src/robot_description/meshes/merged_original"
-output_dir = "src/robot_description/meshes/merged"
+input_dir = "src/qbert_description/meshes/merged_original"
+output_dir = "src/qbert_description/meshes/merged"
 os.makedirs(output_dir, exist_ok=True)
 
 for fname in os.listdir(input_dir):
