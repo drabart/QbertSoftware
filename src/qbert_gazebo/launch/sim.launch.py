@@ -54,6 +54,13 @@ def generate_launch_description():
         ],
     )
 
+    # limit_switches_node = Node(
+    #     package='qbert_gazebo',
+    #     executable='touch_sensor_node',
+    #     name='touch_sensor_node',
+    #     output='screen',
+    # )
+
     return LaunchDescription([
         gz_sim, 
         gazebo_bridge_node, 

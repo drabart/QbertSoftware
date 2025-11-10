@@ -3,72 +3,6 @@
 
     <xacro:include filename="$(find robot_description)/urdf/qbert_base.xacro"/>
 
-    <link name="limit_switch1_link">
-        <visual>
-            <geometry>
-                <box size="0.02 0.01 0.01"/>
-            </geometry>
-            <material name="limit_switch_red">
-                <color rgba="1 0 0 1"/>
-            </material>
-        </visual>
-        <collision name="limit_switch1_collision">
-            <geometry>
-                <box size="0.02 0.01 0.01"/>
-            </geometry>
-        </collision>
-        <inertial>
-            <mass value="0.001"/>
-            <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/>
-        </inertial>
-    </link>
-
-    <joint name="limit_switch1_joint" type="fixed">
-        <parent link="rot_disc"/>
-        <child link="limit_switch1_link"/>
-        <origin xyz="0.21 0 0.005"/>
-    </joint>
-
-    <link name="limit_switch11_link">
-        <visual>
-            <geometry>
-                <box size="0.01 0.02 0.01"/>
-            </geometry>
-            <material name="limit_switch_green">
-                <color rgba="0 1 0 1"/>
-            </material>
-        </visual>
-        <collision name="limit_switch11_collision">
-            <geometry>
-                <box size="0.01 0.02 0.01"/>
-            </geometry>
-        </collision>
-        <inertial>
-            <mass value="0.001"/>
-            <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/>
-        </inertial>
-    </link>
-
-    <joint name="limit_switch11_joint" type="fixed">
-        <parent link="stator"/>
-        <child link="limit_switch11_link"/>
-        <origin xyz="0.28 0.08 0.20"/>
-    </joint>
-
-    <gazebo reference="limit_switch1_link">
-        <sensor name="limit_switch" type="contact">
-            <contact>
-            <collision>limit_switch_collision</collision>
-            </contact>
-            <plugin name="gazebo_ros_contact" filename="libgazebo_ros_contact.so">
-            <ros>
-                <namespace>/qbert</namespace>
-                <remapping>contacts:=limit_switch</remapping>
-            </ros>
-            </plugin>
-        </sensor>
-    </gazebo>
-
     <gazebo>
         <plugin
             filename="gz-sim-joint-state-publisher-system"
@@ -84,6 +18,28 @@
         <static_publisher>true</static_publisher>
         <static_update_frequency>1</static_update_frequency>
         </plugin>
-  </gazebo>
+    </gazebo>
+
+    <gazebo reference="camera_left">
+        <sensor name="camera" type="camera">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>1</update_rate>
+            <camera>
+                <camera_info_topic>camera/camera_info</camera_info_topic>
+                <horizontal_fov>1.089</horizontal_fov>
+                <image>
+                    <format>R8G8B8</format>
+                    <width>640</width>
+                    <height>480</height>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>8.0</far>
+                </clip>
+            </camera>
+            <topic>camera/image_raw</topic>
+        </sensor>
+    </gazebo>
 
 </robot>
