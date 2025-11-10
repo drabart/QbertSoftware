@@ -56,17 +56,34 @@
     </joint>
 
     <gazebo reference="limit_switch1_link">
-    <sensor name="limit_switch" type="contact">
-        <contact>
-        <collision>limit_switch_collision</collision>
-        </contact>
-        <plugin name="gazebo_ros_contact" filename="libgazebo_ros_contact.so">
-        <ros>
-            <namespace>/qbert</namespace>
-            <remapping>contacts:=limit_switch</remapping>
-        </ros>
-        </plugin>
-    </sensor>
+        <sensor name="limit_switch" type="contact">
+            <contact>
+            <collision>limit_switch_collision</collision>
+            </contact>
+            <plugin name="gazebo_ros_contact" filename="libgazebo_ros_contact.so">
+            <ros>
+                <namespace>/qbert</namespace>
+                <remapping>contacts:=limit_switch</remapping>
+            </ros>
+            </plugin>
+        </sensor>
     </gazebo>
+
+    <gazebo>
+        <plugin
+            filename="gz-sim-joint-state-publisher-system"
+            name="gz::sim::systems::JointStatePublisher"/>
+    </gazebo>
+
+    <gazebo>
+        <plugin
+            filename="gz-sim-pose-publisher-system"
+            name="gz::sim::systems::PosePublisher">
+        <publish_link_pose>true</publish_link_pose>
+        <use_pose_vector_msg>true</use_pose_vector_msg>
+        <static_publisher>true</static_publisher>
+        <static_update_frequency>1</static_update_frequency>
+        </plugin>
+  </gazebo>
 
 </robot>

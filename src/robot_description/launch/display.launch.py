@@ -24,15 +24,19 @@ def generate_launch_description():
         output='screen'
     )
 
-    robot_state_node = Node(
+    robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        output='screen',
-        parameters=[{'robot_description': robot_desc}]
+        name='robot_state_publisher',
+        output='both',
+        parameters=[
+            {'use_sim_time': True},
+            {'robot_description': robot_desc},
+        ]
     )
 
     return LaunchDescription([
         rviz_node,
-        joint_gui_node,
-        robot_state_node,
+        # joint_gui_node,
+        robot_state_publisher,
     ])

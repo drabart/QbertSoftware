@@ -42,13 +42,22 @@ def generate_launch_description():
     tf2_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'world', 'Origin'],
+        arguments=[
+            '--x', '0',
+            '--y', '0',
+            '--z', '0',
+            '--roll', '0',
+            '--pitch', '0',
+            '--yaw', '0',
+            '--frame-id', 'world',
+            '--child-frame-id', 'Origin'
+        ],
     )
 
     return LaunchDescription([
         gz_sim, 
         gazebo_bridge_node, 
         gazebo_spawn_entity,
-        joint_state_publisher,
+        # joint_state_publisher,
         tf2_node,
     ])
