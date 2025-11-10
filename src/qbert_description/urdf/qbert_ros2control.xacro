@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot name="qbert">
-    <ros2_control name="qbert" type="position_controllers/JointGroupPositionController">
+    <ros2_control name="qbert" type="system">
         <hardware>
             <plugin>gz_ros2_control/GazeboSimSystem</plugin>
         </hardware>
