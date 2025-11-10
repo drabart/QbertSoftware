@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /RobotModel1
         - /RobotModel1/Description Topic1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 739
   - Class: rviz_common/Selection
@@ -103,6 +104,16 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        limit_switch11_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        limit_switch1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         linear_gantry__configuration_festo:
           Alpha: 1
           Show Axes: false
@@ -180,6 +191,114 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        Origin:
+          Value: true
+        axe:
+          Value: true
+        camera_left:
+          Value: true
+        camera_right:
+          Value: true
+        compressor:
+          Value: true
+        compressor_2:
+          Value: true
+        compressor_3:
+          Value: true
+        compressor_4:
+          Value: true
+        limit_switch11_link:
+          Value: true
+        limit_switch1_link:
+          Value: true
+        linear_gantry__configuration_festo:
+          Value: true
+        roller_gripper:
+          Value: true
+        roller_gripper_2:
+          Value: true
+        roller_gripper_3:
+          Value: true
+        roller_gripper_4:
+          Value: true
+        rot_disc:
+          Value: true
+        solid_gripper:
+          Value: true
+        solid_gripper_2:
+          Value: true
+        solid_gripper_3:
+          Value: true
+        solid_gripper_4:
+          Value: true
+        stator:
+          Value: true
+        tooling_disc:
+          Value: true
+        unstrander:
+          Value: true
+        unstrander_2:
+          Value: true
+        world:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        world:
+          Origin:
+            linear_gantry__configuration_festo:
+              stator:
+                limit_switch11_link:
+                  {}
+                roller_gripper:
+                  {}
+                roller_gripper_2:
+                  {}
+                roller_gripper_3:
+                  {}
+                roller_gripper_4:
+                  {}
+                rot_disc:
+                  camera_left:
+                    {}
+                  camera_right:
+                    {}
+                  compressor:
+                    {}
+                  compressor_2:
+                    {}
+                  compressor_3:
+                    {}
+                  compressor_4:
+                    {}
+                  limit_switch1_link:
+                    {}
+                  tooling_disc:
+                    axe:
+                      {}
+                    unstrander_2:
+                      unstrander:
+                        {}
+                solid_gripper:
+                  {}
+                solid_gripper_2:
+                  {}
+                solid_gripper_3:
+                  {}
+                solid_gripper_4:
+                  {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -226,7 +345,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.7786130905151367
+      Distance: 1.721265435218811
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1

@@ -42,7 +42,7 @@ def generate_launch_description():
     tf2_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'world', 'base'],
+        arguments=['0', '0', '0', '0', '0', '0', 'world', 'Origin'],
     )
 
     return LaunchDescription([
