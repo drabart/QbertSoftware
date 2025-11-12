@@ -67,9 +67,9 @@ def generate_launch_description():
     return LaunchDescription([
         joint_state_broadcaster_spawner,
         position_controller_spawner,
-        # unstrander_controller_spawner,
-        # tool_disc_controller_spawner,
-        # compressor_controller_spawner,
-        # gripper_controller_spawner,
-        # roller_controller_spawner,
+        unstrander_controller_spawner,
+        tool_disc_controller_spawner,
+        compressor_controller_spawner,
+        gripper_controller_spawner,
+        roller_controller_spawner,
     ])

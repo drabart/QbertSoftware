@@ -35,6 +35,6 @@ def generate_launch_description():
     return LaunchDescription([
         include_robot_desc,
         include_gazebo,
-        # include_mock,
+        include_mock,
         include_control,
     ])
