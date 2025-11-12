@@ -48,7 +48,7 @@
 
     <gazebo>
         <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-            <parameters>$(find qbert_description)/config/qbert_controllers.yaml</parameters>
+            <parameters>$(find qbert_control)/config/qbert_controllers.yaml</parameters>
             <controller_manager_prefix_node_name>controller_manager</controller_manager_prefix_node_name>
         </plugin>
     </gazebo>

@@ -303,7 +303,6 @@
     <child link="compressor_3"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="0"/>
-    <mimic joint="J3_B_compressor_2" multiplier="1.0"/>
   </joint>
   <!-- Link compressor_4 -->
   <link name="compressor_4">
@@ -336,7 +335,6 @@
     <child link="compressor_4"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="0.0"/>
-    <mimic joint="J3_B_compressor_1" multiplier="1.0"/>
   </joint>
   <!-- Joint from stator to rot_disc -->
   <joint name="J2_A_rotor" type="revolute">
@@ -409,7 +407,6 @@
     <child link="solid_gripper_2"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="-6.38378e-16"/>
-    <mimic joint="J2_B_solid_gripper_1" multiplier="1.0"/>
   </joint>
   <!-- Link solid_gripper_3 -->
   <link name="solid_gripper_3">
@@ -442,7 +439,6 @@
     <child link="solid_gripper_3"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="-3.88578e-16"/>
-    <mimic joint="J2_B_solid_gripper_1" multiplier="1.0"/>
   </joint>
   <!-- Link solid_gripper_4 -->
   <link name="solid_gripper_4">
@@ -475,7 +471,6 @@
     <child link="solid_gripper_4"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="-4.44089e-16"/>
-    <mimic joint="J2_B_solid_gripper_1" multiplier="1.0"/>
   </joint>
   <!-- Link roller_gripper -->
   <link name="roller_gripper">
@@ -540,7 +535,6 @@
     <child link="roller_gripper_2"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="1.15426e-14"/>
-    <mimic joint="J2_C_roller_gripper_1" multiplier="1.0"/>
   </joint>
   <!-- Link roller_gripper_3 -->
   <link name="roller_gripper_3">
@@ -573,7 +567,6 @@
     <child link="roller_gripper_3"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="1.16236e-14"/>
-    <mimic joint="J2_C_roller_gripper_1" multiplier="1.0"/>
   </joint>
   <!-- Link roller_gripper_4 -->
   <link name="roller_gripper_4">
@@ -606,7 +599,6 @@
     <child link="roller_gripper_4"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10" lower="-0.04" upper="1.14617e-14"/>
-    <mimic joint="J2_C_roller_gripper_1" multiplier="1.0"/>
   </joint>
   <!-- Joint from linear_gantry__configuration_festo to stator -->
   <joint name="J1_gantry" type="prismatic">

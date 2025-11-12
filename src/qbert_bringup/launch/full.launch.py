@@ -1,76 +1,40 @@
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
-from launch.substitutions import Command
 import os
 
 def generate_launch_description():
     pkg_description = get_package_share_directory('qbert_description')
     pkg_gazebo = get_package_share_directory('qbert_gazebo')
-    urdf_file = os.path.join(pkg_description, 'urdf', 'qbert.xacro')
-    robot_desc = Command(['xacro ', urdf_file])
+    pkg_control = get_package_share_directory('qbert_control')
+    pkg_mock = get_package_share_directory('qbert_mock')
 
-    # Include robot description
-    robot_desc_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_description, 'launch', 'display.launch.py'))
+    # Paths to sub-launch files
+    robot_desc_launch = os.path.join(pkg_description, 'launch', 'display.launch.py')
+    gazebo_launch = os.path.join(pkg_gazebo, 'launch', 'sim.launch.py')
+    mock_launch = os.path.join(pkg_mock, 'launch', 'mock.launch.py')
+    control_launch = os.path.join(pkg_control, 'launch', 'control.launch.py')
+
+    include_robot_desc = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(robot_desc_launch)
     )
 
-    # Include Gazebo simulation
-    gazebo_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_gazebo, 'launch', 'sim.launch.py'))
+    include_gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(gazebo_launch)
     )
 
-    mock_limit_switches = Node(
-        package='mock_sensors',
-        executable='limit_switches',
-        name='touch_sensor_node',
-        output='screen',
-        parameters=[
-            {'robot_description': robot_desc}, 
-            {'limit_switch_joints': ['J1_gantry', 'J2_A_rotor']} 
-        ],
+    include_mock = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(mock_launch)
     )
 
-    mock_distance_sensors = Node(
-        package='mock_sensors',
-        executable='distance_sensors',
-        name='distance_sensor_node',
-        output='screen',
-        parameters=[
-            {'distance_sensor_joints': ['joint_J3_A_tool_disc']} 
-        ],
+    include_control = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(control_launch)
     )
 
-    ros2_control_path = os.path.join(pkg_description, 'config', 'qbert_controllers.yaml')
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_state_broadcaster",
-            "--switch-timeout", "1000000",
-        ],
-    )
-
-    rotor_controller_spawner = Node(
-        package='controller_manager',
-        executable='spawner',
-        arguments=[
-            'rotor_position_controller',
-            "--param-file", ros2_control_path,
-            "--switch-timeout", "1000000",
-        ],
-    )
-
-    nodes = [
-        robot_desc_launch,
-        gazebo_launch,
-        mock_limit_switches,
-        mock_distance_sensors,
-        joint_state_broadcaster_spawner,
-        rotor_controller_spawner,
-    ]
-
-    return LaunchDescription(nodes)
+    return LaunchDescription([
+        include_robot_desc,
+        include_gazebo,
+        # include_mock,
+        include_control,
+    ])

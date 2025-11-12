@@ -1,0 +1,63 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 10 # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+position_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints: 
+      - J1_gantry
+      - J2_A_rotor
+    
+    interface_name: position
+
+unstrander_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints: 
+      - J4_unstrander
+
+    interface_name: position
+
+tool_disc_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints: 
+      - joint_J3_A_tool_disc
+
+    interface_name: position
+
+compressor_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints: 
+      - J3_B_compressor_1
+      - J3_B_compressor_2
+      - J3_B_compressor_3
+      - J3_B_compressor_4
+
+    interface_name: position
+
+gripper_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints: 
+      - J2_B_solid_gripper_1
+      - J2_B_solid_gripper_2
+      - J2_B_solid_gripper_3
+      - J2_B_solid_gripper_4
+
+    interface_name: position
+
+roller_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints: 
+      - J2_C_roller_gripper_1
+      - J2_C_roller_gripper_2
+      
+    interface_name: position
+
