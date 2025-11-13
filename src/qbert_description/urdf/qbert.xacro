@@ -6,6 +6,9 @@
     <!-- Load the ros 2 control parameters -->
     <xacro:include filename="$(find qbert_description)/urdf/qbert_ros2control.xacro"/>
 
+    <!-- Load additional gazebo info -->
+    <xacro:include filename="$(find qbert_description)/urdf/qbert_gazebo.xacro"/>
+
     <!-- Load gazebo plugin -->
     <gazebo>
         <plugin

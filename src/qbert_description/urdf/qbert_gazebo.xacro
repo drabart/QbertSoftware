@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot name="qbert">
+    <gazebo reference="roller_gripper">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="roller_gripper_2">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="roller_gripper_3">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="roller_gripper_4">
+        <gravity>0</gravity>
+    </gazebo>
+
+    <gazebo reference="solid_gripper">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="solid_gripper_2">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="solid_gripper_3">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="solid_gripper_4">
+        <gravity>0</gravity>
+    </gazebo>
+
+    <gazebo reference="compressor">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="compressor_2">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="compressor_3">
+        <gravity>0</gravity>
+    </gazebo>
+    <gazebo reference="compressor_4">
+        <gravity>0</gravity>
+    </gazebo>
+    
+</robot>

@@ -7,9 +7,10 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -23,9 +24,23 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_package()
+set(NODES
+gripper_controller_node
+  roller_controller_node
+  compressor_controller_node
+  tool_disc_controller_node
+  # qbert_controller_node
+)
+
+foreach(node ${NODES})
+  add_executable(${node} src/${node}.cpp)
+  ament_target_dependencies(${node} rclcpp std_msgs std_srvs sensor_msgs)
+  install(TARGETS ${node} DESTINATION lib/${PROJECT_NAME})
+endforeach()
 
 install(
   DIRECTORY config launch
   DESTINATION share/${PROJECT_NAME}
 )
+
+ament_package()

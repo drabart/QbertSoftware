@@ -22,10 +22,10 @@ def generate_launch_description():
         '--switch-timeout', '1000000',
     ]
 
-    position_controller_spawner = Node(
+    gantry_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['position_controller'] + common_args,
+        arguments=['gantry_controller'] + common_args,
         output='screen',
     )
 
@@ -64,12 +64,44 @@ def generate_launch_description():
         output='screen',
     )
 
+    roller_service_node = Node(
+        package='qbert_control',
+        executable='roller_controller_node'
+    )
+
+    gripper_service_node = Node(
+        package='qbert_control',
+        executable='gripper_controller_node'
+    )
+
+    compressor_service_node = Node(
+        package='qbert_control',
+        executable='compressor_controller_node'
+    )
+
+    tool_disc_service_node = Node(
+        package='qbert_control',
+        executable='tool_disc_controller_node'
+    )
+
+    # qbert_service_node = Node(
+    #     package='qbert_control',
+    #     executable='roller_controller_node'
+    # )
+
     return LaunchDescription([
         joint_state_broadcaster_spawner,
-        position_controller_spawner,
+
+        gantry_controller_spawner,
         unstrander_controller_spawner,
         tool_disc_controller_spawner,
         compressor_controller_spawner,
         gripper_controller_spawner,
         roller_controller_spawner,
+
+        roller_service_node,
+        gripper_service_node,
+        compressor_service_node,
+        tool_disc_service_node,
+        # qbert_service_node,
     ])

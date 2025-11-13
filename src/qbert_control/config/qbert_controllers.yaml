@@ -5,12 +5,11 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-position_controller:
+gantry_controller:
   ros__parameters:
     type: forward_command_controller/ForwardCommandController
     joints: 
       - J1_gantry
-      - J2_A_rotor
     
     interface_name: position
 
@@ -26,6 +25,7 @@ tool_disc_controller:
   ros__parameters:
     type: forward_command_controller/ForwardCommandController
     joints: 
+      - J2_A_rotor
       - joint_J3_A_tool_disc
 
     interface_name: position

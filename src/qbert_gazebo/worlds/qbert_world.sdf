@@ -33,6 +33,23 @@
       <direction>-0.5 0.1 -0.9</direction>
     </light>
 
+    <!-- Light in a robot to be able to see stuff better -->
+    <light name="omni_light" type="point">
+      <pose>-0.2 -0.13 0.7 0 0 0</pose>   <!-- position of the light -->
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+
+      <attenuation>
+        <range>1</range>        <!-- how far the light reaches -->
+        <constant>0.1</constant>
+        <linear>0.0</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+
+      <cast_shadows>true</cast_shadows>
+    </light>
+
+
     <model name="ground_plane">
       <static>true</static>
       <link name="link">
@@ -59,5 +76,28 @@
         </visual>
       </link>
     </model>
+
+    <model name="cable_model">
+      <static>true</static>
+      <pose>-0.138 -0.23 0.538 0 0 -1.57</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file:///home/drabart/Documents/QbertSoftware/src/qbert_gazebo/worlds/cable.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.6 0.6 0.6 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <cast_shadows>true</cast_shadows>
+        </visual>
+      </link>
+    </model>
+
   </world>
 </sdf>
