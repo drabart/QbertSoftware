@@ -58,6 +58,8 @@ roller_controller:
     joints: 
       - J2_C_roller_gripper_1
       - J2_C_roller_gripper_2
+      - J2_C_roller_gripper_3
+      - J2_C_roller_gripper_4
       
     interface_name: position
 
