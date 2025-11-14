@@ -84,10 +84,10 @@ def generate_launch_description():
         executable='tool_disc_controller_node'
     )
 
-    # qbert_service_node = Node(
-    #     package='qbert_control',
-    #     executable='roller_controller_node'
-    # )
+    qbert_service_node = Node(
+        package='qbert_control',
+        executable='qbert_controller_node'
+    )
 
     return LaunchDescription([
         joint_state_broadcaster_spawner,
@@ -103,5 +103,5 @@ def generate_launch_description():
         gripper_service_node,
         compressor_service_node,
         tool_disc_service_node,
-        # qbert_service_node,
+        qbert_service_node,
     ])

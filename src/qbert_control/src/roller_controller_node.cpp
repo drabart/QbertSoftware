@@ -1,6 +1,9 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/float64_multi_array.hpp>
 #include <std_srvs/srv/trigger.hpp>
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 class RollerNode : public rclcpp::Node
 {
@@ -41,6 +44,9 @@ private:
       std::shared_ptr<std_srvs::srv::Trigger::Response> res)
   {
     send_positions(-0.04, -0.04, -0.04, -0.04);
+
+    rclcpp::sleep_for(1s);
+
     res->success = true;
     res->message = "Rollers extended";
   }
@@ -50,6 +56,9 @@ private:
       std::shared_ptr<std_srvs::srv::Trigger::Response> res)
   {
     send_positions(0.0, 0.0, 0.0, 0.0);
+
+    rclcpp::sleep_for(1s);
+
     res->success = true;
     res->message = "Rollers retracted";
   }

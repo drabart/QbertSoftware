@@ -29,7 +29,7 @@ gripper_controller_node
   roller_controller_node
   compressor_controller_node
   tool_disc_controller_node
-  # qbert_controller_node
+  qbert_controller_node
 )
 
 foreach(node ${NODES})

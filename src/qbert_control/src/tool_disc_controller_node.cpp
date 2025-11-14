@@ -68,7 +68,9 @@ private:
         const std::shared_ptr<std_srvs::srv::Trigger::Request>,
         std::shared_ptr<std_srvs::srv::Trigger::Response> res)
     {
-        send_positions(-0.2, -0.1);
+        send_positions(-0.1, -0.1);
+
+        rclcpp::sleep_for(1s);
 
         res->success = true;
         res->message = "Start position set";
@@ -105,6 +107,8 @@ private:
         }
 
         send_positions(next_rotor_pos, joint_J3_A_tool_disc);
+
+        rclcpp::sleep_for(1s);
 
         res->success = true;
         res->message = "Got to next section";
