@@ -1,26 +1,57 @@
 import pyrealsense2 as rs
 import numpy as np
 import cv2
+import edge_detection
+
+AUTO_EXPOSURE = False
+RECORD_FULL = True
+RECORD_RAW = False
 
 def run_camera():
     cv2.namedWindow('RealSense', cv2.WINDOW_NORMAL)
     cv2.setWindowProperty('RealSense', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
+    fps = 6
+    size = (640, 480)
+
     pipeline = rs.pipeline()
     config = rs.config()
-
-    fps = 6
-    size = (1280, 720)
 
     config.enable_stream(rs.stream.depth, size[0], size[1], rs.format.z16, fps)
     config.enable_stream(rs.stream.color, size[0], size[1], rs.format.bgr8, fps)
 
-    pipeline.start(config)
+    profile = pipeline.start(config)
+    color_sensor = profile.get_device().first_color_sensor()
+
+    if AUTO_EXPOSURE:
+        color_sensor.set_option(rs.option.enable_auto_exposure, 1)
+        color_sensor.set_option(rs.option.enable_auto_white_balance, 1)
+    else:
+        color_sensor.set_option(rs.option.enable_auto_exposure, 0)
+        color_sensor.set_option(rs.option.enable_auto_white_balance, 0)
+        # color_sensor.set_option(rs.option.exposure, 50)
+        color_sensor.set_option(rs.option.exposure, 100)
+        color_sensor.set_option(rs.option.white_balance, 3000)
+
+    color_sensor.set_option(rs.option.gain, 32)
+    color_sensor.set_option(rs.option.brightness, 0)
+    color_sensor.set_option(rs.option.contrast, 50)
+    color_sensor.set_option(rs.option.sharpness, 50)
+    color_sensor.set_option(rs.option.saturation, 50)
+    color_sensor.set_option(rs.option.hue, 0)
+    color_sensor.set_option(rs.option.gamma, 100)
+
+    # optional
+    color_sensor.set_option(rs.option.power_line_frequency, 1)  # 50=1, 60=2, Auto=3
+    color_sensor.set_option(rs.option.auto_exposure_priority, 0)
 
     # Video writers (use any codec you like)
     fourcc = cv2.VideoWriter_fourcc(*"XVID")
-    rgb_writer = cv2.VideoWriter("rgb_output.avi", fourcc, fps, size)
-    depth_writer = cv2.VideoWriter("depth_output.avi", fourcc, fps, size)
+    if RECORD_FULL:
+        video_writer = cv2.VideoWriter("full_recording.avi", fourcc, fps, (size[0]*2, size[1]*2))
+    if RECORD_RAW:
+        rgb_writer = cv2.VideoWriter("rgb_output.avi", fourcc, fps, size)
+        depth_writer = cv2.VideoWriter("depth_output.avi", fourcc, fps, size)
 
     try:
         while True:
@@ -33,8 +64,8 @@ def run_camera():
             depth_image = np.asanyarray(depth_frame.get_data())
             color_image = np.asanyarray(color_frame.get_data())
 
-            min_dist = 300
-            max_dist = 500
+            min_dist = 150
+            max_dist = 300
 
             mask = (depth_image >= min_dist) & (depth_image <= max_dist)
 
@@ -48,18 +79,40 @@ def run_camera():
             depth_colormap = cv2.resize(depth_colormap, (color_image.shape[1], color_image.shape[0]))
 
             # Write to video files
-            rgb_writer.write(color_image)
-            depth_writer.write(depth_colormap)
+            if RECORD_RAW:
+                rgb_writer.write(color_image)
+                depth_writer.write(depth_colormap)
 
-            images = np.hstack((color_image, depth_colormap))
-            cv2.imshow('RealSense', images)
+            data = edge_detection.find_lines(color_image.copy(), False)
+
+            if data is not None:
+                (threshold, edges, lines) = data
+                edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
+
+                # print(color_image.shape, edges.shape, lines.shape, depth_colormap.shape)
+
+                top_row = np.hstack((color_image, edges))
+                bottom_row = np.hstack((lines, depth_colormap))
+
+                grid = np.vstack((top_row, bottom_row))
+
+                if RECORD_FULL:
+                    video_writer.write(grid)
+
+                cv2.imshow("RealSense", grid)
+            else:
+                images = np.hstack((color_image, depth_colormap))
+                cv2.imshow('RealSense', images)
 
             if cv2.waitKey(1) == 27:
                 break
 
     finally:
-        rgb_writer.release()
-        depth_writer.release()
+        if RECORD_RAW:
+            rgb_writer.release()
+            depth_writer.release()
+        if RECORD_FULL:
+            video_writer.release()
         pipeline.stop()
         cv2.destroyAllWindows()
 

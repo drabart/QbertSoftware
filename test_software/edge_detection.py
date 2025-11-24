@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from collections import Counter
+import math
 
 def line_to_general_form(x1, y1, x2, y2):
     a = y2 - y1
@@ -71,36 +73,62 @@ def merge_lines(lines):
                 # update endpoints for further merges
                 x1_1, y1_1, x2_1, y2_1 = line1
 
-        final_lines.append(line1)
+        final_lines.append([line1])
 
     return np.array(final_lines)
 
-def find_lines(image):
+def find_lines(image, custom_processing = True):
     # Load image in grayscale
-    image = cv2.resize(image, (640, 480))
+    # image = cv2.resize(image, (640, 480))
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # ret1, th1 = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    blur = cv2.GaussianBlur(gray, (9, 9), 1)
-    thresholded_image = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 41, 20)
+    blur = cv2.GaussianBlur(gray, (5, 5), 1)
+    thresholded_image = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 5)
     # ret2, thresholded_image = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
     raw_edges = cv2.Canny(thresholded_image, 0, 255)
 
+    slopes = []
+
     # --- Probabilistic Hough (segments) ---
-    geometric_lines = cv2.HoughLinesP(raw_edges, 1, np.pi/180/2, 200, minLineLength=150, maxLineGap=30)
+    PIXEL_RESOLUTION = 1
+    ANGULAR_RESOUTION = (np.pi * 2) / 200
+    VOTE_THRESHOLD = 70
+    geometric_lines = cv2.HoughLinesP(raw_edges, 
+                                      PIXEL_RESOLUTION, 
+                                      ANGULAR_RESOUTION, 
+                                      VOTE_THRESHOLD, 
+                                      minLineLength=30, 
+                                      maxLineGap=15)
+    if geometric_lines is not None:
+        for line in geometric_lines:
+            x1, y1, x2, y2 = line[0]
+
+            if x2 != x1:
+                slope = (y2 - y1) / (x2 - x1)
+                angle = math.degrees(math.atan(slope))
+            else:
+                angle = 90.0  # vertical line
+
+            slopes.append(angle)
 
     if geometric_lines is None:
         print("No geometric_lines found!")
-        return
+        return (thresholded_image, raw_edges, image)
     
-    geometric_lines = geometric_lines.astype(float)
-    geometric_lines = merge_lines(geometric_lines)
+    if custom_processing:
+        geometric_lines = geometric_lines.astype(float)
+        geometric_lines = merge_lines(geometric_lines)
+        geometric_lines = geometric_lines.astype(int)
 
-    geometric_lines = geometric_lines.astype(int)
-    for x1, y1, x2, y2 in geometric_lines:
-        cv2.line(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+    if geometric_lines is not None:
+        for x, line in enumerate(geometric_lines):
+            if not ((slopes[x] > 60 and slopes[x] < 85) or (slopes[x] < -60 and slopes[x] > -85)):
+                continue
+            x1, y1, x2, y2 = line[0]
+            cv2.line(image, (x1, y1), (x2, y2), (0, 255-slopes[x]*(255/90), slopes[x]*(255/90)), 2)
     
     return (thresholded_image, raw_edges, image)
 
