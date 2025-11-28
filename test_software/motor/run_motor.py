@@ -26,8 +26,8 @@ async def main():
     ])
 
     # Enter closed loop control
-    # await odrv0.axis0.controller.config.input_mode.write(InputMode.TRAP_TRAJ)
-    await odrv0.axis0.controller.config.input_mode.write(InputMode.PASSTHROUGH)
+    await odrv0.axis0.controller.config.input_mode.write(InputMode.TRAP_TRAJ)
+    # await odrv0.axis0.controller.config.input_mode.write(InputMode.PASSTHROUGH)
     await odrv0.axis0.controller.config.control_mode.write(ControlMode.POSITION_CONTROL)
     await request_state(odrv0.axis0, AxisState.CLOSED_LOOP_CONTROL)
 

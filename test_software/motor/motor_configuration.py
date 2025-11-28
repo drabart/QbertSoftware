@@ -33,9 +33,9 @@ def main():
     print("Connected to ODrive:", odrv)
 
     if args.backup:
-        load_config(odrv, args.file_name)
-    else:
         save_config(odrv, args.file_name)
+    else:
+        load_config(odrv, args.file_name)
 
 if __name__ == "__main__":
     main()
