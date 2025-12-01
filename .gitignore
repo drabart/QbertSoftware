@@ -5,3 +5,4 @@ log
 
 .venv
 *.avi
+test_software/motor/bin
