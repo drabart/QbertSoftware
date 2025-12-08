@@ -153,7 +153,7 @@ struct Msg_SetInputPos : public CANMsg {
 struct Msg_SetInputVel : public CANMsg {
     Msg_SetInputVel(uint8_t axis_id,
                     float vel,
-                    float torque_ff)
+                    float torque_ff = 0.0)
     {
         frame.can_id = 0x00D | axis_id;
         frame.can_dlc = 8;

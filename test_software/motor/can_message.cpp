@@ -8,6 +8,7 @@
 #include <net/if.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
+#include <chrono>
 
 #include "messages.hpp"
 
@@ -33,14 +34,17 @@ int main() {
     Msg_SetRequestedState state(motor_id, 8);
     state.send(sock);
 
+    #define VELOCITY_CONTROL (2u)
     #define POSITION_CONTROL (3u)
+    #define INPUT_MODE_PASSTHROUGH (1u)
     #define INPUT_MODE_TRAP_TRAJ (5u)
-    Msg_SetControllerModes modes(motor_id, POSITION_CONTROL, INPUT_MODE_TRAP_TRAJ);
+    // Msg_SetControllerModes modes(motor_id, POSITION_CONTROL, INPUT_MODE_TRAP_TRAJ);
+    Msg_SetControllerModes modes(motor_id, VELOCITY_CONTROL, INPUT_MODE_PASSTHROUGH);
     modes.send(sock);
 
     // Example: move position first
-    Msg_SetInputPos pos_0(motor_id, 0.0);
-    Msg_SetInputPos pos_100(motor_id, 500.0);
+    Msg_SetInputVel pos_0(motor_id, -2.0);
+    Msg_SetInputVel pos_100(motor_id, 2.0);
     bool up = true;
     int res = pos_100.send(sock);
     if (res != 0) {
@@ -57,11 +61,37 @@ int main() {
     Msg_GetEncoderError encoder_err(motor_id);
     Msg_GetSensorlessError sensorless_err(motor_id);
 
+    static bool first = true;
+    static double last_pos = 0.0;
+    float vel_estimate = 0.0;
+    static std::chrono::steady_clock::time_point last_time;
+
     while (true) {
         // Encoder estimates
         est.send_and_recv(sock);
-        std::cout << std::setprecision(3) << "[EncoderEst] pos=" << est.pos_estimate 
-                << " vel=" << est.vel_estimate << "\n";
+
+        auto now = std::chrono::steady_clock::now();
+
+        if (first) {
+            last_time = now;
+            last_pos = est.pos_estimate;
+            first = false;
+            vel_estimate = 0.0;
+        } else {
+            double dt = std::chrono::duration<double>(now - last_time).count();
+            double dp = est.pos_estimate - last_pos;
+
+            if (dt > 0.0)
+                vel_estimate = dp / dt * 0.1 + vel_estimate * 0.9;
+
+            last_time = now;
+            last_pos = est.pos_estimate;
+        }
+
+        std::cout << std::setprecision(5)
+                << "[EncoderEst] pos=" << est.pos_estimate
+                << " vel=" << vel_estimate << "\n";
+
 
         // Encoder counts
         // count.send_and_recv(sock);
@@ -98,7 +128,7 @@ int main() {
         // std::cout << "------------------------\n" << std::flush;
 
         // Exit condition
-        if (up && est.pos_estimate > 499.5) {
+        if (up && est.pos_estimate > 4999999.5) {
             pos_0.send(sock);
             up = !up;
         }
