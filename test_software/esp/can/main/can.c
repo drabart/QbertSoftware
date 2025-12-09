@@ -1,4 +1,5 @@
 #include "can.h"
+#include <inttypes.h>
 #include "esp_err.h"
 #include "esp_twai.h"
 #include "esp_twai_onchip.h"
@@ -21,8 +22,30 @@
 QueueHandle_t queue;
 typedef CanErr (*can_callback_t)(const twai_node_handle_t node_hdl, const twai_frame_t *frame);
 
+void print_twai_frame(const twai_frame_t *frame) {
+    const twai_frame_header_t *h = &frame->header;
+
+    printf("TWAI Frame:\n");
+    printf("  ID: 0x%" PRIu32 "\n", h->id);
+    printf("  DLC: %" PRIu16 "\n", h->dlc);
+    printf("  Flags:\n");
+    printf("    IDE: %d\n", h->ide);
+    printf("    RTR: %d\n", h->rtr);
+    printf("    FDF: %d\n", h->fdf);
+    printf("    BRS: %d\n", h->brs);
+    printf("    ESI: %d\n", h->esi);
+    printf("  Timestamp / Trigger Time: %" PRIu64 "\n", h->timestamp);
+
+    printf("  Data (%zu bytes):", h->dlc);
+    for (size_t i = 0; i < h->dlc; i++) {
+        if (i % 16 == 0) printf("\n    ");
+        printf("%02X ", frame->buffer[i]);
+    }
+    printf("\n");
+}
+
 CanErr setPosAxe(const twai_node_handle_t node_hdl, const twai_frame_t *frame) {
-    if (frame->header.dlc != 4) return IncorrectBufLen;
+    if (frame->header.dlc != 4) return IncorrectDLC;
 
     // ESP reads LE
     float pos = *(float*) frame->buffer;
@@ -32,7 +55,7 @@ CanErr setPosAxe(const twai_node_handle_t node_hdl, const twai_frame_t *frame) {
 }
 
 CanErr setGripState(const twai_node_handle_t node_hdl, const twai_frame_t *frame) {
-    if (frame->header.dlc != 1) return IncorrectBufLen;
+    if (frame->header.dlc != 1) return IncorrectDLC;
 
     uint8_t active = *frame->buffer;
     printf("active = %d\n", active);
@@ -109,32 +132,36 @@ void heartbeat(void* arg) {
 
 void can_dispatch_cb(void* arg) {
     twai_node_handle_t node_hdl = arg;
-    twai_frame_t frame;
+    twai_frame_t *frame;
 
     for (;;) {
         if (xQueueReceive(queue, &frame, portMAX_DELAY) == pdTRUE) {
-            uint8_t cmd = frame.header.id & CMD_MASK;
-            printf("received CAN frame with cmd: %d\n", cmd);
+            print_twai_frame(frame);
+            uint8_t cmd = frame->header.id & CMD_MASK;
+            if (cmd > NUM_CAN_CMD) goto cleanup;
+
             can_callback_t cb = callbacks[cmd];
             if (cb) {
-                CanErr err = cb(node_hdl, &frame);
+                CanErr err = cb(node_hdl, frame);
                 printf("err: %d\n", err);
             }
+
+            cleanup:
+            free(frame->buffer);
+            free(frame);
         }
     }
 }
 
 static bool twai_rx(twai_node_handle_t handle, const twai_rx_done_event_data_t *edata, void *user_ctx) {
-    uint8_t buf[8];
-    twai_frame_t frame = {
-        .buffer = buf,
-        .buffer_len = 8,
-    };
+    twai_frame_t *frame = calloc(1, sizeof(twai_frame_t));
+    frame->buffer = calloc(8, 1);
+    frame->buffer_len = 8;
 
-    if (ESP_OK == twai_node_receive_from_isr(handle, &frame)) {
+    if (ESP_OK == twai_node_receive_from_isr(handle, frame)) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-        if (frame.header.id >> 5 == NODE_ID) {
+        if (frame->header.id >> 5 == NODE_ID) {
             xQueueSendFromISR(queue, &frame, &xHigherPriorityTaskWoken);
             return xHigherPriorityTaskWoken == pdTRUE;
         }
@@ -158,7 +185,10 @@ void app_main(void) {
     ESP_ERROR_CHECK(twai_new_node_onchip(&node_config, &node_hdl));
     ESP_ERROR_CHECK(twai_node_register_event_callbacks(node_hdl, &user_cbs, NULL));
 
-    queue = xQueueCreate(10, sizeof(twai_frame_t));
+    queue = xQueueCreate(10, sizeof(twai_frame_t *));
+    if (!queue) {
+        return;
+    }
 
     gpio_reset_pin(LED_PIN);
     gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);

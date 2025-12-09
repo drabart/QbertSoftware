@@ -16,7 +16,7 @@ typedef enum {
 
 typedef enum {
     None = 0,
-    IncorrectBufLen = -1,
+    IncorrectDLC = -1,
     IncorrectArgs = -2,
     NoRTR = -3,
     UnknownErr = -4,
