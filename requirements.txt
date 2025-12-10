@@ -45,7 +45,6 @@ propcache==0.4.1
 psutil==7.1.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
-pybullet==3.2.7
 Pygments==2.19.2
 pyparsing==3.2.5
 PyQt6==6.10.1
