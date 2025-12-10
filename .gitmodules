@@ -1,0 +1,7 @@
+
+[submodule "src/flexbe_behavior_engine"]
+	path = src/flexbe_behavior_engine
+	url = https://github.com/FlexBE/flexbe_behavior_engine.git
+[submodule "src/flexbe_webui"]
+	path = src/flexbe_webui
+	url = https://github.com/FlexBE/flexbe_webui.git
