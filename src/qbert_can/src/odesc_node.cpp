@@ -1,73 +1,41 @@
-#include <rclcpp/rclcpp.hpp>
-#include <std_msgs/msg/float64_multi_array.hpp>
-#include <std_srvs/srv/trigger.hpp>
 #include <chrono>
+
+#include "rclcpp/rclcpp.hpp"
+#include "std_srvs/srv/trigger.hpp"
+#include "odesc_msgs.hpp"
+#include "qbert_msgs/msg/can_frame.hpp"
 
 using namespace std::chrono_literals;
 
-class GripperNode : public rclcpp::Node
+class ODescNode : public rclcpp::Node
 {
+private:
+    rclcpp::Publisher<qbert_msgs::msg::CanFrame>::SharedPtr pub_;
+    rclcpp::Subscription<qbert_msgs::msg::CanFrame>::SharedPtr sub_;
+    rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr reboot_srv_;
+    rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr clear_error_srv_;
+
 public:
-  GripperNode() : Node("gripper_node")
+  ODescNode() : Node("odesc_node")
   {
-    pub_ = this->create_publisher<std_msgs::msg::Float64MultiArray>(
-        "/gripper_controller/commands", 10);
+    pub_ = this->create_publisher<qbert_msgs::msg::CanFrame>(
+        "/can_tx", 10);
+    sub_ = this->create_subscription<qbert_msgs::msg::CanFrame>(
+        "/can_rx", 10, bind(&ODescNode::can_message_received_callback, this, std::placeholders::_1));
 
-    // Services to trigger actions
-    extend_srv_ = this->create_service<std_srvs::srv::Trigger>(
-        "extend_grippers",
-        std::bind(&GripperNode::extend_callback, this, std::placeholders::_1, std::placeholders::_2));
-
-    retract_srv_ = this->create_service<std_srvs::srv::Trigger>(
-        "retract_grippers",
-        std::bind(&GripperNode::retract_callback, this, std::placeholders::_1, std::placeholders::_2));
-
-    RCLCPP_INFO(this->get_logger(), "GripperNode ready");
+    RCLCPP_INFO(this->get_logger(), "ODescNode ready");
   }
 
 private:
-  rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr pub_;
-  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr extend_srv_;
-  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr retract_srv_;
+    void can_message_received_callback(const qbert_msgs::msg::CanFrame& msg) const {
 
-  // --- Helper function ---
-  void send_positions(double j1, double j2, double j3, double j4)
-  {
-    std_msgs::msg::Float64MultiArray msg;
-    msg.data = {j1, j2, j3, j4};
-    pub_->publish(msg);
-  }
-
-  // --- Service callbacks ---
-  void extend_callback(
-      const std::shared_ptr<std_srvs::srv::Trigger::Request>,
-      std::shared_ptr<std_srvs::srv::Trigger::Response> res)
-  {
-    send_positions(-0.04, -0.04, -0.04, -0.04);
-
-    rclcpp::sleep_for(1s);
-
-    res->success = true;
-    res->message = "Grippers extended";
-  }
-
-  void retract_callback(
-      const std::shared_ptr<std_srvs::srv::Trigger::Request>,
-      std::shared_ptr<std_srvs::srv::Trigger::Response> res)
-  {
-    send_positions(0.0, 0.0, 0.0, 0.0);
-
-    rclcpp::sleep_for(1s);
-
-    res->success = true;
-    res->message = "Grippers retracted";
-  }
+    }
 };
 
 int main(int argc, char *argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<GripperNode>());
+  rclcpp::spin(std::make_shared<ODescNode>());
   rclcpp::shutdown();
   return 0;
 }

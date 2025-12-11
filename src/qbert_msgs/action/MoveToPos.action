@@ -1,0 +1,11 @@
+# Goal
+int32 motor
+float64 target_position
+---
+# Result
+bool success
+string message
+---
+# Feedback
+float64 current_position
+float64 remaining_distance

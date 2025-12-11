@@ -11,9 +11,15 @@ find_package(rosidl_default_generators REQUIRED)
 
 # Generate message interfaces
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "action/MoveToPos.action"
+
   "msg/LimitSwitch.msg"
   "msg/DistanceSensor.msg"
   "msg/CanFrame.msg"
+
+  "srv/Home.srv"
+  "srv/MoveWithVel.srv"
+  "srv/SetupDrive.srv"
 )
 
 # Export runtime dependencies for Python
