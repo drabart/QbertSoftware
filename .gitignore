@@ -2,7 +2,7 @@ build
 install
 log
 *__pycache__*
-
+.vscode
 .venv
 *.avi
 test_software/motor/bin
