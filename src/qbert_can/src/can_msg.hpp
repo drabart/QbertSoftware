@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <unistd.h>
 #include <linux/can.h>
+#include <sys/socket.h> 
+
+#include "qbert_msgs/msg/can_frame.hpp"
 
 #define CHECK_RET(expr, msg)                     \
     do {                                         \
@@ -49,11 +52,31 @@ T read_le(const uint8_t* p) {
  *  Base CAN message
  ***********************************************/
 struct CANMsg {
+    using RosCANMsg = qbert_msgs::msg::CanFrame;
     can_frame frame;
 
     int send(int sock) {
         CHECK_RET(::send(sock, &frame, sizeof(can_frame), 0), "send");
 
         return 0;
+    }
+
+    void recv_callback(can_frame recv_frame) {}
+
+    RosCANMsg to_ros_msg() {
+        RosCANMsg msg = RosCANMsg();
+        msg.id = frame.can_id;
+        msg.dlc = frame.can_dlc;
+        for (int i=0; i<frame.can_dlc; i++) {
+            msg.data[i] = frame.data[i];
+        }
+    }
+
+    void from_ros_msg(RosCANMsg ros_msg) {
+        frame.can_id = ros_msg.id;
+        frame.can_dlc = ros_msg.dlc;
+        for (int i=0; i<ros_msg.dlc; i++) {
+            frame.data[i] = ros_msg.data[i];
+        }
     }
 };
