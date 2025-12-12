@@ -1,2 +1,2 @@
 string sensor_id
-float64 distance
+float32 distance

@@ -63,29 +63,17 @@ public:
 private:
     void send_request(const qbert_msgs::msg::CanFrame& msg) const {
         CANMsg can_msg{};
-
-        can_msg.frame.can_id = msg.id;
-        can_msg.frame.can_dlc = msg.dlc;
-        
-        memcpy(can_msg.frame.data, msg.data.data(), msg.dlc);
-
+        can_msg.from_ros_msg(msg);
         can_msg.send(sock_);
     }
 
     void receive_loop() {
-        struct can_frame frame{};
+        CANMsg msg{};
         while (running_) {
-            int nbytes = read(sock_, &frame, sizeof(frame));
+            int nbytes = read(sock_, &msg.frame, sizeof(msg.frame));
             if (nbytes > 0) {
-                qbert_msgs::msg::CanFrame msg;
-                msg.id = frame.can_id;
-                msg.dlc = frame.can_dlc;
-                for (int i = 0; i < frame.can_dlc; i++)
-                {
-                    msg.data[i] = frame.data[i];
-                }
-
-                pub_->publish(msg);
+                qbert_msgs::msg::CanFrame ros_msg = msg.to_ros_msg(); 
+                pub_->publish(ros_msg);
             } else {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }

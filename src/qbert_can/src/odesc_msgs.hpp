@@ -220,9 +220,23 @@ struct Msg_ClearErrors : public CANMsg {
  *  Getter messages (no payload)
  ***********************************************/
 
+enum MotorCommandID {
+    GetMotorError = 0x003,
+    GetEncoderError = 0x004,
+    GetSensorlessError = 0x005,
+    GetEncoderEst = 0x009,
+    GetEncoderCount = 0x00A,
+    GetIQ = 0x014,
+    GetSensorlessEst = 0x015,
+    GetBusVoltageCurrent = 0x017,
+};
+
+
 // 0x003 - Get Motor Error
 struct Msg_GetMotorError : public CANMsg {
     uint64_t motor_error = 0;
+
+    Msg_GetMotorError(const CANMsg& m) : CANMsg(m) {}
 
     Msg_GetMotorError(uint8_t axis_id) {
         frame.can_id = 0x003 | axis_id | CAN_RTR_FLAG;
@@ -238,6 +252,8 @@ struct Msg_GetMotorError : public CANMsg {
 struct Msg_GetEncoderError : public CANMsg {
     uint32_t encoder_error = 0;
 
+    Msg_GetEncoderError(const CANMsg& m) : CANMsg(m) {}
+
     Msg_GetEncoderError(uint8_t axis_id) {
         frame.can_id = 0x004 | axis_id | CAN_RTR_FLAG;
         frame.can_dlc = 0;
@@ -251,6 +267,8 @@ struct Msg_GetEncoderError : public CANMsg {
 // 0x005 - Get Sensorless Error
 struct Msg_GetSensorlessError : public CANMsg {
     uint32_t sensorless_error = 0;
+
+    Msg_GetSensorlessError(const CANMsg& m) : CANMsg(m) {}
 
     Msg_GetSensorlessError(uint8_t axis_id) {
         frame.can_id = 0x005 | axis_id | CAN_RTR_FLAG;
@@ -266,6 +284,8 @@ struct Msg_GetSensorlessError : public CANMsg {
 struct Msg_GetEncoderEst : public CANMsg {
     float pos_estimate = 0;
     float vel_estimate = 0;
+
+    Msg_GetEncoderEst(const CANMsg& m) : CANMsg(m) {}
 
     Msg_GetEncoderEst(uint8_t axis_id) {
         frame.can_id = 0x009 | axis_id | CAN_RTR_FLAG;
@@ -283,6 +303,8 @@ struct Msg_GetEncoderCount : public CANMsg {
     int32_t shadow_count = 0;
     int32_t count_in_cpr = 0;
 
+    Msg_GetEncoderCount(const CANMsg& m) : CANMsg(m) {}
+
     Msg_GetEncoderCount(uint8_t axis_id) {
         frame.can_id = 0x00A | axis_id | CAN_RTR_FLAG;
         frame.can_dlc = 0;
@@ -298,6 +320,8 @@ struct Msg_GetEncoderCount : public CANMsg {
 struct Msg_GetIQ : public CANMsg {
     float iq_setpoint = 0;
     float iq_measured = 0;
+
+    Msg_GetIQ(const CANMsg& m) : CANMsg(m) {}
 
     Msg_GetIQ(uint8_t axis_id) {
         frame.can_id = 0x014 | axis_id | CAN_RTR_FLAG;
@@ -315,6 +339,8 @@ struct Msg_GetSensorlessEst : public CANMsg {
     float pos_estimate = 0;
     float vel_estimate = 0;
 
+    Msg_GetSensorlessEst(const CANMsg& m) : CANMsg(m) {}
+
     Msg_GetSensorlessEst(uint8_t axis_id) {
         frame.can_id = 0x015 | axis_id | CAN_RTR_FLAG;
         frame.can_dlc = 0;
@@ -330,6 +356,8 @@ struct Msg_GetSensorlessEst : public CANMsg {
 struct Msg_GetBusVoltageCurrent : public CANMsg {
     float bus_voltage = 0;
     float bus_current = 0;
+
+    Msg_GetBusVoltageCurrent(const CANMsg& m) : CANMsg(m) {}
 
     Msg_GetBusVoltageCurrent(uint8_t axis_id) {
         frame.can_id = 0x017 | axis_id | CAN_RTR_FLAG;

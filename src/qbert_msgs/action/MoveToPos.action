@@ -1,11 +1,11 @@
 # Goal
 int32 motor
-float64 target_position
+float32 target_position
 ---
 # Result
 bool success
-string message
+float32 position_achieved
 ---
 # Feedback
-float64 current_position
-float64 remaining_distance
+float32 current_position
+float32 remaining_distance
