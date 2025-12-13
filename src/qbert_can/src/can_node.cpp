@@ -65,17 +65,22 @@ private:
         CANMsg can_msg{};
         can_msg.from_ros_msg(msg);
         can_msg.send(sock_);
+        RCLCPP_INFO(this->get_logger(), "sent CAN message");
     }
 
     void receive_loop() {
         CANMsg msg{};
-        while (running_) {
+        while (running_ && rclcpp::ok()) {
+            // RCLCPP_INFO(this->get_logger(), "loop");
             int nbytes = read(sock_, &msg.frame, sizeof(msg.frame));
             if (nbytes > 0) {
+                if (!rclcpp::ok()) 
+                    break;
+
                 qbert_msgs::msg::CanFrame ros_msg = msg.to_ros_msg(); 
                 pub_->publish(ros_msg);
             } else {
-                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
             }
         }
     }

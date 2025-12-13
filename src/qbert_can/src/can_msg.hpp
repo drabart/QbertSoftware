@@ -61,15 +61,18 @@ struct CANMsg {
         return 0;
     }
 
-    void recv_callback(can_frame recv_frame) {}
+    void recv_callback(can_frame recv_frame) {
+        (void)recv_frame;
+    }
 
     RosCANMsg to_ros_msg() {
         RosCANMsg msg = RosCANMsg();
         msg.id = frame.can_id;
         msg.dlc = frame.can_dlc;
         for (int i=0; i<frame.can_dlc; i++) {
-            msg.data[i] = frame.data[i];
+            msg.data.push_back(frame.data[i]);
         }
+        return msg;
     }
 
     void from_ros_msg(RosCANMsg ros_msg) {

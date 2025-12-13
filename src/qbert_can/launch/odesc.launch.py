@@ -14,6 +14,6 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        # can_node,
+        can_node,
         odesc_node
     ])
