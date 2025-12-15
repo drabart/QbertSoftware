@@ -12,6 +12,15 @@ struct Msg_HeartBeat : public CANMsg {
 
     Msg_HeartBeat(const CANMsg& m) : CANMsg(m) {}
 
+    Msg_HeartBeat() {
+        axis_error = 0;
+        axis_current_state = 0;
+        motor_error = false;
+        encoder_error = false;
+        controller_error = false;
+        trajectory_done = false;
+    }
+
     void recv_callback(can_frame recv_frame) {
         axis_error = read_le<uint32_t>(recv_frame.data);
         axis_current_state = read_le<uint8_t>(recv_frame.data + 4);

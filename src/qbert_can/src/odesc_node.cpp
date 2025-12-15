@@ -39,8 +39,7 @@ private:
     Msg_HeartBeat heart_beat_;
 
 public:
-    ODescNode() : Node("odesc_node")
-    {
+    ODescNode() : Node("odesc_node") {
         pub_ = this->create_publisher<CanFrame>(
             "/can_tx", 10);
         sub_ = this->create_subscription<CanFrame>(
@@ -99,6 +98,13 @@ private:
     void send_position_target(DeviceID motor_id, float target) {
         motor_id = motor_id << 5;
         CANMsg msg = Msg_SetInputPos(motor_id, target);
+        CanFrame ros_msg = msg.to_ros_msg();
+        pub_->publish(ros_msg);
+    }
+
+    void send_velocity_target(DeviceID motor_id, float target) {
+        motor_id = motor_id << 5;
+        CANMsg msg = Msg_SetInputVel(motor_id, target);
         CanFrame ros_msg = msg.to_ros_msg();
         pub_->publish(ros_msg);
     }
