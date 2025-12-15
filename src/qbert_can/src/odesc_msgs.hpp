@@ -2,6 +2,30 @@
 
 #include "can_msg.hpp"
 
+struct Msg_HeartBeat : public CANMsg {
+    uint32_t axis_error;
+    uint8_t axis_current_state;
+    bool motor_error;
+    bool encoder_error;
+    bool controller_error;
+    bool trajectory_done;
+
+    Msg_HeartBeat(const CANMsg& m) : CANMsg(m) {}
+
+    void recv_callback(can_frame recv_frame) {
+        axis_error = read_le<uint32_t>(recv_frame.data);
+        axis_current_state = read_le<uint8_t>(recv_frame.data + 4);
+        uint8_t helper;
+        helper = read_le<uint8_t>(recv_frame.data + 5);
+        motor_error = helper & 0x01;
+        helper = read_le<uint8_t>(recv_frame.data + 6);
+        encoder_error = helper & 0x01;
+        helper = read_le<uint8_t>(recv_frame.data + 7);
+        controller_error = helper & 0x01;
+        trajectory_done = helper & 0x80;
+    }
+};
+
 /***********************************************
  *  0x007 – Set Axis Requested State
  ***********************************************/
@@ -221,6 +245,7 @@ struct Msg_ClearErrors : public CANMsg {
  ***********************************************/
 
 enum MotorCommandID {
+    HeartBeat = 0x001,
     GetMotorError = 0x003,
     GetEncoderError = 0x004,
     GetSensorlessError = 0x005,
