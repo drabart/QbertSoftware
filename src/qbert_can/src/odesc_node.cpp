@@ -36,6 +36,7 @@ private:
 
     std::unordered_map<CommandID, std::function<void(CANMsg)>> command_callbacks_;
     std::unordered_map<DeviceID, MotorData> motor_data_;
+    Msg_HeartBeat heart_beat_;
 
 public:
     ODescNode() : Node("odesc_node")
@@ -53,6 +54,7 @@ public:
             std::bind(&ODescNode::handle_move_to_pos_accepted, this, std::placeholders::_1));
 
         command_callbacks_[MotorCommandID::GetEncoderEst] = [this](CANMsg msg) {position_received(msg); };
+        command_callbacks_[MotorCommandID::HeartBeat] = [this](CANMsg msg) {heartbeat_received(msg); };
 
         RCLCPP_INFO(this->get_logger(), "ODescNode ready");
     }
@@ -82,7 +84,10 @@ private:
         motor_data_.at(device_id).position_estimate = est.pos_estimate;
     }
 
-    // TODO heartbeat
+    void heartbeat_received(CANMsg msg) {
+        heart_beat_ = msg;
+        heart_beat_.recv_callback(msg.frame);
+    }
 
     void send_position_est_request(DeviceID motor_id) {
         motor_id = motor_id << 5;
