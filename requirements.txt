@@ -1,7 +1,8 @@
 # ROS nodes
 catkin_pkg
 opencv-python
-can
+python-can
+odrive
 
 # FlexBE
 pyyaml
