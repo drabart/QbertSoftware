@@ -17,7 +17,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/DistanceSensor.msg"
   "msg/CanFrame.msg"
 
-  "srv/Home.srv"
+  "srv/Motor.srv"
   "srv/MoveWithVel.srv"
   "srv/SetupDrive.srv"
 )

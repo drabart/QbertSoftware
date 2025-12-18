@@ -3,32 +3,59 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 
-#include "std_srvs/srv/trigger.hpp"
-
 #include "odesc_msgs.hpp"
 #include "qbert_msgs/msg/can_frame.hpp"
-#include "qbert_msgs/srv/home.hpp"
-#include "qbert_msgs/srv/move_with_vel.hpp"
+
+#include "qbert_msgs/srv/motor.hpp"
 #include "qbert_msgs/srv/setup_drive.hpp"
+#include "qbert_msgs/srv/move_with_vel.hpp"
+
 #include "qbert_msgs/action/move_to_pos.hpp"
 
 using namespace std::chrono_literals;
 
+enum AxisState {
+    IDLE = 1,
+    CLOSED_LOOP_CONTROL = 8,
+    HOMING = 11,
+};
+
+enum InputMode {
+    INACTIVE = 0,
+    PASSTROUGH = 1,
+    TRAP_TRAJ = 5,
+};
+
+enum ControlMode {
+    VELOCITY_CONTROL = 2,
+    POSITION_CONTROL = 3,
+};
+
 struct MotorData {
     double position_estimate;
+    int32_t current_state;
+    bool error;
 };
 
 class ODescNode : public rclcpp::Node
 {
 private:
     using MoveToPos = qbert_msgs::action::MoveToPos;
-    using TriggerService = std_srvs::srv::Trigger;
+    using MotorService = qbert_msgs::srv::Motor;
+    using SetupDrive = qbert_msgs::srv::SetupDrive;
+    using MoveWithVel = qbert_msgs::srv::MoveWithVel;
     using CanFrame = qbert_msgs::msg::CanFrame;
 
-    rclcpp::Publisher<CanFrame>::SharedPtr pub_;
-    rclcpp::Subscription<CanFrame>::SharedPtr sub_;
-    rclcpp::Service<TriggerService>::SharedPtr reboot_srv_;
-    rclcpp::Service<TriggerService>::SharedPtr clear_error_srv_;
+    rclcpp::Publisher<CanFrame>::SharedPtr can_pub_;
+    rclcpp::Subscription<CanFrame>::SharedPtr can_sub_;
+    
+    rclcpp::Service<MotorService>::SharedPtr reboot_srv_;
+    rclcpp::Service<MotorService>::SharedPtr clear_error_srv_;
+    rclcpp::Service<MotorService>::SharedPtr home_srv_;
+    rclcpp::Service<MotorService>::SharedPtr motor_ready_srv_;
+    rclcpp::Service<SetupDrive>::SharedPtr setup_srv_;
+    rclcpp::Service<MoveWithVel>::SharedPtr move_with_vel_srv_;
+    
     rclcpp_action::Server<MoveToPos>::SharedPtr move_to_pos_action_;
 
     using CommandID = int;
@@ -36,13 +63,14 @@ private:
 
     std::unordered_map<CommandID, std::function<void(CANMsg)>> command_callbacks_;
     std::unordered_map<DeviceID, MotorData> motor_data_;
-    Msg_HeartBeat heart_beat_;
 
 public:
     ODescNode() : Node("odesc_node") {
-        pub_ = this->create_publisher<CanFrame>(
+        using namespace std::placeholders;
+
+        can_pub_ = this->create_publisher<CanFrame>(
             "/can_tx", 10);
-        sub_ = this->create_subscription<CanFrame>(
+        can_sub_ = this->create_subscription<CanFrame>(
             "/can_rx", 10, bind(&ODescNode::can_message_received_callback, this, std::placeholders::_1));
 
         this->move_to_pos_action_ = rclcpp_action::create_server<MoveToPos>(
@@ -52,6 +80,26 @@ public:
             std::bind(&ODescNode::handle_move_to_pos_cancel, this, std::placeholders::_1),
             std::bind(&ODescNode::handle_move_to_pos_accepted, this, std::placeholders::_1));
 
+        // Initialize services
+        reboot_srv_ = this->create_service<MotorService>(
+            "/reboot_motor", std::bind(&ODescNode::reboot_callback, this, _1, _2));
+
+        clear_error_srv_ = this->create_service<MotorService>(
+            "/clear_motor_error", std::bind(&ODescNode::clear_error_callback, this, _1, _2));
+
+        home_srv_ = this->create_service<MotorService>(
+            "/home_motor", std::bind(&ODescNode::home_callback, this, _1, _2));
+
+        setup_srv_ = this->create_service<SetupDrive>(
+            "/setup_drive", std::bind(&ODescNode::setup_callback, this, _1, _2));
+
+        move_with_vel_srv_ = this->create_service<MoveWithVel>(
+            "/move_with_velocity", std::bind(&ODescNode::move_with_vel_callback, this, _1, _2));
+
+        motor_ready_srv_ = this->create_service<MotorService>(
+            "/motor_ready", std::bind(&ODescNode::motor_ready_callback, this, _1, _2));
+        
+        // Setup can message listeners
         command_callbacks_[MotorCommandID::GetEncoderEst] = [this](CANMsg msg) {position_received(msg); };
         command_callbacks_[MotorCommandID::HeartBeat] = [this](CANMsg msg) {heartbeat_received(msg); };
 
@@ -84,31 +132,141 @@ private:
     }
 
     void heartbeat_received(CANMsg msg) {
-        heart_beat_ = msg;
-        heart_beat_.recv_callback(msg.frame);
+        Msg_HeartBeat heart_beat = msg;
+        heart_beat.recv_callback(msg.frame);
+
+        DeviceID device_id = (msg.frame.can_id & 0x7E0) >> 5;
+        if (motor_data_.find(device_id) == motor_data_.end()) {
+            motor_data_.insert({device_id, MotorData{}});
+        }
+
+        auto &motor_data = motor_data_.at(device_id);
+        motor_data.current_state = heart_beat.axis_current_state;
+        motor_data.error = heart_beat.axis_error | heart_beat.controller_error | heart_beat.encoder_error | heart_beat.motor_error;
     }
 
     void send_position_est_request(DeviceID motor_id) {
         motor_id = motor_id << 5;
         CANMsg msg = Msg_GetEncoderEst(motor_id);
         CanFrame ros_msg = msg.to_ros_msg();
-        pub_->publish(ros_msg);
+        can_pub_->publish(ros_msg);
     }
 
     void send_position_target(DeviceID motor_id, float target) {
         motor_id = motor_id << 5;
         CANMsg msg = Msg_SetInputPos(motor_id, target);
         CanFrame ros_msg = msg.to_ros_msg();
-        pub_->publish(ros_msg);
+        can_pub_->publish(ros_msg);
     }
 
     void send_velocity_target(DeviceID motor_id, float target) {
         motor_id = motor_id << 5;
         CANMsg msg = Msg_SetInputVel(motor_id, target);
         CanFrame ros_msg = msg.to_ros_msg();
-        pub_->publish(ros_msg);
+        can_pub_->publish(ros_msg);
     }
 
+    void send_reboot_request(DeviceID motor_id) {
+        motor_id = motor_id << 5;
+        CANMsg msg = Msg_Reboot(motor_id);
+        CanFrame ros_msg = msg.to_ros_msg();
+        can_pub_->publish(ros_msg);
+    }
+
+    void send_clear_errors_request(DeviceID motor_id) {
+        motor_id = motor_id << 5;
+        CANMsg msg = Msg_ClearErrors(motor_id);
+        CanFrame ros_msg = msg.to_ros_msg();
+        can_pub_->publish(ros_msg);
+    }
+
+    void send_state_request(DeviceID motor_id, AxisState state) {
+        motor_id = motor_id << 5;
+        CANMsg msg = Msg_SetRequestedState(motor_id, state);
+        CanFrame ros_msg = msg.to_ros_msg();
+        can_pub_->publish(ros_msg);
+    }
+
+    void send_state_request(DeviceID motor_id, int32_t input_mode, int32_t control_mode) {
+        motor_id = motor_id << 5;
+        CANMsg msg = Msg_SetControllerModes(motor_id, control_mode, input_mode);
+        CanFrame ros_msg = msg.to_ros_msg();
+        can_pub_->publish(ros_msg);
+    }
+
+    // Services callbacks
+    void reboot_callback(
+        const std::shared_ptr<MotorService::Request> request,
+        std::shared_ptr<MotorService::Response> response)
+    {
+        RCLCPP_INFO(this->get_logger(), "Reboot service called");
+        send_reboot_request(request.get()->motor);
+        response->success = true;
+    }
+
+    void clear_error_callback(
+        const std::shared_ptr<MotorService::Request> request,
+        std::shared_ptr<MotorService::Response> response)
+    {
+        RCLCPP_INFO(this->get_logger(), "Clear error service called");
+        send_clear_errors_request(request.get()->motor);
+        response->success = true;
+    }
+
+    void home_callback(
+        const std::shared_ptr<MotorService::Request> request,
+        std::shared_ptr<MotorService::Response> response)
+    {
+        RCLCPP_INFO(this->get_logger(), "Home service called");
+        send_state_request(request.get()->motor, AxisState::HOMING);
+        response->success = true;
+    }
+
+    void motor_ready_callback(
+        const std::shared_ptr<MotorService::Request> request,
+        std::shared_ptr<MotorService::Response> response)
+    {
+        RCLCPP_INFO(this->get_logger(), "Motor ready called");
+        send_state_request(request.get()->motor, AxisState::CLOSED_LOOP_CONTROL);
+        response->success = true;
+    }
+
+    void setup_callback(
+        const std::shared_ptr<SetupDrive::Request> request,
+        std::shared_ptr<SetupDrive::Response> response)
+    {
+        RCLCPP_INFO(this->get_logger(), "Setup drive service called");
+
+        DeviceID device_id = request.get()->motor;
+
+        switch (request.get()->mode) {
+            case SetupDrive::Request::MODE_IDLE:
+                send_state_request(device_id, InputMode::INACTIVE, ControlMode::POSITION_CONTROL);
+                break;
+            case SetupDrive::Request::MODE_POSITION:
+                send_state_request(device_id, InputMode::TRAP_TRAJ, ControlMode::POSITION_CONTROL);
+                break;
+            case SetupDrive::Request::MODE_VELOCITY:
+                send_state_request(device_id, InputMode::PASSTROUGH, ControlMode::VELOCITY_CONTROL);
+                break;
+            default:
+                response->success = false;
+                return;
+        }
+
+        response->success = true;
+    }
+
+    void move_with_vel_callback(
+        const std::shared_ptr<MoveWithVel::Request> request,
+        std::shared_ptr<MoveWithVel::Response> response)
+    {
+        RCLCPP_INFO(this->get_logger(), "Move with velocity service called");
+        send_velocity_target(request.get()->motor, request.get()->vel);
+        response->success = true;
+    }
+
+    // move to pos action
     rclcpp_action::GoalResponse handle_move_to_pos_goal(
         const rclcpp_action::GoalUUID & uuid,
         std::shared_ptr<const MoveToPos::Goal> goal) {
