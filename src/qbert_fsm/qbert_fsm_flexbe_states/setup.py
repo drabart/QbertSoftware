@@ -29,6 +29,7 @@ setup(
         'console_scripts': [
             'example_action_state = qbert_fsm_flexbe_states.example_action_state',
             'example_state = qbert_fsm_flexbe_states.example_state',
+            'move_motor_to_pos_state = qbert_fsm_flexbe_states.move_motor_to_pos_state'
         ],
     },
 )
