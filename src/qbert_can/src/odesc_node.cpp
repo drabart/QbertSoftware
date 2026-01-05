@@ -124,9 +124,6 @@ private:
         est.recv_callback(msg.frame);
 
         DeviceID device_id = (msg.frame.can_id & 0x7E0) >> 5;
-        if (motor_data_.find(device_id) == motor_data_.end()) {
-            motor_data_.insert({device_id, MotorData{}});
-        }
 
         motor_data_.at(device_id).position_estimate = est.pos_estimate;
     }
@@ -143,6 +140,14 @@ private:
         auto &motor_data = motor_data_.at(device_id);
         motor_data.current_state = heart_beat.axis_current_state;
         motor_data.error = heart_beat.axis_error | heart_beat.controller_error | heart_beat.encoder_error | heart_beat.motor_error;
+    }
+
+    bool device_active(DeviceID device_id) {
+        if (motor_data_.find(device_id) == motor_data_.end()) {
+            return false;
+        }
+
+        return !motor_data.error;
     }
 
     void send_position_est_request(DeviceID motor_id) {
@@ -200,7 +205,14 @@ private:
         std::shared_ptr<MotorService::Response> response)
     {
         RCLCPP_INFO(this->get_logger(), "Reboot service called");
-        send_reboot_request(request.get()->motor);
+
+        DeviceID motor_id = request.get()->motor;
+        if (!device_active(motor_id)) {
+            response->success = false;
+            return;
+        }
+
+        send_reboot_request(motor_id);
         response->success = true;
     }
 
@@ -209,7 +221,14 @@ private:
         std::shared_ptr<MotorService::Response> response)
     {
         RCLCPP_INFO(this->get_logger(), "Clear error service called");
-        send_clear_errors_request(request.get()->motor);
+
+        DeviceID motor_id = request.get()->motor;
+        if (!device_active(motor_id)) {
+            response->success = false;
+            return;
+        }
+
+        send_clear_errors_request(motor_id);
         response->success = true;
     }
 
@@ -218,7 +237,14 @@ private:
         std::shared_ptr<MotorService::Response> response)
     {
         RCLCPP_INFO(this->get_logger(), "Home service called");
-        send_axis_state_request(request.get()->motor, AxisState::HOMING);
+
+        DeviceID motor_id = request.get()->motor;
+        if (!device_active(motor_id)) {
+            response->success = false;
+            return;
+        }
+
+        send_axis_state_request(motor_id, AxisState::HOMING);
         response->success = true;
     }
 
@@ -227,7 +253,14 @@ private:
         std::shared_ptr<MotorService::Response> response)
     {
         RCLCPP_INFO(this->get_logger(), "Motor ready called");
-        send_axis_state_request(request.get()->motor, AxisState::CLOSED_LOOP_CONTROL);
+
+        DeviceID motor_id = request.get()->motor;
+        if (!device_active(motor_id)) {
+            response->success = false;
+            return;
+        }
+
+        send_axis_state_request(motor_id, AxisState::CLOSED_LOOP_CONTROL);
         response->success = true;
     }
 
@@ -254,9 +287,13 @@ private:
     {
         RCLCPP_INFO(this->get_logger(), "Setup drive service called");
 
-        DeviceID device_id = request.get()->motor;
+        DeviceID motor_id = request.get()->motor;
+        if (!device_active(motor_id)) {
+            response->success = false;
+            return;
+        }
 
-        response->success = request_state(device_id, request.get()->mode);
+        response->success = request_state(motor_id, request.get()->mode);
     }
 
     void move_with_vel_callback(
@@ -264,7 +301,14 @@ private:
         std::shared_ptr<MoveWithVel::Response> response)
     {
         RCLCPP_INFO(this->get_logger(), "Move with velocity service called");
-        send_velocity_target(request.get()->motor, request.get()->vel);
+
+        DeviceID motor_id = request.get()->motor;
+        if (!device_active(motor_id)) {
+            response->success = false;
+            return;
+        }
+
+        send_velocity_target(motor_id, request.get()->vel);
         response->success = true;
     }
 
@@ -275,6 +319,12 @@ private:
         
         RCLCPP_INFO(this->get_logger(), "Received goal for motor: %d of pos: %.2f", goal->motor, goal->target_position);
         (void)uuid;
+
+        DeviceID motor_id = request.get()->motor;
+        if (!device_active(motor_id)) {
+            return rclcpp_action::GoalResponse::REJECT;
+        }
+
         return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
     }
 
@@ -337,6 +387,14 @@ private:
             // Publish feedback
             goal_handle->publish_feedback(feedback);
             RCLCPP_INFO(this->get_logger(), "Publish feedback");
+
+            if (rclcpp::ok() && motor_data_.at(motor_id).error) {
+                result->position_achieved = current_position;
+                result->success = false;
+                goal_handle->abort(result);
+                RCLCPP_WARN(this->get_logger(), "Motor failed");
+                return;
+            }
 
             if (goal_achieved(current_position, goal.get()->target_position)) {
                 break;
