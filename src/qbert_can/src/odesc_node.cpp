@@ -180,14 +180,14 @@ private:
         can_pub_->publish(ros_msg);
     }
 
-    void send_state_request(DeviceID motor_id, AxisState state) {
+    void send_axis_state_request(DeviceID motor_id, AxisState state) {
         motor_id = motor_id << 5;
         CANMsg msg = Msg_SetRequestedState(motor_id, state);
         CanFrame ros_msg = msg.to_ros_msg();
         can_pub_->publish(ros_msg);
     }
 
-    void send_state_request(DeviceID motor_id, int32_t input_mode, int32_t control_mode) {
+    void send_control_state_request(DeviceID motor_id, int32_t input_mode, int32_t control_mode) {
         motor_id = motor_id << 5;
         CANMsg msg = Msg_SetControllerModes(motor_id, control_mode, input_mode);
         CanFrame ros_msg = msg.to_ros_msg();
@@ -218,7 +218,7 @@ private:
         std::shared_ptr<MotorService::Response> response)
     {
         RCLCPP_INFO(this->get_logger(), "Home service called");
-        send_state_request(request.get()->motor, AxisState::HOMING);
+        send_axis_state_request(request.get()->motor, AxisState::HOMING);
         response->success = true;
     }
 
@@ -227,8 +227,25 @@ private:
         std::shared_ptr<MotorService::Response> response)
     {
         RCLCPP_INFO(this->get_logger(), "Motor ready called");
-        send_state_request(request.get()->motor, AxisState::CLOSED_LOOP_CONTROL);
+        send_axis_state_request(request.get()->motor, AxisState::CLOSED_LOOP_CONTROL);
         response->success = true;
+    }
+
+    bool request_state(DeviceID device_id, uint8_t mode) {
+        switch (mode) {
+            case SetupDrive::Request::MODE_IDLE:
+                send_control_state_request(device_id, InputMode::INACTIVE, ControlMode::POSITION_CONTROL);
+                break;
+            case SetupDrive::Request::MODE_POSITION:
+                send_control_state_request(device_id, InputMode::TRAP_TRAJ, ControlMode::POSITION_CONTROL);
+                break;
+            case SetupDrive::Request::MODE_VELOCITY:
+                send_control_state_request(device_id, InputMode::PASSTROUGH, ControlMode::VELOCITY_CONTROL);
+                break;
+            default:
+                return false;
+        }
+        return true;
     }
 
     void setup_callback(
@@ -239,22 +256,7 @@ private:
 
         DeviceID device_id = request.get()->motor;
 
-        switch (request.get()->mode) {
-            case SetupDrive::Request::MODE_IDLE:
-                send_state_request(device_id, InputMode::INACTIVE, ControlMode::POSITION_CONTROL);
-                break;
-            case SetupDrive::Request::MODE_POSITION:
-                send_state_request(device_id, InputMode::TRAP_TRAJ, ControlMode::POSITION_CONTROL);
-                break;
-            case SetupDrive::Request::MODE_VELOCITY:
-                send_state_request(device_id, InputMode::PASSTROUGH, ControlMode::VELOCITY_CONTROL);
-                break;
-            default:
-                response->success = false;
-                return;
-        }
-
-        response->success = true;
+        response->success = request_state(device_id, request.get()->mode);
     }
 
     void move_with_vel_callback(
@@ -279,10 +281,11 @@ private:
     rclcpp_action::CancelResponse handle_move_to_pos_cancel(
         const std::shared_ptr<rclcpp_action::ServerGoalHandle<MoveToPos>> goal_handle) {
 
-        RCLCPP_INFO(this->get_logger(), "Received request to cancel goal");
-        (void)goal_handle;
+        const auto goal = goal_handle->get_goal();
+        request_state(goal->motor, SetupDrive::Request::MODE_IDLE);
 
-        // TODO add stopping motor here
+        RCLCPP_INFO(this->get_logger(), "Received request to cancel goal");
+
         return rclcpp_action::CancelResponse::ACCEPT;
     }
 
