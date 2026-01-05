@@ -6,11 +6,10 @@
   <name>qbert_fsm_flexbe_states</name>
   <version>0.0.1</version>
   <description>
-     qbert_fsm_flexbe_states provides a collection of custom states.
-     Feel free to add new states.
+     States for running Qbert
   </description>
-  <author email="todo@todo.com">TODO</author>
-  <maintainer email="todo@todo.com">TODO</maintainer>
+  <author email="drabart@outlook.com">Bartosz Drabinski</author>
+  <maintainer email="drabart@outlook.com">Bartosz Drabinski</maintainer>
   <license>BSD</license>
 
   <exec_depend>rclpy</exec_depend>
