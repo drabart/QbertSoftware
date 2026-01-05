@@ -8,118 +8,120 @@ from qbert_msgs.srv import Motor
 
 class SetMotorStateState(EventState):
     """
-    State implementing state setup
+    State implementing motor state setup.
 
-    Shouldn't be using multiple actions for one robot at once.
-
-    Elements defined here for UI
     Parameters
     -- motor               Motor which should be moved
-    -- desired_state       State to which motor should be set ['homing', 'inactive', 'position', 'velocity']
+    -- desired_state       ['homing', 'inactive', 'position', 'velocity']
     -- homing_topic        Topic for homing the motor
     -- setup_topic         Topic for selecting the control type
     -- motor_arm_topic     Topic for arming the motor
 
-    Outputs
-    <= state_set           State has been set
-    <= failed              Failed for some reason.
+    Outcomes
+    <= state_set
+    <= failed
     """
 
-    def __init__(self, motor, desired_state, homing_topic="/home_motor", setup_topic="/setup_drive", motor_arm_topic="/motor_ready"):
-        # See example_state.py for basic explanations.
-        super().__init__(outcomes=['move_complete', 'failed'],
-                         input_keys=[],
-                         output_keys=['failed'])
-        
-        self._homing_topic = homing_topic
-        self._setup_topic = setup_topic
-        self._motor_arm_topic = motor_arm_topic
+    MODE_MAP = {
+        'inactive': 0,
+        'position': 1,
+        'velocity': 2,
+    }
+
+    def __init__(self, motor, desired_state,
+        homing_topic="/home_motor",
+        setup_topic="/setup_drive",
+        motor_arm_topic="/motor_ready",
+    ):
+        super().__init__(
+            outcomes=['state_set', 'failed'],
+            input_keys=[],
+            output_keys=[],
+        )
+
         self._motor = motor
         self._desired_state = desired_state
 
-        # Create the action client when building the behavior.
-        # Using the proxy client provides asynchronous access to the result and status
-        # and makes sure only one client is used, no matter how often this state is used in a behavior.
+        self._homing_topic = homing_topic
+        self._setup_topic = setup_topic
+        self._motor_arm_topic = motor_arm_topic
+
         ProxyServiceCaller.initialize(SetMotorStateState._node)
 
-        self._homing_client = ProxyServiceCaller({self._homing_topic: Motor},
-                                                wait_duration=0.0)
-        self._state_client = ProxyServiceCaller({self._setup_topic: SetupDrive},
-                                                wait_duration=0.0)
-        self._motor_arm_client = ProxyServiceCaller({self._motor_arm_topic: Motor},
-                                                wait_duration=0.0)
+        self._homing_client = ProxyServiceCaller(
+            {self._homing_topic: Motor},
+            wait_duration=0.0,
+        )
+        self._state_client = ProxyServiceCaller(
+            {self._setup_topic: SetupDrive},
+            wait_duration=0.0,
+        )
+        self._motor_arm_client = ProxyServiceCaller(
+            {self._motor_arm_topic: Motor},
+            wait_duration=0.0,
+        )
 
-        # It may happen that the action client fails to send the action goal.
-        self._error = False
-        self._return = None  # Retain return value in case the outcome is blocked by operator
+    def _call_service(self, client, topic, request, name):
+        """Helper to call a service and check its result."""
+        try:
+            response = client.call(topic, request)
+        except Exception as exc:
+            Logger.logwarn(f"{name} service call failed: {type(exc)} - {exc}")
+            return None
+
+        if not response.success:
+            Logger.logwarn(f"{name} service reported failure")
+            return None
+
+        return response
 
     def execute(self, userdata):
-        # Check if the client failed to send the goal.
-        if self._error:
+        motor_req = Motor.Request()
+        motor_req.motor = self._motor
+
+        # --- HOMING ---
+        if self._desired_state == 'homing':
+            if not self._call_service(
+                self._homing_client,
+                self._homing_topic,
+                motor_req,
+                "Homing",
+            ):
+                return 'failed'
+
+            return 'state_set'
+
+        # --- OTHER MODES ---
+        if self._desired_state not in self.MODE_MAP:
+            Logger.logwarn(f"Unknown motor state: {self._desired_state}")
             return 'failed'
 
-        if self._return is not None:
-            # Return prior outcome in case transition is blocked by autonomy level
-            return self._return
+        # Arm motor first (position / velocity / inactive)
+        if not self._call_service(
+            self._motor_arm_client,
+            self._motor_arm_topic,
+            motor_req,
+            "Motor arm",
+        ):
+            return 'failed'
 
-        # Check if the action has been finished
-        if self._client.has_result(self._topic):
-            _ = self._client.get_result(self._topic)  # The delta result value is not useful here
-            userdata.duration = self._node.get_clock().now() - self._start_time
-            Logger.loginfo('Move complete')
-            self._return = 'move_complete'
-            return self._return
+        setup_req = SetupDrive.Request()
+        setup_req.motor = self._motor
+        setup_req.mode = self.MODE_MAP[self._desired_state]
 
-        # If the action has not yet finished, no outcome will be returned and the state stays active.
-        return None
+        if not self._call_service(
+            self._state_client,
+            self._setup_topic,
+            setup_req,
+            "Setup drive",
+        ):
+            return 'failed'
+
+        return 'state_set'
 
     def on_enter(self, userdata):
-        # make sure to reset the error state since a previous state execution might have failed
-        self._error = False
-        self._return = None
-
-        motor_goal = Motor.Goal()
-        motor_goal.motor = self._motor
-
-        match self._desired_state:
-            case 'homing':
-                try:
-                    self._homing_client.send_goal(self._homing_topic, motor_goal, wait_duration=1.0)
-                except Exception as exc:
-                    Logger.logwarn(f"Failed to send:\n  {type(exc)} - {exc}")
-                    self._error = True
-            case 'inactive':
-                goal = SetupDrive.Goal()
-                goal.motor = self._motor
-                goal.mode = 0
-                try:
-                    self._state_client.send_goal(self._state_client, goal, wait_duration=1.0)
-                except Exception as exc:
-                    Logger.logwarn(f"Failed to send:\n  {type(exc)} - {exc}")
-                    self._error = True
-            case 'position':
-                goal = SetupDrive.Goal()
-                goal.motor = self._motor
-                goal.mode = 1
-                try:
-                    self._motor_arm_client.send_goal(self._motor_arm_topic, motor_goal, wait_duration=1.0)
-                    self._state_client.send_goal(self._state_client, goal, wait_duration=1.0)
-                except Exception as exc:
-                    Logger.logwarn(f"Failed to send:\n  {type(exc)} - {exc}")
-                    self._error = True
-            case 'velocity':
-                goal = SetupDrive.Goal()
-                goal.motor = self._motor
-                goal.mode = 2
-                try:
-                    self._motor_arm_client.send_goal(self._motor_arm_topic, motor_goal, wait_duration=1.0)
-                    self._state_client.send_goal(self._state_client, goal, wait_duration=1.0)
-                except Exception as exc:
-                    Logger.logwarn(f"Failed to send:\n  {type(exc)} - {exc}")
-                    self._error = True
-            case _:
-                self._error = True
-                return
+        pass
 
     def on_exit(self, userdata):
         pass
+

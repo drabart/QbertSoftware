@@ -3,9 +3,9 @@
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
 
-from qbert_msgs.srv import MoveWithVel
+from qbert_msgs.srv import Motor
 
-class SetMotorVelState(EventState):
+class MotorRebootState(EventState):
     """
     State implementing target velocity movement
 
@@ -14,39 +14,36 @@ class SetMotorVelState(EventState):
     Elements defined here for UI
     Parameters
     -- motor               Motor which should be moved
-    -- target_velocity     Velocity to be achieved
-    -- vel_topic           Topic for setting the motor's velocity
+    -- topic               Topic for setting the motor's velocity
 
     Outputs
-    <= velocity_set        Successfully set the velocity
+    <= done                Successfully set the velocity
     <= failed              Failed for some reason
     """
 
-    def __init__(self, motor, target_velocity=5.0, vel_topic="/move_with_velocity"):
-        super().__init__(outcomes=['velocity_set', 'failed'],
+    def __init__(self, motor, topic="/reboot_motor"):
+        super().__init__(outcomes=['done', 'failed'],
                          input_keys=[],
                          output_keys=[])
         
-        self._vel_topic = vel_topic
+        self._topic = topic
         self._motor = motor
-        self._target_velocity = target_velocity
 
-        ProxyServiceCaller.initialize(SetMotorVelState._node)
+        ProxyServiceCaller.initialize(MotorRebootState._node)
 
-        self._client = ProxyServiceCaller({self._vel_topic: MoveWithVel},
+        self._client = ProxyServiceCaller({self._topic: Motor},
                                             wait_duration=0.0)
 
     def execute(self, userdata):
-        motor_goal = MoveWithVel.Request()
+        motor_goal = Motor.Request()
         motor_goal.motor = self._motor
-        motor_goal.vel = self._target_velocity
 
-        result = self._client.call(self._vel_topic, motor_goal)
+        result = self._client.call(self._topic, motor_goal)
 
         if not result.success:
             return 'failed'
         
-        return 'velocity_set'
+        return 'done'
 
     def on_enter(self, userdata):
         pass
