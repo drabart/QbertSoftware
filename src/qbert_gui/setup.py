@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'gui = qbert_gui.main:main'
         ],
     },
 )
