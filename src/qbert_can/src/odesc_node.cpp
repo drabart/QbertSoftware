@@ -147,7 +147,7 @@ private:
             return false;
         }
 
-        return !motor_data.error;
+        return !motor_data_.at(device_id).error;
     }
 
     void send_position_est_request(DeviceID motor_id) {
@@ -207,11 +207,6 @@ private:
         RCLCPP_INFO(this->get_logger(), "Reboot service called");
 
         DeviceID motor_id = request.get()->motor;
-        if (!device_active(motor_id)) {
-            response->success = false;
-            return;
-        }
-
         send_reboot_request(motor_id);
         response->success = true;
     }
@@ -223,11 +218,6 @@ private:
         RCLCPP_INFO(this->get_logger(), "Clear error service called");
 
         DeviceID motor_id = request.get()->motor;
-        if (!device_active(motor_id)) {
-            response->success = false;
-            return;
-        }
-
         send_clear_errors_request(motor_id);
         response->success = true;
     }
@@ -320,7 +310,7 @@ private:
         RCLCPP_INFO(this->get_logger(), "Received goal for motor: %d of pos: %.2f", goal->motor, goal->target_position);
         (void)uuid;
 
-        DeviceID motor_id = request.get()->motor;
+        DeviceID motor_id = goal.get()->motor;
         if (!device_active(motor_id)) {
             return rclcpp_action::GoalResponse::REJECT;
         }
