@@ -34,6 +34,7 @@ setup(
             'move_motor_to_pos_state = qbert_fsm_flexbe_states.move_motor_to_pos_state',
             'set_motor_state_state = qbert_fsm_flexbe_states.set_motor_state_state',
             'set_motor_vel_state = qbert_fsm_flexbe_states.set_motor_vel_state',
+            'get_motor_state_state = qbert_fsm_flexbe_states.get_motor_state_state',
         ],
     },
 )
