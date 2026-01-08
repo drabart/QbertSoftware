@@ -8,6 +8,7 @@
 #include "esp_twai_onchip.h"
 #include "esp_twai_types.h"
 #include "esp_err.h"
+#include "esp_timer.h"
 
 #include "freertos/idf_additions.h"
 #include "freertos/projdefs.h"
@@ -48,6 +49,8 @@
 #define MIN(a, b)               (a) < (b) ? (a) : (b)
 #define MAX(a, b)               (a) > (b) ? (a) : (b)
 #define BETWEEN(mid, min, max)  ((mid) > (min) && (mid) < (max))
+
+#define EPSILON 0.3
 
 // DEFINES
 //
@@ -99,10 +102,14 @@ void print_twai_frame(const twai_frame_t *frame) {
     printf("\n");
 }
 
-float mV_to_mm(float mV) {
+float mV_to_mm_axe_0(float mV) {
     // standard: range from 1V-10V, 1V = 0mm and 10V = 100mm -> 90 mV/mm
-    // adjusted: range from 230-2360 mV -> ~21.3 mV/mm
-    return ((mV - 230) / 21.3);
+    // adjusted: range from 260-2360 mV -> ~21.3 mV/mm
+    return ((mV - 260) / 21);
+}
+float mV_to_mm_axe_1(float mV) {
+    // adjusted: range from 310-2400 mV -> ~20.9 mV/mm
+    return ((mV - 310) / 20.9);
 }
 
 float read_adc_q(QueueHandle_t reply, adc_channel_t chan, uint16_t samples) {
@@ -118,7 +125,9 @@ float read_adc_q(QueueHandle_t reply, adc_channel_t chan, uint16_t samples) {
 
 float read_adc(adc_channel_t chan, uint16_t samples) {
     QueueHandle_t reply = xQueueCreate(1, sizeof(float));
-    return read_adc_q(reply, chan, samples);
+    float val = read_adc_q(reply, chan, samples);
+    vQueueDelete(reply);
+    return val;
 }
 
 // HELPER_FUNCTIONS
@@ -148,10 +157,12 @@ CanErr getPosAxe(const twai_frame_t *frame) {
     if (!frame->header.rtr) return NoRTR;
 
     float mV_0 = read_adc(AXE_0_ADC_CHAN, 48);
-    float pos_0 = mV_to_mm(mV_0);
+    float pos_0 = mV_to_mm_axe_0(mV_0);
+    printf("axe_0: %4.2f mV -> %3.2f mm\n", mV_0, pos_0);
 
     float mV_1 = read_adc(AXE_1_ADC_CHAN, 48);
-    float pos_1 = mV_to_mm(mV_1);
+    float pos_1 = mV_to_mm_axe_1(mV_1);
+    printf("axe_1: %4.2f mV -> %3.2f mm\n", mV_1, pos_1);
 
     uint8_t buf[8];
 
@@ -204,7 +215,7 @@ void adc_loop(void* arg) {
         acc = 0;
         for (uint16_t i = 0; i < req.samples; i++) {
             adc_oneshot_read(adc1_unit_handle, req.chan, &raw);
-            adc_cali_raw_to_voltage(adc1_cali_handle, acc/req.samples, &cali_mV);
+            adc_cali_raw_to_voltage(adc1_cali_handle, raw, &cali_mV);
             acc += cali_mV;
         }
         val = acc / req.samples;
@@ -288,61 +299,91 @@ void heartbeat(void* arg) {
 //
 // POSITION_LOOP
 
-/*void position_single(QueueHandle_t replies, adc_channel_t chan, float pos) {*/
-/*    for (;;) {*/
-/*        if (!xQueueIsQueueEmptyFromISR(pos_queue)) return;*/
-/*        if (BETWEEN(mV_to_mm(read_adc_q(replies, chan, 48)), pos-1, pos+1)) return;*/
-/*        vTaskDelay(1);*/
-/*    }*/
-/*}*/
+void pos_single_axe_0(float target, float cur) {
+    printf("pos 0\n");
+    QueueHandle_t replies = xQueueCreate(1, sizeof(float));
+    int gpio_pin = (cur - target > 0) ? AXE_0_RETRACT_PIN : AXE_0_EXTEND_PIN;
+    gpio_set_level(gpio_pin, 1);
+
+    for (;;) {
+        if (!xQueueIsQueueEmptyFromISR(pos_queue)) { break; }
+
+        float pos = mV_to_mm_axe_0(read_adc_q(replies, AXE_0_ADC_CHAN, 48));
+        if (BETWEEN(pos, target-EPSILON, target+EPSILON)) { break; }
+    }
+
+    vQueueDelete(replies);
+    gpio_set_level(gpio_pin, 0);
+}
+
+void pos_single_axe_1(float target, float cur) {
+    printf("pos 1\n");
+    QueueHandle_t replies = xQueueCreate(1, sizeof(float));
+    int gpio_pin = (cur - target > 0) ? AXE_1_RETRACT_PIN : AXE_1_EXTEND_PIN;
+    gpio_set_level(gpio_pin, 1);
+
+    for (;;) {
+        if (!xQueueIsQueueEmptyFromISR(pos_queue)) { break; }
+
+        float pos = mV_to_mm_axe_1(read_adc_q(replies, AXE_1_ADC_CHAN, 48));
+        if (BETWEEN(pos, target-EPSILON, target+EPSILON)) { break; }
+    }
+
+    vQueueDelete(replies);
+    gpio_set_level(gpio_pin, 0);
+}
+
+void pos_both(float target, float cur_0, float cur_1) {
+    printf("pos both\n");
+    QueueHandle_t replies = xQueueCreate(1, sizeof(float));
+    int axe_0_pin  = (cur_0 - target > 0) ? AXE_0_RETRACT_PIN : AXE_0_EXTEND_PIN;
+    int axe_1_pin  = (cur_0 - target > 0) ? AXE_1_RETRACT_PIN : AXE_1_EXTEND_PIN;
+    gpio_set_level(axe_0_pin, 1);
+    gpio_set_level(axe_1_pin, 1);
+
+    for (;;) {
+        if (!xQueueIsQueueEmptyFromISR(pos_queue)) { break; }
+
+        float pos_0 = mV_to_mm_axe_0(read_adc_q(replies, AXE_0_ADC_CHAN, 48));
+        float pos_1 = mV_to_mm_axe_1(read_adc_q(replies, AXE_1_ADC_CHAN, 48));
+
+        if (BETWEEN(pos_0, target-EPSILON, target+EPSILON)) { break; }
+        if (BETWEEN(pos_1, target-EPSILON, target+EPSILON)) { break; }
+    }
+
+    xQueueSend(pos_queue, &target, 0);
+    vQueueDelete(replies);
+    gpio_set_level(axe_0_pin, 0);
+    gpio_set_level(axe_1_pin, 0);
+}
 
 void position(void* arg) {
     float pos;
-    QueueHandle_t replies = xQueueCreate(1, sizeof(float));
 
     for (;;) {
         // wait for new pos and grab newest
         while (xQueueIsQueueEmptyFromISR(pos_queue)) { vTaskDelay(1); }
         while (xQueueReceive(pos_queue, &pos, 0) == pdTRUE) { }
+        printf("new pos: %3.2f\n", pos);
 
-        float pos_0 = mV_to_mm(read_adc_q(replies, AXE_0_ADC_CHAN, 48));
-        float pos_1 = mV_to_mm(read_adc_q(replies, AXE_1_ADC_CHAN, 48));
+        float pos_0 = mV_to_mm_axe_0(read_adc(AXE_0_ADC_CHAN, 48));
+        float pos_1 = mV_to_mm_axe_1(read_adc(AXE_1_ADC_CHAN, 48));
+        printf("pos_0: %3.2f - pos_1: %3.2f\n", pos_0, pos_1);
 
-        if (BETWEEN(pos_0, pos-0.5, pos+0.5) && BETWEEN(pos_1, pos-0.5, pos+0.5)) continue;
+        float eps = 1.5 * EPSILON;
+        bool correct_0 = BETWEEN(pos_0, pos-eps, pos+eps);
+        bool correct_1 = BETWEEN(pos_1, pos-eps, pos+eps);
 
-        int axe_0_pin = pos_0 - pos > 0 ? AXE_0_RETRACT_PIN : AXE_0_EXTEND_PIN;
-        int axe_1_pin = pos_1 - pos > 0 ? AXE_1_RETRACT_PIN : AXE_1_EXTEND_PIN;
+        uint8_t correct = (correct_0 << 1) | correct_1;
+        printf("correct: %1d\n", correct);
 
-        gpio_set_level(axe_0_pin, 1);
-        gpio_set_level(axe_1_pin, 1);
-        for (;;) {
-            // new position needed
-            if (!xQueueIsQueueEmptyFromISR(pos_queue)) {
-                gpio_set_level(axe_0_pin, 0);
-                gpio_set_level(axe_1_pin, 0);
-                break;
-            }
-
-            // axe 0 reached position
-            if (BETWEEN(mV_to_mm(read_adc_q(replies, AXE_0_ADC_CHAN, 48)), pos-1, pos+1)) {
-                gpio_set_level(axe_0_pin, 0);
-                /*position_single(replies, AXE_1_ADC_CHAN, pos);*/
-                gpio_set_level(axe_1_pin, 0);
-                xQueueSend(pos_queue, &pos, 0);
-                break;
-            }
-
-            // axe 1 reached position
-            if (BETWEEN(mV_to_mm(read_adc_q(replies, AXE_1_ADC_CHAN, 48)), pos-1, pos+1)) {
-                gpio_set_level(axe_1_pin, 0);
-                /*position_single(replies, AXE_0_ADC_CHAN, pos);*/
-                gpio_set_level(axe_0_pin, 0);
-                xQueueSend(pos_queue, &pos, 0);
-                break;
-            }
-
-            vTaskDelay(1);
+        switch (correct) {
+            case 0b00: { pos_both(pos, pos_0, pos_1); } break;
+            case 0b01: { pos_single_axe_0(pos, pos_0); } break;
+            case 0b10: { pos_single_axe_1(pos, pos_1); } break;
+            case 0b11: {} break;
         }
+        vTaskDelay(1);
     }
 }
 
@@ -387,8 +428,8 @@ void setup_adc() {
     // setup adc calibration
     adc_cali_line_fitting_config_t adc_cal_config = {
         .unit_id = ADC_UNIT_1,
-        .bitwidth = ADC_BITWIDTH,
         .atten = ADC_ATTEN_DB_12,
+        .bitwidth = ADC_BITWIDTH,
         .default_vref = 0,
     };
     ESP_ERROR_CHECK(adc_cali_create_scheme_line_fitting(&adc_cal_config, &adc1_cali_handle));
@@ -420,11 +461,48 @@ void setup_pins() {
     gpio_reset_pin(GRIPPERS_RETRACT_PIN);
     gpio_set_direction(GRIPPERS_RETRACT_PIN, GPIO_MODE_OUTPUT);
     gpio_set_level(GRIPPERS_RETRACT_PIN, 0);
+
+    /*gpio_reset_pin(AXE_0_IN_PIN);*/
+    /*gpio_input_enable(AXE_0_IN_PIN);*/
+    /**/
+    /*gpio_reset_pin(AXE_1_IN_PIN);*/
+    /*gpio_input_enable(AXE_1_IN_PIN);*/
 }
 
 // SETUP
 //
 // MAIN
+
+void test(void* arg) {
+    QueueHandle_t replies = xQueueCreate(1, sizeof(float));
+    bool extend = false;
+
+    for (;;) {
+        float end_time = esp_timer_get_time() + (7 * 1000 * 1000);
+
+        if (extend) {
+            gpio_set_level(AXE_0_EXTEND_PIN, 1);
+            gpio_set_level(AXE_1_EXTEND_PIN, 1);
+        } else {
+            gpio_set_level(AXE_0_RETRACT_PIN, 1);
+            gpio_set_level(AXE_1_RETRACT_PIN, 1);
+        }
+
+        while (esp_timer_get_time() < end_time) {
+            float mV_0 = read_adc_q(replies, AXE_0_ADC_CHAN, 48);
+            float mV_1 = read_adc_q(replies, AXE_1_ADC_CHAN, 48);
+            printf("mV_0: %4.2f - mV_1: %4.2f\n", mV_0, mV_1);
+            vTaskDelay(1);
+        }
+
+        gpio_set_level(AXE_0_EXTEND_PIN, 0);
+        gpio_set_level(AXE_0_RETRACT_PIN, 0);
+        gpio_set_level(AXE_1_EXTEND_PIN, 0);
+        gpio_set_level(AXE_1_RETRACT_PIN, 0);
+
+        extend = !extend;
+    }
+}
 
 void app_main(void) {
     setup_can();
@@ -433,6 +511,7 @@ void app_main(void) {
     pos_queue = xQueueCreate(4, sizeof(float));
 
     xTaskCreate(adc_loop, "ADC reader", 2048, NULL, 8, NULL);
+    /*xTaskCreate(test, "test", 2048, NULL, 7, NULL);*/
     xTaskCreate(position, "axe position loop", 2048, NULL, 7, NULL);
     xTaskCreate(can_dispatch_cb, "CAN dispatch", 2048, NULL, 6, NULL);
     xTaskCreate(heartbeat, "heartbeat", 1028, NULL, 5, NULL);
