@@ -4,18 +4,18 @@
 #define CMD_MASK 0b11111
 
 typedef enum {
-    HeartBeat = 1,
+    Reserved = 0,
+    HeartBeat,
     SetPosAxe,
     SetGripState,
     GetPosAxe,
     GetGripState,
-    GetError,
     GripDone,
     NUM_CAN_CMD,
 } CanCmd;
 
 typedef enum {
-    None = 0,
+    OK = 0,
     IncorrectDLC = -1,
     IncorrectArgs = -2,
     NoRTR = -3,
