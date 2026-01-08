@@ -14,6 +14,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "action/MoveToPos.action"
 
   "srv/Motor.srv"
+  "srv/MotorState.srv"
   "srv/MoveWithVel.srv"
   "srv/SetupDrive.srv"
   "srv/GripperState.srv"
