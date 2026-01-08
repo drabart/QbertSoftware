@@ -41,6 +41,8 @@ from flexbe_core import PriorityContainer
 from flexbe_core import initialize_flexbe_core
 from flexbe_states.calculation_state import CalculationState
 from flexbe_states.check_condition_state import CheckConditionState
+from flexbe_states.log_key_state import LogKeyState
+from flexbe_states.subscriber_state import SubscriberState
 from flexbe_states.wait_state import WaitState
 from qbert_fsm_flexbe_states.move_motor_to_pos_state import MoveMotorToPosState
 from qbert_fsm_flexbe_states.set_motor_state_state import SetMotorStateState
@@ -48,8 +50,8 @@ from qbert_fsm_flexbe_states.set_motor_vel_state import SetMotorVelState
 
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
-
-
+from std_msgs.msg import Bool, String, Float64, Empty
+from flexbe_core.proxy.qos import QOS_DEFAULT
 # [/MANUAL_IMPORT]
 
 
@@ -108,7 +110,9 @@ class ExampleBehaviorSM(Behavior):
                                        transitions={'state_set': 'finished'  # 777 388 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 815 550 -1 -1 -1 -1
                                                     },
-                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
+                                       autonomy={'received': Autonomy.Off,
+                                                 'unavailable': Autonomy.Off},
+                                       remapping={'message': 'stuff'})
 
             # x:71 y:680
             OperatableStateMachine.add('Iter++',
@@ -199,6 +203,15 @@ class ExampleBehaviorSM(Behavior):
                                                     },
                                        autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
 
+            # x:389 y:397
+            OperatableStateMachine.add('log?',
+                                       LogKeyState(text="Received message: {}",
+                                                   severity=2),
+                                       transitions={'done': 'wait2'  # 365 483 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'stuff'})
+
             # x:746 y:127
             OperatableStateMachine.add('move-',
                                        MoveMotorToPosState(id=1,
@@ -253,6 +266,13 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('wait',
                                        WaitState(wait_time=5),
                                        transitions={'done': 'ina'  # 749 321 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:268 y:488
+            OperatableStateMachine.add('wait2',
+                                       WaitState(wait_time=0.1),
+                                       transitions={'done': 'sub'  # 236 482 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
