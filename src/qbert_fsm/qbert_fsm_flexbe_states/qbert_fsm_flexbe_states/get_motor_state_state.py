@@ -7,7 +7,7 @@ from qbert_msgs.srv import MotorState
 
 class GetMotorStateState(EventState):
     """
-    State implementing target velocity movement
+    State implementing retrieving of a current motor state
 
     Shouldn't be using multiple actions for one robot at once.
 

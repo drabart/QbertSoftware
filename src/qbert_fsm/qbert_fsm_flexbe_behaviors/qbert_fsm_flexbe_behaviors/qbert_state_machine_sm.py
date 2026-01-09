@@ -39,13 +39,16 @@ from flexbe_core import Logger
 from flexbe_core import OperatableStateMachine
 from flexbe_core import PriorityContainer
 from flexbe_core import initialize_flexbe_core
+from flexbe_states.calculation_state import CalculationState
 from flexbe_states.check_condition_state import CheckConditionState
 from flexbe_states.log_key_state import LogKeyState
 from flexbe_states.log_state import LogState
 from flexbe_states.subscriber_state import SubscriberState
+from flexbe_states.user_data_state import UserdataState
 from flexbe_states.wait_state import WaitState
 from qbert_fsm_flexbe_states.get_motor_state_state import GetMotorStateState
 from qbert_fsm_flexbe_states.set_motor_state_state import SetMotorStateState
+from qbert_fsm_flexbe_states.set_motor_vel_state import SetMotorVelState
 
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -86,10 +89,14 @@ class QbertStateMachineSM(Behavior):
         # Private variables
         GANTRY_MOTOR = 1
         ROTATION_MOTOR = 0
+        GANTRY_MIN = 100
+        GANTRY_MAX = 1500
 
         # Root state machine
-        # x:891 y:96, x:896 y:196
+        # x:1237 y:101, x:1199 y:651
         _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
+        _state_machine.userdata.gantry_position = 0.0
+        _state_machine.userdata.rotation_position = 0.0
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
@@ -97,10 +104,52 @@ class QbertStateMachineSM(Behavior):
 
         # [/MANUAL_CREATE]
 
-        # x:864 y:141, x:679 y:505
-        _sm_wait_for_homing_0 = OperatableStateMachine(outcomes=['finished', 'failed'])
+        # x:892 y:332, x:130 y:400
+        _sm_waitforstart_0 = OperatableStateMachine(outcomes=['finished', 'failed'])
 
-        with _sm_wait_for_homing_0:
+        with _sm_waitforstart_0:
+            # x:305 y:111
+            OperatableStateMachine.add('SubscribeGUIStart',
+                                       SubscriberState(topic='/gui_start',
+                                                       msg_type=Empty,
+                                                       blocking=False,
+                                                       clear=False,
+                                                       qos=QOS_DEFAULT),
+                                       transitions={'received': 'CheckMessageReceived'  # 473 151 -1 -1 -1 -1
+                                                    , 'unavailable': 'failed'  # 220 282 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'received': Autonomy.Off,
+                                                 'unavailable': Autonomy.Off},
+                                       remapping={'message': 'start_message'})
+
+            # x:522 y:134
+            OperatableStateMachine.add('CheckMessageReceived',
+                                       CheckConditionState(predicate=lambda x: x is not None),
+                                       transitions={'true': 'Log'  # 630 201 -1 -1 -1 -1
+                                                    , 'false': 'Delay'  # 561 274 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'start_message'})
+
+            # x:400 y:315
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=0.2),
+                                       transitions={'done': 'SubscribeGUIStart'  # 323 241 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:706 y:222
+            OperatableStateMachine.add('Log',
+                                       LogState(text="Received start command",
+                                                severity=2),
+                                       transitions={'done': 'finished'  # 831 298 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+        # x:864 y:141, x:679 y:505
+        _sm_waitforhomingclicked_1 = OperatableStateMachine(outcomes=['finished', 'failed'])
+
+        with _sm_waitforhomingclicked_1:
             # x:149 y:104
             OperatableStateMachine.add('CheckHomingGUI',
                                        SubscriberState(topic="/gui_home",
@@ -141,9 +190,9 @@ class QbertStateMachineSM(Behavior):
                                        remapping={'input_value': 'homing_message'})
 
         # x:942 y:184, x:933 y:428
-        _sm_homerobot_1 = OperatableStateMachine(outcomes=['finished', 'failed'])
+        _sm_homerobot_2 = OperatableStateMachine(outcomes=['finished', 'failed'])
 
-        with _sm_homerobot_1:
+        with _sm_homerobot_2:
             # x:191 y:172
             OperatableStateMachine.add('SetGantryIntoHomingState',
                                        SetMotorStateState(motor=GANTRY_MOTOR,
@@ -151,33 +200,33 @@ class QbertStateMachineSM(Behavior):
                                                           homing_topic='/home_motor',
                                                           setup_topic='/setup_drive',
                                                           motor_arm_topic='/motor_ready'),
-                                       transitions={'state_set': 'Delay'  # 405 196 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 652 327 -1 -1 -1 -1
+                                       transitions={'state_set': 'Delay'  # 342 111 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 554 485 -1 -1 -1 -1
                                                     },
                                        autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
 
-            # x:644 y:339
+            # x:477 y:265
             OperatableStateMachine.add('CheckError',
                                        CheckConditionState(predicate=lambda x: x == AxisState.UNDEFINED),
-                                       transitions={'true': 'failed'  # 850 409 -1 -1 -1 -1
-                                                    , 'false': 'Delay'  # 590 312 -1 -1 -1 -1
+                                       transitions={'true': 'failed'  # 802 393 -1 -1 -1 -1
+                                                    , 'false': 'Delay'  # 450 225 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
                                        remapping={'input_value': 'motor_state'})
 
-            # x:654 y:186
+            # x:644 y:204
             OperatableStateMachine.add('CheckHomingComplete',
                                        CheckConditionState(predicate=lambda x: x == AxisState.IDLE),
-                                       transitions={'true': 'finished'  # 867 186 -1 -1 -1 -1
-                                                    , 'false': 'CheckError'  # 713 295 -1 -1 -1 -1
+                                       transitions={'true': 'finished'  # 864 204 -1 -1 -1 -1
+                                                    , 'false': 'CheckError'  # 601 234 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
                                        remapping={'input_value': 'motor_state'})
 
-            # x:484 y:210
+            # x:398 y:75
             OperatableStateMachine.add('Delay',
                                        WaitState(wait_time=0.2),
-                                       transitions={'done': 'WaitForHoming'  # 516 137 -1 -1 -1 -1
+                                       transitions={'done': 'WaitForHoming'  # 457 63 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
@@ -185,47 +234,356 @@ class QbertStateMachineSM(Behavior):
             OperatableStateMachine.add('WaitForHoming',
                                        GetMotorStateState(motor=1,
                                                           get_state_topic='/get_motor_state'),
-                                       transitions={'state_acquired': 'CheckHomingComplete'  # 685 147 -1 -1 -1 -1
+                                       transitions={'state_acquired': 'CheckHomingComplete'  # 670 160 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 826 265 -1 -1 -1 -1
                                                     },
                                        autonomy={'state_acquired': Autonomy.Off,
                                                  'failed': Autonomy.Off},
                                        remapping={'current_state': 'motor_state'})
 
+        # x:219 y:456, x:665 y:484
+        _sm_waitforcancel_3 = OperatableStateMachine(outcomes=['failed', 'cancelled'])
+
+        with _sm_waitforcancel_3:
+            # x:266 y:85
+            OperatableStateMachine.add('SubscribeCancelled',
+                                       SubscriberState(topic='/gui_cancel',
+                                                       msg_type=Empty,
+                                                       blocking=False,
+                                                       clear=False,
+                                                       qos=QOS_DEFAULT),
+                                       transitions={'received': 'CheckCancelled'  # 457 175 -1 -1 -1 -1
+                                                    , 'unavailable': 'failed'  # 231 306 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'received': Autonomy.Off,
+                                                 'unavailable': Autonomy.Off},
+                                       remapping={'message': 'cancel_message'})
+
+            # x:479 y:207
+            OperatableStateMachine.add('CheckCancelled',
+                                       CheckConditionState(predicate=lambda x: x is not None),
+                                       transitions={'true': 'cancelled'  # 569 379 -1 -1 -1 -1
+                                                    , 'false': 'Delay'  # 444 277 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'cancel_message'})
+
+            # x:296 y:254
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=0.1),
+                                       transitions={'done': 'SubscribeCancelled'  # 288 191 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+        # x:30 y:400, x:130 y:400
+        _sm_splitcablewithaxe_4 = OperatableStateMachine(outcomes=['finished', 'failed'])
+
+        with _sm_splitcablewithaxe_4:
+            # x:200 y:96
+            OperatableStateMachine.add('MockDriveAxe',
+                                       LogState(text="TODO: Driving axe into cable here",
+                                                severity=2),
+                                       transitions={'done': 'Delay'  # 235 188 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:213 y:208
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=2.0),
+                                       transitions={'done': 'finished'  # 127 323 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+        # x:30 y:400, x:130 y:400
+        _sm_rotatedisktoposition_5 = OperatableStateMachine(outcomes=['finished', 'failed'])
+
+        with _sm_rotatedisktoposition_5:
+            # x:246 y:126
+            OperatableStateMachine.add('MockRotateDisk',
+                                       LogState(text="TODO: Rotate the disk into position",
+                                                severity=2),
+                                       transitions={'done': 'Delay'  # 197 189 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:118 y:216
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=0.1),
+                                       transitions={'done': 'finished'  # 77 327 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+        # x:1222 y:159, x:130 y:400
+        _sm_findcableend_6 = OperatableStateMachine(outcomes=['finished', 'failed'])
+
+        with _sm_findcableend_6:
+            # x:196 y:107
+            OperatableStateMachine.add('SetVelocityMode',
+                                       SetMotorStateState(motor=GANTRY_MOTOR,
+                                                          desired_state='velocity',
+                                                          homing_topic='/home_motor',
+                                                          setup_topic='/setup_drive',
+                                                          motor_arm_topic='/motor_ready'),
+                                       transitions={'state_set': 'StartSearch'  # 345 96 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 165 283 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
+
+            # x:908 y:97
+            OperatableStateMachine.add('CheckCableEndFound',
+                                       CheckConditionState(predicate=""),
+                                       transitions={'true': 'StopSearch'  # 952 188 -1 -1 -1 -1
+                                                    , 'false': 'GetPosition'  # 875 211 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'cable_end_message'})
+
+            # x:556 y:395
+            OperatableStateMachine.add('CheckPositionInBounds',
+                                       CheckConditionState(predicate=lambda x: x > GANTRY_MIN and x < GANTRY_MAX),
+                                       transitions={'true': 'Delay'  # 545 315 -1 -1 -1 -1
+                                                    , 'false': 'StopMotor'  # 598 500 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'gantry_position'})
+
+            # x:557 y:218
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=0.1),
+                                       transitions={'done': 'SubscribeCameraFoundEnd'  # -1 -1 592 217 679 144
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:801 y:290
+            OperatableStateMachine.add('GetPosition',
+                                       LogState(text="TODO: Getting motor position here",
+                                                severity=2),
+                                       transitions={'done': 'SetMockPosition'  # 788 391 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:244 y:479
+            OperatableStateMachine.add('NoCableFound',
+                                       LogState(text="Couldn't find cable end",
+                                                severity=2),
+                                       transitions={'done': 'failed'  # 191 462 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:747 y:453
+            OperatableStateMachine.add('SetMockPosition',
+                                       UserdataState(data=0.0),
+                                       transitions={'done': 'CheckPositionInBounds'  # 708 501 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'gantry_position'})
+
+            # x:381 y:97
+            OperatableStateMachine.add('StartSearch',
+                                       SetMotorVelState(motor=GANTRY_MOTOR,
+                                                        target_velocity=5.0,
+                                                        vel_topic='/move_with_velocity'),
+                                       transitions={'velocity_set': 'SubscribeCameraFoundEnd',
+                                                    'failed': 'failed'  # 260 272 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'velocity_set': Autonomy.Off,
+                                                 'failed': Autonomy.Off})
+
+            # x:426 y:507
+            OperatableStateMachine.add('StopMotor',
+                                       SetMotorStateState(motor=GANTRY_MOTOR,
+                                                          desired_state='inactive',
+                                                          homing_topic='/home_motor',
+                                                          setup_topic='/setup_drive',
+                                                          motor_arm_topic='/motor_ready'),
+                                       transitions={'state_set': 'NoCableFound'  # 396 493 -1 -1 -1 -1
+                                                    , 'failed': 'NoCableFound'  # 396 493 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
+
+            # x:959 y:240
+            OperatableStateMachine.add('StopSearch',
+                                       SetMotorStateState(motor=GANTRY_MOTOR,
+                                                          desired_state='inactive',
+                                                          homing_topic='/home_motor',
+                                                          setup_topic='/setup_drive',
+                                                          motor_arm_topic='/motor_ready'),
+                                       transitions={'state_set': 'finished'  # 1145 207 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 549 360 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
+
+            # x:631 y:91
+            OperatableStateMachine.add('SubscribeCameraFoundEnd',
+                                       SubscriberState(topic='/camera_found_end',
+                                                       msg_type=Empty,
+                                                       blocking=False,
+                                                       clear=False,
+                                                       qos=QOS_DEFAULT),
+                                       transitions={'received': 'CheckCableEndFound'  # 843 81 -1 -1 -1 -1
+                                                    , 'unavailable': 'failed'  # 384 267 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'received': Autonomy.Off,
+                                                 'unavailable': Autonomy.Off},
+                                       remapping={'message': 'cable_end_message'})
+
+        # x:605 y:602, x:247 y:640
+        _sm_cableunstranding_7 = OperatableStateMachine(outcomes=['finished', 'failed'])
+
+        with _sm_cableunstranding_7:
+            # x:77 y:99
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=1.0),
+                                       transitions={'done': 'FindCableEnd'  # 192 56 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:224 y:124
+            OperatableStateMachine.add('FindCableEnd',
+                                       _sm_findcableend_6,
+                                       transitions={'finished': 'MockGripper'  # 316 91 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 239 433 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
+
+            # x:590 y:209
+            OperatableStateMachine.add('Loop',
+                                       CheckConditionState(predicate=lambda x: x < 6),
+                                       transitions={'true': 'RotateDiskToPosition'  # 665 117 -1 -1 -1 -1
+                                                    , 'false': 'finished'  # 593 396 647 262 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'unstranded_sections'})
+
+            # x:346 y:59
+            OperatableStateMachine.add('MockGripper',
+                                       LogState(text="4 pistons grip the cable",
+                                                severity=2),
+                                       transitions={'done': 'SetSectionAmount'  # 466 89 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:723 y:79
+            OperatableStateMachine.add('RotateDiskToPosition',
+                                       _sm_rotatedisktoposition_5,
+                                       transitions={'finished': 'SplitCableWithAxe'  # 916 106 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 491 394 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
+
+            # x:478 y:113
+            OperatableStateMachine.add('SetSectionAmount',
+                                       UserdataState(data=0),
+                                       transitions={'done': 'Loop'  # 568 187 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'unstranded_sections'})
+
+            # x:887 y:140
+            OperatableStateMachine.add('SplitCableWithAxe',
+                                       _sm_splitcablewithaxe_4,
+                                       transitions={'finished': 'UnstandedSectionsInc'  # 950 237 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 569 415 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
+
+            # x:855 y:276
+            OperatableStateMachine.add('UnstandedSectionsInc',
+                                       CalculationState(calculation=lambda x: x + 1),
+                                       transitions={'done': 'Loop'  # 778 253 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'input_value': 'unstranded_sections',
+                                                  'output_value': 'unstranded_sections'})
+
+        # x:120 y:480, x:586 y:471, x:433 y:527, x:107 y:542, x:431 y:479, x:429 y:577, x:582 y:530
+        _sm_dounstranding_8 = ConcurrencyContainer(outcomes=['finished', 'cancelled', 'failed'],
+                                                   conditions=[('finished', [('CableUnstranding', 'finished')]),
+                                                               ('failed', [('CableUnstranding', 'failed')]),
+                                                               ('failed', [('WaitForCancel', 'failed')]),
+                                                               ('cancelled', [('WaitForCancel', 'cancelled')])
+                                                               ])
+
+        with _sm_dounstranding_8:
+            # x:231 y:91
+            OperatableStateMachine.add('CableUnstranding',
+                                       _sm_cableunstranding_7,
+                                       transitions={'finished': 'finished', 'failed': 'failed'},
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
+
+            # x:548 y:84
+            OperatableStateMachine.add('WaitForCancel',
+                                       _sm_waitforcancel_3,
+                                       transitions={'failed': 'failed', 'cancelled': 'cancelled'},
+                                       autonomy={'failed': Autonomy.Inherit,
+                                                 'cancelled': Autonomy.Inherit})
+
         with _state_machine:
-            # x:150 y:120
-            OperatableStateMachine.add('Wait for Homing',
-                                       _sm_wait_for_homing_0,
-                                       transitions={'finished': 'HomeRobot'  # 365 131 -1 -1 -1 -1
-                                                    , 'failed': 'LogError'  # 406 347 -1 -1 -1 -1
+            # x:110 y:55
+            OperatableStateMachine.add('WaitForHomingClicked',
+                                       _sm_waitforhomingclicked_1,
+                                       transitions={'finished': 'HomeRobot'  # 297 50 -1 -1 -1 -1
+                                                    , 'failed': 'LogError'  # 386 398 -1 -1 -1 -1
                                                     },
                                        autonomy={'finished': Autonomy.Inherit,
                                                  'failed': Autonomy.Inherit})
 
-            # x:422 y:135
+            # x:788 y:71
+            OperatableStateMachine.add('DoUnstranding',
+                                       _sm_dounstranding_8,
+                                       transitions={'finished': 'LogMachineDone'  # 985 96 -1 -1 -1 -1
+                                                    , 'cancelled': 'LogCancelled'  # 951 237 -1 -1 -1 -1
+                                                    , 'failed': 'LogError'  # 659 391 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'cancelled': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
+
+            # x:315 y:61
             OperatableStateMachine.add('HomeRobot',
-                                       _sm_homerobot_1,
-                                       transitions={'finished': 'LogMachineDone'  # 604 127 -1 -1 -1 -1
-                                                    , 'failed': 'LogError'  # 496 342 471 194 -1 -1
+                                       _sm_homerobot_2,
+                                       transitions={'finished': 'WaitForStart'  # 498 66 -1 -1 -1 -1
+                                                    , 'failed': 'LogError'  # 477 384 364 120 -1 -1
                                                     },
                                        autonomy={'finished': Autonomy.Inherit,
                                                  'failed': Autonomy.Inherit})
 
-            # x:501 y:493
+            # x:958 y:337
+            OperatableStateMachine.add('LogCancelled',
+                                       LogState(text="Process was cancelled",
+                                                severity=2),
+                                       transitions={'done': 'finished'  # 1131 236 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:488 y:619
             OperatableStateMachine.add('LogError',
                                        LogState(text="Error occured",
                                                 severity=2),
-                                       transitions={'done': 'failed'  # 732 369 -1 -1 -1 -1
+                                       transitions={'done': 'failed'  # 904 632 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
-            # x:687 y:109
+            # x:1031 y:76
             OperatableStateMachine.add('LogMachineDone',
                                        LogState(text="State machine finished",
                                                 severity=2),
-                                       transitions={'done': 'finished'  # 845 114 -1 -1 -1 -1
+                                       transitions={'done': 'finished'  # 1187 94 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
+
+            # x:554 y:65
+            OperatableStateMachine.add('WaitForStart',
+                                       _sm_waitforstart_0,
+                                       transitions={'finished': 'DoUnstranding'  # 740 52 -1 -1 -1 -1
+                                                    , 'failed': 'LogError'  # 531 376 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
 
         return _state_machine
 
