@@ -21,12 +21,14 @@ class GetMotorStateState(EventState):
     <= failed              Failed for some reason
 
     Outputs
-    #> current_state        Current state of the motor
+    #> motor_axis_state        Current axis state of the motor
+    #> motor_position             Current motor position
+    #> motor_error                Is motor throwing an error
     """
 
     def __init__(self, motor, get_state_topic="/get_motor_state"):
         super().__init__(outcomes=['state_acquired', 'failed'],
-                         output_keys=['current_state'])
+                         output_keys=['motor_axis_state', 'motor_position', 'motor_error'])
         
         self._get_state_topic = get_state_topic
         self._motor = motor
@@ -40,12 +42,14 @@ class GetMotorStateState(EventState):
         motor_goal = MotorState.Request()
         motor_goal.motor = self._motor
 
-        result = self._client.call(self._vel_topic, motor_goal)
+        result = self._client.call(self._get_state_topic, motor_goal)
 
         if not result.exists:
             return 'failed'
         
-        userdata.current_state = result.state
+        userdata.motor_axis_state = result.state
+        userdata.motor_position = result.position
+        userdata.motor_error = result.error
         return 'state_acquired'
 
     def on_enter(self, userdata):
