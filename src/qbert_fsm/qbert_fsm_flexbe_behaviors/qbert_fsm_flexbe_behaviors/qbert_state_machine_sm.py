@@ -44,12 +44,14 @@ from flexbe_states.log_key_state import LogKeyState
 from flexbe_states.log_state import LogState
 from flexbe_states.subscriber_state import SubscriberState
 from flexbe_states.wait_state import WaitState
+from qbert_fsm_flexbe_states.get_motor_state_state import GetMotorStateState
 from qbert_fsm_flexbe_states.set_motor_state_state import SetMotorStateState
 
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
 from std_msgs.msg import Bool, String, Float64, Empty
 from flexbe_core.proxy.qos import QOS_DEFAULT
+from odrive.enums import AxisState
 # [/MANUAL_IMPORT]
 
 
@@ -142,17 +144,53 @@ class QbertStateMachineSM(Behavior):
         _sm_homerobot_1 = OperatableStateMachine(outcomes=['finished', 'failed'])
 
         with _sm_homerobot_1:
-            # x:293 y:225
+            # x:191 y:172
             OperatableStateMachine.add('SetGantryIntoHomingState',
                                        SetMotorStateState(motor=GANTRY_MOTOR,
                                                           desired_state='homing',
                                                           homing_topic='/home_motor',
                                                           setup_topic='/setup_drive',
                                                           motor_arm_topic='/motor_ready'),
-                                       transitions={'state_set': 'finished'  # 696 224 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 691 348 -1 -1 -1 -1
+                                       transitions={'state_set': 'Delay'  # 405 196 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 652 327 -1 -1 -1 -1
                                                     },
                                        autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
+
+            # x:644 y:339
+            OperatableStateMachine.add('CheckError',
+                                       CheckConditionState(predicate=lambda x: x == AxisState.UNDEFINED),
+                                       transitions={'true': 'failed'  # 850 409 -1 -1 -1 -1
+                                                    , 'false': 'Delay'  # 590 312 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'motor_state'})
+
+            # x:654 y:186
+            OperatableStateMachine.add('CheckHomingComplete',
+                                       CheckConditionState(predicate=lambda x: x == AxisState.IDLE),
+                                       transitions={'true': 'finished'  # 867 186 -1 -1 -1 -1
+                                                    , 'false': 'CheckError'  # 713 295 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'motor_state'})
+
+            # x:484 y:210
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=0.2),
+                                       transitions={'done': 'WaitForHoming'  # 516 137 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:587 y:49
+            OperatableStateMachine.add('WaitForHoming',
+                                       GetMotorStateState(motor=1,
+                                                          get_state_topic='/get_motor_state'),
+                                       transitions={'state_acquired': 'CheckHomingComplete'  # 685 147 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 826 265 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'state_acquired': Autonomy.Off,
+                                                 'failed': Autonomy.Off},
+                                       remapping={'current_state': 'motor_state'})
 
         with _state_machine:
             # x:150 y:120
