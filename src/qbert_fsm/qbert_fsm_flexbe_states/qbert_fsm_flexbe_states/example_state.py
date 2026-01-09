@@ -20,7 +20,6 @@ from rclpy.duration import Duration
 
 from flexbe_core import EventState, Logger
 
-
 class ExampleState(EventState):
     """
     Example for a state to demonstrate which functionality is available for state implementation.
