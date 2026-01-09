@@ -1,3 +1,5 @@
+#pragma once
+
 #include "can_msgs/msg/frame.hpp"
 #include <rclcpp/node.hpp>
 
