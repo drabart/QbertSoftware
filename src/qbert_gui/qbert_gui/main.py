@@ -17,6 +17,8 @@ class RosWorker(QObject):
         self.publishers = {}
 
         self.get_publisher("/gui_home", Empty)
+        self.get_publisher("/gui_start", Empty)
+        self.get_publisher("/gui_cancel", Empty)
 
     def get_publisher(self, topic, msg_type):
         if topic not in self.publishers:
@@ -67,6 +69,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setup_ros_worker()
 
         self.home.homingButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_home"))
+        self.home.startButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_start"))
+        self.home.stopButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_cancel"))
+
 
     def load_ui(self):
         self.setWindowTitle("Multi Screen App")
