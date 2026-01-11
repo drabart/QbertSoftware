@@ -6,71 +6,100 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1191</width>
-    <height>967</height>
+    <width>1280</width>
+    <height>600</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout">
+  <property name="windowTitle">
+   <string>Home Screen</string>
+  </property>
+  <layout class="QVBoxLayout" name="mainLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="contentLayout">
+     <property name="spacing">
+      <number>30</number>
+     </property>
+     <property name="leftMargin">
+      <number>30</number>
+     </property>
+     <property name="topMargin">
+      <number>30</number>
+     </property>
+     <property name="rightMargin">
+      <number>30</number>
+     </property>
+     <property name="bottomMargin">
+      <number>30</number>
+     </property>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="leftButtonLayout">
+       <property name="spacing">
+        <number>30</number>
+       </property>
        <item>
-        <widget class="QPushButton" name="startButton">
+        <widget class="QPushButton" name="controlButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>500</width>
+           <height>1000</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string>QPushButton {
+    background-color: #28E87C;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+}
+QPushButton:pressed {
+    background-color: #20D06C;
+}</string>
          </property>
          <property name="text">
           <string>Start</string>
-         </property>
-         <property name="class" stdset="0">
-          <string>bigButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="stopButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Stop</string>
-         </property>
-         <property name="class" stdset="0">
-          <string>bigButton</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="rightLayout">
+       <property name="spacing">
+        <number>15</number>
+       </property>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <property name="sizeConstraint">
-          <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+        <layout class="QHBoxLayout" name="statusButtonsLayout">
+         <property name="spacing">
+          <number>30</number>
          </property>
          <item>
           <widget class="QPushButton" name="homingButton">
@@ -80,8 +109,23 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="layoutDirection">
-            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string>QPushButton {
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-size: 16px;
+}
+QPushButton:pressed {
+    background-color: #D0D0D0;
+}</string>
            </property>
            <property name="text">
             <string>Homing</string>
@@ -89,52 +133,145 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="settingsButton">
+          <widget class="QPushButton" name="placeholderButton1">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string>QPushButton {
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-size: 16px;
+}</string>
+           </property>
            <property name="text">
-            <string>Settings</string>
+            <string>.....</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="logo">
+          <widget class="QPushButton" name="placeholderButton2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="maximumSize">
+           <property name="minimumSize">
             <size>
-             <width>300</width>
-             <height>300</height>
+             <width>0</width>
+             <height>50</height>
             </size>
            </property>
+           <property name="styleSheet">
+            <string>QPushButton {
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-size: 16px;
+}</string>
+           </property>
            <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap>../assets/logo.png</pixmap>
-           </property>
-           <property name="scaledContents">
-            <bool>true</bool>
+            <string>.....</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QTextEdit" name="logText"/>
+        <widget class="QLabel" name="logOutputLabel">
+         <property name="styleSheet">
+          <string>font-size: 14px;
+font-weight: bold;</string>
+         </property>
+         <property name="text">
+          <string>Log Output</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="logText">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string>QTextEdit {
+    background-color: white;
+    border: 1px solid #D0D0D0;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 12px;
+}</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="progressLabel">
+         <property name="styleSheet">
+          <string>font-size: 14px;
+font-weight: bold;</string>
+         </property>
+         <property name="text">
+          <string>Progress</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QProgressBar" name="progressBar">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string>QProgressBar {
+    border: none;
+    border-radius: 15px;
+    background-color: #E0E0E0;
+    text-align: center;
+}
+QProgressBar::chunk {
+    background-color: #5C6BC0;
+    border-radius: 15px;
+}</string>
+         </property>
          <property name="value">
-          <number>0</number>
+          <number>65</number>
+         </property>
+         <property name="textVisible">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
