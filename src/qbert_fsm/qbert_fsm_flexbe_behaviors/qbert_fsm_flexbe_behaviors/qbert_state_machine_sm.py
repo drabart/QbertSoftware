@@ -195,11 +195,11 @@ class QbertStateMachineSM(Behavior):
         with _sm_homerobot_2:
             # x:191 y:172
             OperatableStateMachine.add('SetGantryIntoHomingState',
-                                       SetMotorStateState(motor=GANTRY_MOTOR,
+                                       SetMotorStateState(id=GANTRY_MOTOR,
                                                           desired_state='homing',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'Delay'  # 342 111 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 554 485 -1 -1 -1 -1
                                                     },
@@ -239,7 +239,9 @@ class QbertStateMachineSM(Behavior):
                                                     },
                                        autonomy={'state_acquired': Autonomy.Off,
                                                  'failed': Autonomy.Off},
-                                       remapping={'current_state': 'motor_state'})
+                                       remapping={'motor_axis_state': 'motor_state',
+                                                  'motor_position': 'motor_position',
+                                                  'motor_error': 'motor_error'})
 
         # x:219 y:456, x:665 y:484
         _sm_waitforcancel_3 = OperatableStateMachine(outcomes=['failed', 'cancelled'])
@@ -319,11 +321,11 @@ class QbertStateMachineSM(Behavior):
         with _sm_findsectionsplit_6:
             # x:107 y:117
             OperatableStateMachine.add('SetStateVel',
-                                       SetMotorStateState(motor=ROTATION_MOTOR,
+                                       SetMotorStateState(id=ROTATION_MOTOR,
                                                           desired_state='velocity',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'StartSearch'  # 296 133 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 120 280 -1 -1 -1 -1
                                                     },
@@ -345,7 +347,7 @@ class QbertStateMachineSM(Behavior):
                                                     , 'false': 'StopMotor'  # 481 412 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-                                       remapping={'input_value': 'motor_state'})
+                                       remapping={'input_value': 'motor_axis_state'})
 
             # x:236 y:250
             OperatableStateMachine.add('Delay',
@@ -363,7 +365,9 @@ class QbertStateMachineSM(Behavior):
                                                     },
                                        autonomy={'state_acquired': Autonomy.Off,
                                                  'failed': Autonomy.Off},
-                                       remapping={'current_state': 'motor_state'})
+                                       remapping={'motor_axis_state': 'motor_axis_state',
+                                                  'motor_position': 'motor_position',
+                                                  'motor_error': 'motor_error'})
 
             # x:743 y:261
             OperatableStateMachine.add('MockGetCameraState',
@@ -383,7 +387,7 @@ class QbertStateMachineSM(Behavior):
 
             # x:731 y:473
             OperatableStateMachine.add('ResetVelocity',
-                                       SetMotorVelState(motor=ROTATION_MOTOR,
+                                       SetMotorVelState(id=ROTATION_MOTOR,
                                                         target_velocity=0.0,
                                                         vel_topic='/move_with_velocity'),
                                        transitions={'velocity_set': 'StopSearch'  # 789 432 -1 -1 -1 -1
@@ -394,7 +398,7 @@ class QbertStateMachineSM(Behavior):
 
             # x:118 y:544
             OperatableStateMachine.add('ResetVelocity2',
-                                       SetMotorVelState(motor=ROTATION_MOTOR,
+                                       SetMotorVelState(id=ROTATION_MOTOR,
                                                         target_velocity=0.0,
                                                         vel_topic='/move_with_velocity'),
                                        transitions={'velocity_set': 'failed'  # 126 496 -1 -1 -1 -1
@@ -405,7 +409,7 @@ class QbertStateMachineSM(Behavior):
 
             # x:348 y:125
             OperatableStateMachine.add('StartSearch',
-                                       SetMotorVelState(motor=ROTATION_MOTOR,
+                                       SetMotorVelState(id=ROTATION_MOTOR,
                                                         target_velocity=5.0,
                                                         vel_topic='/move_with_velocity'),
                                        transitions={'velocity_set': 'GetState'  # 528 132 -1 -1 -1 -1
@@ -416,11 +420,11 @@ class QbertStateMachineSM(Behavior):
 
             # x:333 y:514
             OperatableStateMachine.add('StopMotor',
-                                       SetMotorStateState(motor=ROTATION_MOTOR,
+                                       SetMotorStateState(id=ROTATION_MOTOR,
                                                           desired_state='inactive',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'ResetVelocity2'  # 285 573 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 291 440 -1 -1 -1 -1
                                                     },
@@ -428,11 +432,11 @@ class QbertStateMachineSM(Behavior):
 
             # x:822 y:363
             OperatableStateMachine.add('StopSearch',
-                                       SetMotorStateState(motor=ROTATION_MOTOR,
+                                       SetMotorStateState(id=ROTATION_MOTOR,
                                                           desired_state='inactive',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'finished'  # 898 454 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 481 387 -1 -1 -1 -1
                                                     },
@@ -444,11 +448,11 @@ class QbertStateMachineSM(Behavior):
         with _sm_findcableend_7:
             # x:196 y:107
             OperatableStateMachine.add('SetVelocityMode',
-                                       SetMotorStateState(motor=GANTRY_MOTOR,
+                                       SetMotorStateState(id=GANTRY_MOTOR,
                                                           desired_state='velocity',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'StartSearch'  # 345 96 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 165 283 -1 -1 -1 -1
                                                     },
@@ -505,7 +509,7 @@ class QbertStateMachineSM(Behavior):
 
             # x:381 y:97
             OperatableStateMachine.add('StartSearch',
-                                       SetMotorVelState(motor=GANTRY_MOTOR,
+                                       SetMotorVelState(id=GANTRY_MOTOR,
                                                         target_velocity=5.0,
                                                         vel_topic='/move_with_velocity'),
                                        transitions={'velocity_set': 'SubscribeCameraFoundEnd',
@@ -516,11 +520,11 @@ class QbertStateMachineSM(Behavior):
 
             # x:426 y:507
             OperatableStateMachine.add('StopMotor',
-                                       SetMotorStateState(motor=GANTRY_MOTOR,
+                                       SetMotorStateState(id=GANTRY_MOTOR,
                                                           desired_state='inactive',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'NoCableFound'  # 396 493 -1 -1 -1 -1
                                                     , 'failed': 'NoCableFound'  # 396 493 -1 -1 -1 -1
                                                     },
@@ -528,11 +532,11 @@ class QbertStateMachineSM(Behavior):
 
             # x:959 y:240
             OperatableStateMachine.add('StopSearch',
-                                       SetMotorStateState(motor=GANTRY_MOTOR,
+                                       SetMotorStateState(id=GANTRY_MOTOR,
                                                           desired_state='inactive',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'finished'  # 1145 207 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 549 360 -1 -1 -1 -1
                                                     },
