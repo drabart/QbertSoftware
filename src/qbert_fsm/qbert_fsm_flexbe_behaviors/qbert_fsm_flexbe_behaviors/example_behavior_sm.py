@@ -98,17 +98,14 @@ class ExampleBehaviorSM(Behavior):
         # [/MANUAL_CREATE]
 
         with _state_machine:
-            # x:202 y:354
-            OperatableStateMachine.add('home',
-                                       SetMotorStateState(motor=1,
-                                                          desired_state='homing',
-                                                          homing_topic='/odesc/home_motor',
-                                                          setup_topic='/odesc/setup_drive',
-                                                          motor_arm_topic='/odesc/motor_ready'),
-                                       transitions={'state_set': 'finished'  # 777 388 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 815 550 -1 -1 -1 -1
+            # x:475 y:111
+            OperatableStateMachine.add('custom_move',
+                                       CalculationState(calculation=lambda x: -200.0),
+                                       transitions={'done': 'move-'  # 668 114 -1 -1 -1 -1
                                                     },
-                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'input_value': 'position',
+                                                  'output_value': 'position'})
 
             # x:71 y:680
             OperatableStateMachine.add('Iter++',
@@ -130,7 +127,7 @@ class ExampleBehaviorSM(Behavior):
 
             # x:471 y:670
             OperatableStateMachine.add('Move',
-                                       MoveMotorToPosState(motor=1,
+                                       MoveMotorToPosState(id=1,
                                                            timeout=200,
                                                            action_topic='/odesc/move_to_pos'),
                                        transitions={'move_complete': 'SetDesiredPos2'  # 699 667 -1 -1 -1 -1
@@ -146,7 +143,7 @@ class ExampleBehaviorSM(Behavior):
 
             # x:1025 y:563
             OperatableStateMachine.add('Move2',
-                                       MoveMotorToPosState(motor=1,
+                                       MoveMotorToPosState(id=1,
                                                            timeout=200,
                                                            action_topic='/odesc/move_to_pos'),
                                        transitions={'move_complete': 'Loop'  # 554 562 1024 570 -1 -1
@@ -178,22 +175,25 @@ class ExampleBehaviorSM(Behavior):
                                        remapping={'input_value': 'position',
                                                   'output_value': 'position'})
 
-            # x:475 y:111
-            OperatableStateMachine.add('custom_move',
-                                       CalculationState(calculation=lambda x: -1000.0),
-                                       transitions={'done': 'move-'  # 668 114 -1 -1 -1 -1
+            # x:202 y:354
+            OperatableStateMachine.add('home',
+                                       SetMotorStateState(id=1,
+                                                          desired_state='homing',
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
+                                       transitions={'state_set': 'finished'  # 777 388 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 815 550 -1 -1 -1 -1
                                                     },
-                                       autonomy={'done': Autonomy.Off},
-                                       remapping={'input_value': 'position',
-                                                  'output_value': 'position'})
+                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
 
             # x:793 y:313
             OperatableStateMachine.add('ina',
-                                       SetMotorStateState(motor=1,
+                                       SetMotorStateState(id=1,
                                                           desired_state='inactive',
-                                                          homing_topic='/odesc/home_motor',
-                                                          setup_topic='/odesc/setup_drive',
-                                                          motor_arm_topic='/odesc/motor_ready'),
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
                                        transitions={'state_set': 'finished'  # 1076 368 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 1112 523 -1 -1 -1 -1
                                                     },
@@ -201,7 +201,7 @@ class ExampleBehaviorSM(Behavior):
 
             # x:746 y:127
             OperatableStateMachine.add('move-',
-                                       MoveMotorToPosState(motor=1,
+                                       MoveMotorToPosState(id=1,
                                                            timeout=1000,
                                                            action_topic='/odesc/move_to_pos'),
                                        transitions={'move_complete': 'finished'  # 1068 318 -1 -1 -1 -1
@@ -215,21 +215,21 @@ class ExampleBehaviorSM(Behavior):
                                                  'timeout': Autonomy.Off},
                                        remapping={'position': 'position', 'duration': 'duration'})
 
-            # x:136 y:233
+            # x:187 y:236
             OperatableStateMachine.add('set_state',
-                                       SetMotorStateState(motor=1,
+                                       SetMotorStateState(id=1,
                                                           desired_state='velocity',
-                                                          homing_topic='/odesc/home_motor',
-                                                          setup_topic='/odesc/setup_drive',
-                                                          motor_arm_topic='/odesc/motor_ready'),
-                                       transitions={'state_set': 'vel'  # 343 261 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 784 482 -1 -1 -1 -1
+                                                          homing_topic='/odesc/home',
+                                                          setup_topic='/odesc/setup',
+                                                          id_arm_topic='/odesc/ready'),
+                                       transitions={'state_set': 'vel'  # 353 261 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 806 483 -1 -1 -1 -1
                                                     },
                                        autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
 
             # x:392 y:220
             OperatableStateMachine.add('vel',
-                                       SetMotorVelState(motor=1,
+                                       SetMotorVelState(id=1,
                                                         target_velocity=-15.0,
                                                         vel_topic='/odesc/move_with_velocity'),
                                        transitions={'velocity_set': 'wait'  # 573 257 -1 -1 -1 -1
@@ -240,7 +240,7 @@ class ExampleBehaviorSM(Behavior):
 
             # x:797 y:237
             OperatableStateMachine.add('vel2',
-                                       SetMotorVelState(motor=1,
+                                       SetMotorVelState(id=1,
                                                         target_velocity=0.0,
                                                         vel_topic='/odesc/move_with_velocity'),
                                        transitions={'velocity_set': 'finished'  # 1067 333 -1 -1 -1 -1

@@ -13,21 +13,21 @@ class MotorRebootState(EventState):
 
     Elements defined here for UI
     Parameters
-    -- motor               Motor which should be moved
-    -- topic               Topic for setting the motor's velocity
+    -- id               Motor which should be moved
+    -- topic               Topic for setting the id's velocity
 
     Outputs
     <= done                Successfully set the velocity
     <= failed              Failed for some reason
     """
 
-    def __init__(self, motor, topic="/reboot_motor"):
+    def __init__(self, id, topic="/odesc/reboot"):
         super().__init__(outcomes=['done', 'failed'],
                          input_keys=[],
                          output_keys=[])
         
         self._topic = topic
-        self._motor = motor
+        self._id = id
 
         ProxyServiceCaller.initialize(MotorRebootState._node)
 
@@ -35,10 +35,10 @@ class MotorRebootState(EventState):
                                             wait_duration=0.0)
 
     def execute(self, userdata):
-        motor_goal = Motor.Request()
-        motor_goal.motor = self._motor
+        id_goal = Motor.Request()
+        id_goal.id = self._id
 
-        result = self._client.call(self._topic, motor_goal)
+        result = self._client.call(self._topic, id_goal)
 
         if not result.success:
             return 'failed'

@@ -13,22 +13,22 @@ class SetMotorVelState(EventState):
 
     Elements defined here for UI
     Parameters
-    -- motor               Motor which should be moved
+    -- id               Motor which should be moved
     -- target_velocity     Velocity to be achieved
-    -- vel_topic           Topic for setting the motor's velocity
+    -- vel_topic           Topic for setting the id's velocity
 
     Outputs
     <= velocity_set        Successfully set the velocity
     <= failed              Failed for some reason
     """
 
-    def __init__(self, motor, target_velocity=5.0, vel_topic="/move_with_velocity"):
+    def __init__(self, id, target_velocity=5.0, vel_topic="/odesc/move_with_velocity"):
         super().__init__(outcomes=['velocity_set', 'failed'],
                          input_keys=[],
                          output_keys=[])
         
         self._vel_topic = vel_topic
-        self._motor = motor
+        self._id = id
         self._target_velocity = target_velocity
 
         ProxyServiceCaller.initialize(SetMotorVelState._node)
@@ -37,11 +37,11 @@ class SetMotorVelState(EventState):
                                             wait_duration=0.0)
 
     def execute(self, userdata):
-        motor_goal = MoveWithVel.Request()
-        motor_goal.motor = self._motor
-        motor_goal.vel = self._target_velocity
+        id_goal = MoveWithVel.Request()
+        id_goal.id = self._id
+        id_goal.vel = self._target_velocity
 
-        result = self._client.call(self._vel_topic, motor_goal)
+        result = self._client.call(self._vel_topic, id_goal)
 
         if not result.success:
             return 'failed'
