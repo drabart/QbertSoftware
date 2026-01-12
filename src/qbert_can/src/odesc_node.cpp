@@ -115,14 +115,17 @@ bool ODescNode::request_state(
     switch (mode) {
 
         case SetupDrive::Request::MODE_IDLE: {
-            send_control_state_req(
+            send_axis_state_req(
                 motor_id,
-                InputMode::INACTIVE,
-                ControlMode::POSITION_CONTROL
+                AxisState::IDLE
             );
         } break;
 
         case SetupDrive::Request::MODE_POSITION: {
+            send_axis_state_req(
+                motor_id,
+                AxisState::CLOSED_LOOP_CONTROL
+            );
             send_control_state_req(
                 motor_id,
                 InputMode::TRAP_TRAJ,
@@ -131,6 +134,10 @@ bool ODescNode::request_state(
         } break;
 
         case SetupDrive::Request::MODE_VELOCITY: {
+            send_axis_state_req(
+                motor_id,
+                AxisState::CLOSED_LOOP_CONTROL
+            );
             send_control_state_req(
                 motor_id,
                 InputMode::PASSTROUGH,
@@ -344,6 +351,7 @@ void ODescNode::send_axis_state_req(
 
     frame.id = create_id(motor_id, SetRequestedState);
     frame.dlc = 4;
+    frame.data = data;
 
     pub_->publish(frame);
 }
@@ -360,7 +368,7 @@ void ODescNode::send_control_state_req(
     write_le(data.data() + 4, static_cast<uint32_t>(input));
 
     frame.id = create_id(motor_id, SetControlMode);
-    frame.dlc = 4;
+    frame.dlc = 8;
     frame.data = data;
 
     pub_->publish(frame);

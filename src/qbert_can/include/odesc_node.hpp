@@ -49,7 +49,7 @@ public:
             std::bind(&ODescNode::move_with_vel, this, _1, _2)
         );
 
-        motor_ready_srv_ = this->create_service<Motor>(
+        motor_ready_srv_ = create_service<Motor>(
             "/odesc/ready",
             std::bind(&ODescNode::motor_ready, this, _1, _2)
         );

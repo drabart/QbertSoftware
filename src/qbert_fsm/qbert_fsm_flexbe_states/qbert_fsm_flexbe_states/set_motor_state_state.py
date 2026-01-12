@@ -96,15 +96,6 @@ class SetMotorStateState(EventState):
             Logger.logwarn(f"Unknown id state: {self._desired_state}")
             return 'failed'
 
-        # Arm id first (position / velocity / inactive)
-        if not self._call_service(
-            self._id_arm_client,
-            self._id_arm_topic,
-            id_req,
-            "Motor arm",
-        ):
-            return 'failed'
-
         setup_req = SetupDrive.Request()
         setup_req.id = self._id
         setup_req.mode = self.MODE_MAP[self._desired_state]
@@ -115,8 +106,10 @@ class SetMotorStateState(EventState):
             setup_req,
             "Setup drive",
         ):
+            Logger.logwarn(f"Failed setup drive")
             return 'failed'
 
+        Logger.logwarn(f"Setup done successfully")
         return 'state_set'
 
     def on_enter(self, userdata):
