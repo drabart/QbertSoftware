@@ -5,36 +5,27 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def generate_launch_description():
-    pkg_description = get_package_share_directory('qbert_description')
-    pkg_gazebo = get_package_share_directory('qbert_gazebo')
-    pkg_control = get_package_share_directory('qbert_control')
-    pkg_mock = get_package_share_directory('qbert_mock')
+    pkg_can = get_package_share_directory('qbert_can')
+    pkg_flexbe_onboard = get_package_share_directory('flexbe_onboard')
+    pkg_flexbe_webui = get_package_share_directory('flexbe_webui')
 
     # Paths to sub-launch files
-    robot_desc_launch = os.path.join(pkg_description, 'launch', 'display.launch.py')
-    gazebo_launch = os.path.join(pkg_gazebo, 'launch', 'sim.launch.py')
-    mock_launch = os.path.join(pkg_mock, 'launch', 'mock.launch.py')
-    control_launch = os.path.join(pkg_control, 'launch', 'control.launch.py')
+    can_launch = os.path.join(pkg_can, 'launch', 'can.launch.py')
+    flexbe_onboard_launch = os.path.join(pkg_flexbe_onboard, 'behavior_onboard.launch.py')
+    flexbe_webui_launch = os.path.join(pkg_flexbe_webui, 'launch', 'flexbe_ocs.launch.py')
 
-    include_robot_desc = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(robot_desc_launch)
+    include_can = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(can_launch)
     )
-
-    include_gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(gazebo_launch)
+    include_flexbe_onboard = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(flexbe_onboard_launch)
     )
-
-    include_mock = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(mock_launch)
-    )
-
-    include_control = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(control_launch)
+    include_flexbe_webui = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(flexbe_webui_launch)
     )
 
     return LaunchDescription([
-        include_robot_desc,
-        include_gazebo,
-        include_mock,
-        include_control,
+        include_can,
+        include_flexbe_onboard,
+        include_flexbe_webui,
     ])

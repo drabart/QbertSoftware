@@ -9,14 +9,14 @@ from qbert_msgs.action import MoveToPos
 
 class MoveMotorToPosState(EventState):
     """
-    State implementing moving a motor to a desired position.
+    State implementing moving a id to a desired position.
 
     Shouldn't be using multiple actions for one robot at once.
 
     Elements defined here for UI
     Parameters
     -- timeout             Maximum time allowed (seconds)
-    -- motor               Motor which should be moved
+    -- id               Motor which should be moved
     -- action_topic        Topic on which the action is called
 
     Outputs
@@ -26,12 +26,12 @@ class MoveMotorToPosState(EventState):
     <= timeout             The action has timed out.
 
     User data
-    ># position  float     Desired position of movement (motor rotations) (Input)
+    ># position  float     Desired position of movement (id rotations) (Input)
     #> duration  float     Amount time taken to complete rotation (seconds) (Output)
 
     """
 
-    def __init__(self, motor, timeout = 10.0, action_topic="/move_to_pos"):
+    def __init__(self, id, timeout = 10.0, action_topic="/odesc/move_to_pos"):
         super().__init__(outcomes=['move_complete', 'failed', 'canceled', 'timeout'],
                          input_keys=['position'],
                          output_keys=['duration'])
@@ -39,7 +39,7 @@ class MoveMotorToPosState(EventState):
         self._timeout = Duration(seconds=timeout)
         self._timeout_sec = timeout
         self._topic = action_topic
-        self._motor = motor
+        self._id = id
 
         ProxyActionClient.initialize(MoveMotorToPosState._node)
 
@@ -82,7 +82,7 @@ class MoveMotorToPosState(EventState):
         self._start_time = self._node.get_clock().now()
 
         goal = MoveToPos.Goal()
-        goal.motor = self._motor
+        goal.id = self._id
 
         if isinstance(userdata.position, (float, int)):
             goal.target_position = userdata.position
