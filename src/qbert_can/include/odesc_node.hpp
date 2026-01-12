@@ -21,42 +21,42 @@ using MoveToPos = qbert_msgs::action::MoveToPos;
 
 class ODescNode : public CanNode {
 public:
-    explicit ODescNode() : CanNode("ODesc_node") {
+    explicit ODescNode() : CanNode("ODesc_Node") {
         using namespace std::placeholders;
 
         reboot_srv_ = create_service<Motor>(
-            "/reboot_motor",
+            "/odesc/reboot",
             std::bind(&ODescNode::reboot, this, _1, _2)
         );
 
         clear_error_srv_ = create_service<Motor>(
-            "/clear_motor_error",
+            "/odesc/clear_error",
             std::bind(&ODescNode::clear_error, this, _1, _2)
         );
 
         home_srv_ = create_service<Motor>(
-            "/home_motor",
+            "/odesc/home",
             std::bind(&ODescNode::home, this, _1, _2)
         );
 
         setup_srv_ = create_service<SetupDrive>(
-            "/setup_drive",
+            "/odesc/setup",
             std::bind(&ODescNode::setup, this, _1, _2)
         );
 
         move_with_vel_srv_ = create_service<MoveWithVel>(
-            "/move_with_velocity",
+            "/odesc/move_with_velocity",
             std::bind(&ODescNode::move_with_vel, this, _1, _2)
         );
 
         motor_ready_srv_ = this->create_service<Motor>(
-            "/motor_ready",
+            "/odesc/ready",
             std::bind(&ODescNode::motor_ready, this, _1, _2)
         );
 
         move_to_pos_action_ = rclcpp_action::create_server<MoveToPos>(
             this,
-            "/move_to_pos",
+            "/odesc/move_to_pos",
             std::bind(&ODescNode::move_to_pos_goal, this, _1, _2),
             std::bind(&ODescNode::move_to_pos_cancel, this, _1),
             std::bind(&ODescNode::move_to_pos_accepted, this, _1)
@@ -107,9 +107,9 @@ private:
     //
     // Helper functions
 
-    void CAN_recv(const can_msgs::msg::Frame& frame) const override;
+    void CAN_recv(const CanFrame& frame) override;
 
-    bool is_active(uint8_t motor_id) const;
+    bool is_active(uint8_t motor_id) const override;
 
     // Helper functions
     // 

@@ -28,14 +28,15 @@ endif()
 add_executable(qbert_odesc_node src/odesc_node.cpp)
 ament_target_dependencies(qbert_odesc_node rclcpp rclcpp_action qbert_msgs std_srvs can_msgs)
 
-target_include_directories(qbert_odesc_node
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-)
+add_executable(qbert_esp_node src/esp_node.cpp)
+ament_target_dependencies(qbert_esp_node rclcpp rclcpp_action qbert_msgs std_srvs can_msgs)
+
+target_include_directories(qbert_odesc_node PUBLIC include)
+target_include_directories(qbert_esp_node PUBLIC include)
 
 install(TARGETS
   qbert_odesc_node
+  qbert_esp_node
   DESTINATION lib/${PROJECT_NAME})
 
 install(

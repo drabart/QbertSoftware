@@ -102,9 +102,9 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('home',
                                        SetMotorStateState(motor=1,
                                                           desired_state='homing',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home_motor',
+                                                          setup_topic='/odesc/setup_drive',
+                                                          motor_arm_topic='/odesc/motor_ready'),
                                        transitions={'state_set': 'finished'  # 777 388 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 815 550 -1 -1 -1 -1
                                                     },
@@ -132,7 +132,7 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('Move',
                                        MoveMotorToPosState(motor=1,
                                                            timeout=200,
-                                                           action_topic='/move_to_pos'),
+                                                           action_topic='/odesc/move_to_pos'),
                                        transitions={'move_complete': 'SetDesiredPos2'  # 699 667 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 999 682 -1 -1 -1 -1
                                                     , 'canceled': 'failed'  # 999 682 -1 -1 -1 -1
@@ -148,7 +148,7 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('Move2',
                                        MoveMotorToPosState(motor=1,
                                                            timeout=200,
-                                                           action_topic='/move_to_pos'),
+                                                           action_topic='/odesc/move_to_pos'),
                                        transitions={'move_complete': 'Loop'  # 554 562 1024 570 -1 -1
                                                     , 'failed': 'failed'  # 1235 638 -1 -1 -1 -1
                                                     , 'canceled': 'failed'  # 1235 638 -1 -1 -1 -1
@@ -191,9 +191,9 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('ina',
                                        SetMotorStateState(motor=1,
                                                           desired_state='inactive',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home_motor',
+                                                          setup_topic='/odesc/setup_drive',
+                                                          motor_arm_topic='/odesc/motor_ready'),
                                        transitions={'state_set': 'finished'  # 1076 368 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 1112 523 -1 -1 -1 -1
                                                     },
@@ -203,7 +203,7 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('move-',
                                        MoveMotorToPosState(motor=1,
                                                            timeout=1000,
-                                                           action_topic='/move_to_pos'),
+                                                           action_topic='/odesc/move_to_pos'),
                                        transitions={'move_complete': 'finished'  # 1068 318 -1 -1 -1 -1
                                                     , 'failed': 'finished'  # 1068 318 -1 -1 -1 -1
                                                     , 'canceled': 'finished'  # 1068 318 -1 -1 -1 -1
@@ -219,9 +219,9 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('set_state',
                                        SetMotorStateState(motor=1,
                                                           desired_state='velocity',
-                                                          homing_topic='/home_motor',
-                                                          setup_topic='/setup_drive',
-                                                          motor_arm_topic='/motor_ready'),
+                                                          homing_topic='/odesc/home_motor',
+                                                          setup_topic='/odesc/setup_drive',
+                                                          motor_arm_topic='/odesc/motor_ready'),
                                        transitions={'state_set': 'vel'  # 343 261 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 784 482 -1 -1 -1 -1
                                                     },
@@ -231,7 +231,7 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('vel',
                                        SetMotorVelState(motor=1,
                                                         target_velocity=-15.0,
-                                                        vel_topic='/move_with_velocity'),
+                                                        vel_topic='/odesc/move_with_velocity'),
                                        transitions={'velocity_set': 'wait'  # 573 257 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 908 476 -1 -1 -1 -1
                                                     },
@@ -242,7 +242,7 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('vel2',
                                        SetMotorVelState(motor=1,
                                                         target_velocity=0.0,
-                                                        vel_topic='/move_with_velocity'),
+                                                        vel_topic='/odesc/move_with_velocity'),
                                        transitions={'velocity_set': 'finished'  # 1067 333 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 1104 492 -1 -1 -1 -1
                                                     },
