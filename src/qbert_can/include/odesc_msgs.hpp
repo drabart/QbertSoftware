@@ -5,28 +5,24 @@
 
 using CanFrame = can_msgs::msg::Frame;
 
-// Getter messages
 enum ODescCommand {
     HeartBeat = 0x01,
-    GetMotorError = 0x03,
-    GetEncoderError = 0x04,
-    GetSensorlessError = 0x05,
+//    GetMotorError = 0x03,
+//    GetEncoderError = 0x04,
+//    GetSensorlessError = 0x05,
     SetRequestedState = 0x07,
     GetEncoderEst = 0x09,
-    GetEncoderCount = 0x0A,
+//    GetEncoderCount = 0x0A,
     SetControlMode = 0x0B,
     SetInputPos = 0x0C,
     SetInputVel = 0x0D,
-    GetIQ = 0x14,
-    GetSensorlessEst = 0x15,
+//    GetIQ = 0x14,
+//    GetSensorlessEst = 0x15,
     Reboot = 0x16,
-    GetBusVoltageCurrent = 0x17,
+//    GetBusVoltageCurrent = 0x17,
     ClearErrors = 0x18,
 };
 
-/*
- * HeartBeat - 0x01
- */
 struct Msg_HeartBeat {
     uint32_t axis_error = 0;
     uint8_t axis_current_state = 0;
@@ -45,9 +41,6 @@ struct Msg_HeartBeat {
     }
 };
 
-/*
- * GetEncoderEst - 0x09
- */
 struct Msg_GetEncoderEst {
     float pos_estimate = 0;
     float vel_estimate = 0;

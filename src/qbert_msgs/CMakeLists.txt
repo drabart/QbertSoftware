@@ -13,10 +13,6 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "action/MoveToPos.action"
 
-  "msg/LimitSwitch.msg"
-  "msg/DistanceSensor.msg"
-  "msg/CanFrame.msg"
-
   "srv/Motor.srv"
   "srv/MoveWithVel.srv"
   "srv/SetupDrive.srv"

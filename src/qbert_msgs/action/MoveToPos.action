@@ -1,5 +1,5 @@
 # Goal
-int32 motor
+int32 id
 float32 target_position
 ---
 # Result

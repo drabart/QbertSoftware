@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void ODescNode::CAN_recv(const can_msgs::msg::Frame& frame) const {
+void ODescNode::CAN_recv(const can_msgs::msg::Frame& frame) {
     uint8_t cmd = extract_cmd(frame.id);
     if (auto func = callbacks_.find(static_cast<ODescCommand>(cmd)); func != callbacks_.end()) { func->second(frame); }
 }
@@ -21,8 +21,8 @@ void ODescNode::CAN_recv(const can_msgs::msg::Frame& frame) const {
 // Helpers
 
 bool ODescNode::is_active(uint8_t motor_id) const {
-    if (auto motor = motors_.find(motor_id); motor != motors_.end()) {
-        return !motor->second.error;
+    if (auto it = motors_.find(motor_id); it != motors_.end()) {
+        return !it->second.error;
     }
     return false;
 }
@@ -32,9 +32,8 @@ bool ODescNode::is_active(uint8_t motor_id) const {
 
 void ODescNode::heartbeat(const CanFrame& frame) {
     Msg_HeartBeat hb = frame;
-    uint8_t id = extract_id(frame.id);
 
-    // 5 bits of available odescs, yes way too many
+    uint8_t id = extract_id(frame.id);
     if (id >= 0b100000) { return; }
 
     if (auto it = motors_.find(id); it == motors_.end()) {
@@ -49,12 +48,12 @@ void ODescNode::heartbeat(const CanFrame& frame) {
 
 void ODescNode::encoder_est(const CanFrame& frame) {
     Msg_GetEncoderEst est = frame;
-    uint8_t id = extract_id(frame.id);
 
-    // 5 bits of available odescs, yes way too many
+    uint8_t id = extract_id(frame.id);
     if (id >= 0b100000) { return; }
 
-    if (auto m = motors_.find(id); m == motors_.end()) {
+    if (auto it = motors_.find(id); it == motors_.end()) {
+        // TODO: if we get a response from this id, id should be alive
         return;
     }
 
@@ -180,7 +179,7 @@ rclcpp_action::GoalResponse ODescNode::move_to_pos_goal(
     const rclcpp_action::GoalUUID & _,
     std::shared_ptr<const MoveToPos::Goal> goal
 ) const {
-    if (!is_active(goal->motor)) { return rclcpp_action::GoalResponse::REJECT; }
+    if (!is_active(goal->id)) { return rclcpp_action::GoalResponse::REJECT; }
     return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
 
@@ -188,7 +187,7 @@ rclcpp_action::CancelResponse ODescNode::move_to_pos_cancel(
     const std::shared_ptr<rclcpp_action::ServerGoalHandle<MoveToPos>> goal_handle
 ) const {
     const auto goal = goal_handle->get_goal();
-    request_state(goal->motor, SetupDrive::Request::MODE_IDLE);
+    request_state(goal->id, SetupDrive::Request::MODE_IDLE);
     return rclcpp_action::CancelResponse::ACCEPT;
 }
 
@@ -222,12 +221,13 @@ void ODescNode::move_to_pos_execute(
     auto& current_position = feedback->current_position;
     auto result = std::make_shared<MoveToPos::Result>();
 
-    if (motors_.find(goal->motor) == motors_.end()) {
-        motors_.emplace(goal->motor, MotorState {});
+    if (motors_.find(goal->id) == motors_.end()) {
+        // TODO: is this really what we want, if no state in map then possibly dead motor?
+        motors_.emplace(goal->id, MotorState {});
     }
-    auto& motor = motors_.at(goal->motor);
+    auto& motor = motors_.at(goal->id);
 
-    send_position_target_req(goal->motor, goal->target_position);
+    send_position_target_req(goal->id, goal->target_position);
 
     while(true) {
         // Check if there is a cancel request
@@ -241,7 +241,7 @@ void ODescNode::move_to_pos_execute(
 
         // Update sequence
         current_position = motor.pos_est;
-        send_position_est_req(goal->motor);
+        send_position_est_req(goal->id);
 
         // Publish feedback
         goal_handle->publish_feedback(feedback);
@@ -276,10 +276,9 @@ using Array = std::array<uint8_t, 8>;
 
 void ODescNode::send_position_est_req(uint8_t motor_id) const {
     CanFrame frame {};
-    motor_id = motor_id & 0b111111;
 
+    frame.id = create_id(motor_id, GetEncoderEst);
     frame.is_rtr = true;
-    frame.id = (motor_id << 5) | GetEncoderEst;
 
     pub_->publish(frame);
 }
@@ -289,12 +288,11 @@ void ODescNode::send_position_target_req(
     float target
 ) const {
     CanFrame frame {};
-    motor_id = motor_id & 0b111111;
 
     Array data {};
     write_le(data.data(), target);
 
-    frame.id = (motor_id << 5) | SetInputPos;
+    frame.id = create_id(motor_id, SetInputPos);
     frame.dlc = 8;
     frame.data = data;
 
@@ -306,12 +304,11 @@ void ODescNode::send_velocity_target_req(
     float target
 ) const { 
     CanFrame frame {};
-    motor_id = motor_id & 0b111111;
 
     Array data {};
     write_le(data.data(), target);
 
-    frame.id = (motor_id << 5) | SetInputVel;
+    frame.id = create_id(motor_id, SetInputVel);
     frame.dlc = 8;
     frame.data = data;
 
@@ -320,9 +317,8 @@ void ODescNode::send_velocity_target_req(
 
 void ODescNode::send_reboot_req(uint8_t motor_id) const {
     CanFrame frame {};
-    motor_id = motor_id & 0b111111;
 
-    frame.id = (motor_id << 5) | Reboot;
+    frame.id = create_id(motor_id, Reboot);
     frame.dlc = 0;
 
     pub_->publish(frame);
@@ -330,9 +326,8 @@ void ODescNode::send_reboot_req(uint8_t motor_id) const {
 
 void ODescNode::send_clear_errors_req(uint8_t motor_id) const {
     CanFrame frame {};
-    motor_id = motor_id & 0b111111;
 
-    frame.id = (motor_id << 5) | ClearErrors;
+    frame.id = create_id(motor_id, ClearErrors);
     frame.dlc = 0;
 
     pub_->publish(frame);
@@ -343,12 +338,11 @@ void ODescNode::send_axis_state_req(
     AxisState state
 ) const {
     CanFrame frame {};
-    motor_id = motor_id & 0b111111;
 
     Array data {};
     write_le(data.data(), static_cast<uint32_t>(state));
 
-    frame.id = (motor_id << 5) | SetRequestedState;
+    frame.id = create_id(motor_id, SetRequestedState);
     frame.dlc = 4;
 
     pub_->publish(frame);
@@ -360,13 +354,12 @@ void ODescNode::send_control_state_req(
     ControlMode control
 ) const {
     CanFrame frame {};
-    motor_id = motor_id & 0b111111;
 
     Array data {};
     write_le(data.data(), static_cast<uint32_t>(control));
     write_le(data.data() + 4, static_cast<uint32_t>(input));
 
-    frame.id = (motor_id << 5) | SetControlMode;
+    frame.id = create_id(motor_id, SetControlMode);
     frame.dlc = 4;
     frame.data = data;
 

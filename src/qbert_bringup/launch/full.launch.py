@@ -9,12 +9,14 @@ def generate_launch_description():
     pkg_gazebo = get_package_share_directory('qbert_gazebo')
     pkg_control = get_package_share_directory('qbert_control')
     pkg_mock = get_package_share_directory('qbert_mock')
+    pkg_can = get_package_share_directory('qbert_can')
 
     # Paths to sub-launch files
     robot_desc_launch = os.path.join(pkg_description, 'launch', 'display.launch.py')
     gazebo_launch = os.path.join(pkg_gazebo, 'launch', 'sim.launch.py')
     mock_launch = os.path.join(pkg_mock, 'launch', 'mock.launch.py')
     control_launch = os.path.join(pkg_control, 'launch', 'control.launch.py')
+    can_launch = os.path.join(pkg_can, 'launch', 'can.launch.py')
 
     include_robot_desc = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(robot_desc_launch)
@@ -32,9 +34,14 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(control_launch)
     )
 
+    include_can = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(can_launch)
+    )
+
     return LaunchDescription([
         include_robot_desc,
         include_gazebo,
         include_mock,
         include_control,
+        include_can,
     ])
