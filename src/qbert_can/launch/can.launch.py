@@ -17,6 +17,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'interface': 'can0',
+            'receiver_interval_sec': '0.2',
         }.items(),
     )
 
