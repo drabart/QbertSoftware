@@ -21,7 +21,7 @@ using MoveToPos = qbert_msgs::action::MoveToPos;
 
 class ODescNode : public CanNode {
 public:
-    explicit ODescNode() : CanNode("ODesc_Node") {
+    explicit ODescNode() : CanNode("ODesc_node") {
         using namespace std::placeholders;
 
         reboot_srv_ = create_service<Motor>(

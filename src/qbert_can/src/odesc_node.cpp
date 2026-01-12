@@ -70,7 +70,7 @@ void ODescNode::reboot(
     const std::shared_ptr<Motor::Request> req,
     std::shared_ptr<Motor::Response> res
 ) const {
-    send_reboot_req(req->motor);
+    send_reboot_req(req->id);
     res->success = true;
 }
 
@@ -78,7 +78,7 @@ void ODescNode::clear_error(
     const std::shared_ptr<Motor::Request> req,
     std::shared_ptr<Motor::Response> res
 ) const {
-    send_clear_errors_req(req->motor);
+    send_clear_errors_req(req->id);
     res->success = true;
 }
 
@@ -86,12 +86,12 @@ void ODescNode::home(
     const std::shared_ptr<Motor::Request> req,
     std::shared_ptr<Motor::Response> res
 ) const {
-    if (!is_active(req->motor)) {
+    if (!is_active(req->id)) {
         res->success = false;
         return;
     }
 
-    send_axis_state_req(req->motor, AxisState::HOMING);
+    send_axis_state_req(req->id, AxisState::HOMING);
     res->success = true;
 }
 
@@ -99,12 +99,12 @@ void ODescNode::motor_ready(
     const std::shared_ptr<Motor::Request> req,
     std::shared_ptr<Motor::Response> res
 ) const {
-    if (!is_active(req->motor)) {
+    if (!is_active(req->id)) {
         res->success = false;
         return;
     }
 
-    send_axis_state_req(req->motor, AxisState::CLOSED_LOOP_CONTROL);
+    send_axis_state_req(req->id, AxisState::CLOSED_LOOP_CONTROL);
     res->success = true;
 }
 
@@ -150,24 +150,24 @@ void ODescNode::setup(
     const std::shared_ptr<SetupDrive::Request> req,
     std::shared_ptr<SetupDrive::Response> res
 ) const {
-    if (!is_active(req->motor)) {
+    if (!is_active(req->id)) {
         res->success = false;
         return;
     }
 
-    res->success = request_state(req->motor, req->mode);
+    res->success = request_state(req->id, req->mode);
 }
 
 void ODescNode::move_with_vel(
     const std::shared_ptr<MoveWithVel::Request> req,
     std::shared_ptr<MoveWithVel::Response> res
 ) const {
-    if (!is_active(req->motor)) {
+    if (!is_active(req->id)) {
         res->success = false;
         return;
     }
 
-    send_velocity_target_req(req->motor, req->vel);
+    send_velocity_target_req(req->id, req->vel);
     res->success = true;
 }
 
