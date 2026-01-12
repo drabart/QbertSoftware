@@ -8,14 +8,14 @@ from qbert_msgs.srv import Motor
 
 class SetMotorStateState(EventState):
     """
-    State implementing motor state setup.
+    State implementing id state setup.
 
     Parameters
-    -- motor               Motor which should be moved
+    -- id               Motor which should be moved
     -- desired_state       ['homing', 'inactive', 'position', 'velocity']
-    -- homing_topic        Topic for homing the motor
+    -- homing_topic        Topic for homing the id
     -- setup_topic         Topic for selecting the control type
-    -- motor_arm_topic     Topic for arming the motor
+    -- id_arm_topic     Topic for arming the id
 
     Outcomes
     <= state_set
@@ -28,10 +28,10 @@ class SetMotorStateState(EventState):
         'velocity': 2,
     }
 
-    def __init__(self, motor, desired_state,
-        homing_topic="/home_motor",
-        setup_topic="/setup_drive",
-        motor_arm_topic="/motor_ready",
+    def __init__(self, id, desired_state,
+        homing_topic="/odesc/home",
+        setup_topic="/odesc/setup",
+        id_arm_topic="/odesc/ready",
     ):
         super().__init__(
             outcomes=['state_set', 'failed'],
@@ -39,12 +39,12 @@ class SetMotorStateState(EventState):
             output_keys=[],
         )
 
-        self._motor = motor
+        self._id = id
         self._desired_state = desired_state
 
         self._homing_topic = homing_topic
         self._setup_topic = setup_topic
-        self._motor_arm_topic = motor_arm_topic
+        self._id_arm_topic = id_arm_topic
 
         ProxyServiceCaller.initialize(SetMotorStateState._node)
 
@@ -56,8 +56,8 @@ class SetMotorStateState(EventState):
             {self._setup_topic: SetupDrive},
             wait_duration=0.0,
         )
-        self._motor_arm_client = ProxyServiceCaller(
-            {self._motor_arm_topic: Motor},
+        self._id_arm_client = ProxyServiceCaller(
+            {self._id_arm_topic: Motor},
             wait_duration=0.0,
         )
 
@@ -76,15 +76,15 @@ class SetMotorStateState(EventState):
         return response
 
     def execute(self, userdata):
-        motor_req = Motor.Request()
-        motor_req.motor = self._motor
+        id_req = Motor.Request()
+        id_req.id = self._id
 
         # --- HOMING ---
         if self._desired_state == 'homing':
             if not self._call_service(
                 self._homing_client,
                 self._homing_topic,
-                motor_req,
+                id_req,
                 "Homing",
             ):
                 return 'failed'
@@ -93,20 +93,20 @@ class SetMotorStateState(EventState):
 
         # --- OTHER MODES ---
         if self._desired_state not in self.MODE_MAP:
-            Logger.logwarn(f"Unknown motor state: {self._desired_state}")
+            Logger.logwarn(f"Unknown id state: {self._desired_state}")
             return 'failed'
 
-        # Arm motor first (position / velocity / inactive)
+        # Arm id first (position / velocity / inactive)
         if not self._call_service(
-            self._motor_arm_client,
-            self._motor_arm_topic,
-            motor_req,
+            self._id_arm_client,
+            self._id_arm_topic,
+            id_req,
             "Motor arm",
         ):
             return 'failed'
 
         setup_req = SetupDrive.Request()
-        setup_req.motor = self._motor
+        setup_req.id = self._id
         setup_req.mode = self.MODE_MAP[self._desired_state]
 
         if not self._call_service(

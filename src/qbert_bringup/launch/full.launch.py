@@ -11,8 +11,8 @@ def generate_launch_description():
 
     # Paths to sub-launch files
     can_launch = os.path.join(pkg_can, 'launch', 'can.launch.py')
-    flexbe_onboard_launch = os.path.join(pkg_can, 'launch', 'behaviour_onboard.launch.py')
-    flexbe_webui_launch = os.path.join(pkg_can, 'launch', 'flexbe_ocs.launch.py')
+    flexbe_onboard_launch = os.path.join(pkg_flexbe_onboard, 'behavior_onboard.launch.py')
+    flexbe_webui_launch = os.path.join(pkg_flexbe_webui, 'launch', 'flexbe_ocs.launch.py')
 
     include_can = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(can_launch)
