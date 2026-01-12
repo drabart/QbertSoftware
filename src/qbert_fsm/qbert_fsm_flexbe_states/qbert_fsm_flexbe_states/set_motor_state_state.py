@@ -18,8 +18,8 @@ class SetMotorStateState(EventState):
     -- id_arm_topic     Topic for arming the id
 
     Outcomes
-    <= state_set
-    <= failed
+    <= state_set        Set state successfully
+    <= failed           Setting failed
     """
 
     MODE_MAP = {
