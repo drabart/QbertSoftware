@@ -16,6 +16,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/Motor.srv"
   "srv/MoveWithVel.srv"
   "srv/SetupDrive.srv"
+  "srv/GripperState.srv"
 )
 
 # Export runtime dependencies for Python

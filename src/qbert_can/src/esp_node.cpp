@@ -76,6 +76,16 @@ void EspNode::gripper_state(const CanFrame& frame) {
 //
 // Services
 
+void EspNode::gripper_state_srv(
+    const std::shared_ptr<GripperState::Request> req,
+    std::shared_ptr<GripperState::Response> res
+) const {
+    send_set_gripper_state_req(req->id, req->state);
+    res->success = true;
+
+    send_get_gripper_state_req(req->id);
+}
+
 // Services
 //
 // Actions

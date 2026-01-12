@@ -8,14 +8,21 @@
 #include "esp_msgs.hpp"
 #include "can_node.hpp"
 #include "qbert_msgs/action/move_to_pos.hpp"
+#include "qbert_msgs/srv/gripper_state.hpp"
 
 using CanFrame = can_msgs::msg::Frame;
+using GripperState = qbert_msgs::srv::GripperState;
 using MoveToPos = qbert_msgs::action::MoveToPos;
 
 class EspNode : public CanNode {
 public:
     explicit EspNode() : CanNode("ESP_Node") {
         using namespace std::placeholders;
+
+        gripper_state_srv_ = create_service<GripperState>(
+            "/esp/gripper_state",
+            std::bind(&EspNode::gripper_state_srv, this, _1, _2)
+        );
 
         move_to_pos_action_ = rclcpp_action::create_server<MoveToPos>(
             this,
@@ -32,6 +39,7 @@ public:
 
 private:
     // Member fields
+    rclcpp::Service<GripperState>::SharedPtr gripper_state_srv_;
     rclcpp_action::Server<MoveToPos>::SharedPtr move_to_pos_action_;
 
     struct EspState {
@@ -65,6 +73,11 @@ private:
     // Receive callbacks
     //
     // Services
+
+    void gripper_state_srv(
+        const std::shared_ptr<GripperState::Request> req,
+        std::shared_ptr<GripperState::Response> res
+    ) const;
 
     // Services
     //
