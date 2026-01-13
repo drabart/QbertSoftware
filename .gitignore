@@ -7,3 +7,5 @@ log
 *.avi
 test_software/motor/bin
 .clangd
+.cache
+dev_launch.sh

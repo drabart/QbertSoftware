@@ -1,0 +1,6 @@
+int32 motor
+---
+bool exists
+int32 state
+float32 position
+bool error
