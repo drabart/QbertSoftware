@@ -1,102 +1,89 @@
-import os, sys
-import rclpy
+"""
+Main application entry point.
+"""
+
+import sys, os
 from pathlib import Path
-from rclpy.node import Node
-from std_msgs.msg import Bool, String, Float64, Empty
-from PyQt6 import QtWidgets, uic, QtCore
-from PyQt6.QtCore import QObject, pyqtSignal, QThread, pyqtSlot
+from PyQt6 import QtWidgets
+from PyQt6.QtCore import QThread
+from core import TranslationManager, Router, Navbar
+from screens import HomeScreen, SettingsScreen, DebugScreen
+from ros_worker import RosWorker
 from ament_index_python.packages import get_package_share_directory
-
-class RosWorker(QObject):
-    message_received = pyqtSignal(str)
-
-    def __init__(self):
-        super().__init__()
-        rclpy.init()
-        self.node = Node("pyqt_ros_node")
-        self.publishers = {}
-
-        self.get_publisher("/gui_home", Empty)
-        self.get_publisher("/gui_start", Empty)
-        self.get_publisher("/gui_cancel", Empty)
-
-    def get_publisher(self, topic, msg_type):
-        if topic not in self.publishers:
-            self.publishers[topic] = self.node.create_publisher(
-                msg_type, topic, 10
-            )
-        return self.publishers[topic]
-    
-    @pyqtSlot(str)
-    def publish_empty(self, topic):
-        msg = Empty()
-        self.get_publisher(topic, Empty).publish(msg)
-    
-    @pyqtSlot(str, bool)
-    def publish_bool(self, topic, value):
-        msg = Bool()
-        msg.data = value
-        self.get_publisher(topic, Bool).publish(msg)
-
-    @pyqtSlot(str, float)
-    def publish_float(self, topic, value):
-        msg = Float64()
-        msg.data = value
-        self.get_publisher(topic, Float64).publish(msg)
-
-    @pyqtSlot(str, str)
-    def publish_string(self, topic, value):
-        msg = String()
-        msg.data = value
-        self.get_publisher(topic, String).publish(msg)
-
-    def callback(self, msg):
-        self.message_received.emit(msg.data)
-
-    def spin(self):
-        rclpy.spin(self.node)
-
-    def shutdown(self):
-        self.node.destroy_node()
-        rclpy.shutdown()
 
 SHARE_DIR = Path(get_package_share_directory("qbert_gui"))
 
 class MainWindow(QtWidgets.QMainWindow):
+    """Main application window."""
+    
     def __init__(self):
         super().__init__()
-        self.load_ui()
+        self.setWindowTitle("Qbert Software")
+
+        # Set up ros thread
         self.setup_ros_worker()
 
-        self.home.homingButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_home"))
-        self.home.startButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_start"))
-        self.home.stopButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_cancel"))
-
-
-    def load_ui(self):
-        self.setWindowTitle("Multi Screen App")
-
-        self.load_language(SHARE_DIR / "i18n" / "nl.qm")
-
+        # self.home.homingButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_home"))
+        # self.home.startButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_start"))
+        # self.home.stopButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_cancel"))
+        
+        # Translation
+        self.translation_manager = TranslationManager()
+        
+        # Setup UI with router
         self.stack = QtWidgets.QStackedWidget()
-        self.setCentralWidget(self.stack)
+        
+        # Create router
+        self.router = Router(self.stack)
+        
+        # Create screens
+        self.home_screen = HomeScreen(self)
+        self.settings_screen = SettingsScreen(self)
+        self.debug_screen = DebugScreen(self)
+        
+        # Register routes with router
+        self.router.register('home', self.home_screen)
+        self.router.register('settings', self.settings_screen)
+        self.router.register('debug', self.debug_screen)
+        
+        # Create navbar
+        navbar_routes = [
+            {'name': 'home', 'icon': 'home.png', 'label': 'Home'},
+            {'name': 'debug', 'icon': 'debug.png', 'label': 'Debug'},
+            {'name': 'settings', 'icon': 'settings.png', 'label': 'Settings'},
+        ]
+        self.navbar = Navbar(self.router, navbar_routes, self)
+        
+        # Create main container with stack and navbar
+        main_widget = QtWidgets.QWidget()
+        main_layout = QtWidgets.QVBoxLayout(main_widget)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        
+        # Add stack (takes most space)
+        main_layout.addWidget(self.stack, 1)
+        
+        # Add navbar at bottom
+        main_layout.addWidget(self.navbar, 0)
+        
+        self.setCentralWidget(main_widget)
+        
+        # Navigate to initial screen
+        self.router.navigate('home')
+        
+        # Setup language selector if present
+        if hasattr(self.settings_screen, 'languageComboBox'):
+            self._setup_language_selector()
+        
+        # Load theme and language
+        self._load_theme(SHARE_DIR / "themes" / "dark.qss")
+        self.translation_manager.set_language("en")
+        
+        # Set window size
+        self.resize(1280, 600)
+        # self.showFullScreen()  # Uncomment for fullscreen/touchscreen
 
-        self.home = uic.loadUi(SHARE_DIR / "ui" / "home.ui")
-        self.settings = uic.loadUi(SHARE_DIR / "ui" / "settings.ui")
-        self.debug = uic.loadUi(SHARE_DIR / "ui" / "debug.ui")
-
-        self.stack.addWidget(self.home)
-        self.stack.addWidget(self.settings)
-        self.stack.addWidget(self.debug)
-
-        self.home.settingsButton.clicked.connect(self.go_settings)
-        self.settings.backButton.clicked.connect(self.go_home)
-        self.settings.debugButton.clicked.connect(self.go_debug)
-        self.debug.backButton.clicked.connect(self.go_settings)
-
-        self.load_theme(SHARE_DIR / "themes" / "dark.qss")
-
-    def setup_ros_worker(self): 
+    def _setup_ros_worker(self): 
         self.ros_thread = QThread(self) 
         self.ros_worker = RosWorker() 
 
@@ -104,47 +91,57 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ros_thread.started.connect(self.ros_worker.spin) 
 
         self.ros_thread.start()
-
-    def load_theme(self, path):
-        with open(SHARE_DIR / "themes" / "common.qss", "r") as f:
-            common_style = f.read()
-
-        with open(path, "r") as f:
-            theme_style = f.read()
-
-        app.setStyleSheet(common_style + "\n" + theme_style)
-
-    # Navigation
-    def go_home(self):
-        self.stack.setCurrentIndex(0)
-
-    def go_settings(self):
-        self.stack.setCurrentIndex(1)
-
-    def go_debug(self):
-        self.stack.setCurrentIndex(2)
-
-    def load_language(self, path):
-        if not hasattr(self, "translator"):
-            self.translator = QtCore.QTranslator()
-
-        if self.translator.load(str(path)):
-            QtWidgets.QApplication.instance().installTranslator(self.translator)
-        else:
-            print("Failed to load:", path)
+    
+    def _setup_language_selector(self):
+        """Setup language selection combo box."""
+        combo = self.settings_screen.languageComboBox
+        combo.clear()
+        for lang_code in self.translation_manager.get_available_languages():
+            lang_name = self.translation_manager.get_language_name(lang_code)
+            combo.addItem(lang_name, lang_code)
+        
+        # Set current language
+        current_lang = self.translation_manager.current_language
+        index = combo.findData(current_lang)
+        if index >= 0:
+            combo.setCurrentIndex(index)
+        
+        combo.currentIndexChanged.connect(self._on_language_changed)
+    
+    def _on_language_changed(self, index):
+        """Handle language change."""
+        combo = self.settings_screen.languageComboBox
+        lang_code = combo.itemData(index)
+        if lang_code:
+            self.translation_manager.set_language(lang_code)
+    
+    def _load_theme(self, theme_file: str):
+        """Load a theme from QSS file."""
+        theme_path = os.path.join(SHARE_DIR, "themes", theme_file)
+        common_path = os.path.join(SHARE_DIR, "themes", "common.qss")
+        
+        style = ""
+        if os.path.exists(common_path):
+            with open(common_path, 'r') as f:
+                style += f.read() + "\n"
+        if os.path.exists(theme_path):
+            with open(theme_path, 'r') as f:
+                style += f.read()
+        
+        if style:
+            self.setStyleSheet(style)
 
 
 def main():
-    global app
-
+    """Application entry point."""
     app = QtWidgets.QApplication(sys.argv)
-    w = MainWindow()
-    w.resize(400, 300)
-    w.show()
-    exit_code = app.exec()
-    sys.exit(exit_code)
+    app.setApplicationName("Qbert Software")
+    app.setOrganizationName("Qbert")
+    
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
     main()
-    
