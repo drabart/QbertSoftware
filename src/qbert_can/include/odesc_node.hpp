@@ -8,14 +8,14 @@
 #include "qbert_msgs/action/move_to_pos.hpp"
 #include "qbert_msgs/srv/motor.hpp"
 #include "qbert_msgs/srv/move_with_vel.hpp"
-#include "qbert_msgs/srv/setup_drive.hpp"
+#include "qbert_msgs/srv/motor_setup.hpp"
 
 #include "can_node.hpp"
 #include "odesc_msgs.hpp"
 
 using CanFrame = can_msgs::msg::Frame;
 using Motor = qbert_msgs::srv::Motor;
-using SetupDrive = qbert_msgs::srv::SetupDrive;
+using MotorSetup = qbert_msgs::srv::MotorSetup;
 using MoveWithVel = qbert_msgs::srv::MoveWithVel;
 using MoveToPos = qbert_msgs::action::MoveToPos;
 
@@ -39,7 +39,7 @@ public:
             std::bind(&ODescNode::home, this, _1, _2)
         );
 
-        setup_srv_ = create_service<SetupDrive>(
+        setup_srv_ = create_service<MotorSetup>(
             "/odesc/setup",
             std::bind(&ODescNode::setup, this, _1, _2)
         );
@@ -47,11 +47,6 @@ public:
         move_with_vel_srv_ = create_service<MoveWithVel>(
             "/odesc/move_with_velocity",
             std::bind(&ODescNode::move_with_vel, this, _1, _2)
-        );
-
-        motor_ready_srv_ = create_service<Motor>(
-            "/odesc/ready",
-            std::bind(&ODescNode::motor_ready, this, _1, _2)
         );
 
         move_to_pos_action_ = rclcpp_action::create_server<MoveToPos>(
@@ -89,7 +84,7 @@ private:
     rclcpp::Service<Motor>::SharedPtr clear_error_srv_;
     rclcpp::Service<Motor>::SharedPtr home_srv_;
     rclcpp::Service<Motor>::SharedPtr motor_ready_srv_;
-    rclcpp::Service<SetupDrive>::SharedPtr setup_srv_;
+    rclcpp::Service<MotorSetup>::SharedPtr setup_srv_;
     rclcpp::Service<MoveWithVel>::SharedPtr move_with_vel_srv_;
 
     rclcpp_action::Server<MoveToPos>::SharedPtr move_to_pos_action_;
@@ -149,8 +144,8 @@ private:
     ) const;
 
     void setup(
-        const std::shared_ptr<SetupDrive::Request> req,
-        std::shared_ptr<SetupDrive::Response> res
+        const std::shared_ptr<MotorSetup::Request> req,
+        std::shared_ptr<MotorSetup::Response> res
     ) const;
 
     void move_with_vel(

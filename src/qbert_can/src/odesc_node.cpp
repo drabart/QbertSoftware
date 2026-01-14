@@ -95,33 +95,20 @@ void ODescNode::home(
     res->success = true;
 }
 
-void ODescNode::motor_ready(
-    const std::shared_ptr<Motor::Request> req,
-    std::shared_ptr<Motor::Response> res
-) const {
-    if (!is_active(req->id)) {
-        res->success = false;
-        return;
-    }
-
-    send_axis_state_req(req->id, AxisState::CLOSED_LOOP_CONTROL);
-    res->success = true;
-}
-
 bool ODescNode::request_state(
     uint8_t motor_id,
     uint8_t mode
 ) const {
     switch (mode) {
 
-        case SetupDrive::Request::MODE_IDLE: {
+        case MotorSetup::Request::MODE_IDLE: {
             send_axis_state_req(
                 motor_id,
                 AxisState::IDLE
             );
         } break;
 
-        case SetupDrive::Request::MODE_POSITION: {
+        case MotorSetup::Request::MODE_POSITION: {
             send_axis_state_req(
                 motor_id,
                 AxisState::CLOSED_LOOP_CONTROL
@@ -133,7 +120,7 @@ bool ODescNode::request_state(
             );
         } break;
 
-        case SetupDrive::Request::MODE_VELOCITY: {
+        case MotorSetup::Request::MODE_VELOCITY: {
             send_axis_state_req(
                 motor_id,
                 AxisState::CLOSED_LOOP_CONTROL
@@ -154,8 +141,8 @@ bool ODescNode::request_state(
 }
 
 void ODescNode::setup(
-    const std::shared_ptr<SetupDrive::Request> req,
-    std::shared_ptr<SetupDrive::Response> res
+    const std::shared_ptr<MotorSetup::Request> req,
+    std::shared_ptr<MotorSetup::Response> res
 ) const {
     if (!is_active(req->id)) {
         res->success = false;
@@ -194,7 +181,7 @@ rclcpp_action::CancelResponse ODescNode::move_to_pos_cancel(
     const std::shared_ptr<rclcpp_action::ServerGoalHandle<MoveToPos>> goal_handle
 ) const {
     const auto goal = goal_handle->get_goal();
-    request_state(goal->id, SetupDrive::Request::MODE_IDLE);
+    request_state(goal->id, MotorSetup::Request::MODE_IDLE);
     return rclcpp_action::CancelResponse::ACCEPT;
 }
 
