@@ -1,20 +1,31 @@
 #include "can_msgs/msg/frame.hpp"
 #include <rclcpp/executors.hpp>
+#include <chrono>
 
 #include "odesc_node.hpp"
 
 using CanFrame = can_msgs::msg::Frame;
+using namespace std::chrono_literals;
 
 int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<ODescNode>());
+
+    auto node = std::make_shared<ODescNode>();
+
+    rclcpp::executors::MultiThreadedExecutor exec;
+    exec.add_node(node);
+    exec.spin();
+
     rclcpp::shutdown();
     return 0;
 }
 
 void ODescNode::CAN_recv(const can_msgs::msg::Frame& frame) {
     uint8_t cmd = extract_cmd(frame.id);
+    if (cmd != 1) {
+        RCLCPP_INFO(get_logger(), "CAN: %d", cmd);
+    }
     if (auto func = callbacks_.find(static_cast<ODescCommand>(cmd)); func != callbacks_.end()) { func->second(frame); }
 }
 
@@ -58,8 +69,13 @@ void ODescNode::encoder_est(const CanFrame& frame) {
     }
 
     MotorState& motor = motors_.at(id);
-
+    
+    RCLCPP_INFO(get_logger(), "received position estimate");
     motor.pos_est = est.pos_estimate;
+
+    std::lock_guard lock(position_mutex);
+    position_reply = motor.pos_est;
+    position_received_flag.notify_one();
 }
 
 // Receive callbacks
@@ -165,6 +181,28 @@ void ODescNode::move_with_vel(
     res->success = true;
 }
 
+void ODescNode::get_state(
+    const std::shared_ptr<MotorGetState::Request> req,
+    std::shared_ptr<MotorGetState::Response> res
+) {
+    if (!is_active(req->id)) {
+        RCLCPP_WARN(this->get_logger(), "Device inactive");
+        res->exists = false;
+        return;
+    }
+
+    if (!send_position_est_req(req->id)) {
+        RCLCPP_WARN(this->get_logger(), "Device missing position");
+        res->exists = false;
+        return;
+    }
+
+    res->state = motors_.at(req->id).axis_state;
+    res->error = motors_.at(req->id).error;
+    res->position = motors_.at(req->id).pos_est;
+    res->exists = true;
+}
+
 // Services
 //
 // Actions
@@ -268,13 +306,25 @@ void ODescNode::move_to_pos_execute(
 
 using Array = std::array<uint8_t, 8>;
 
-void ODescNode::send_position_est_req(uint8_t motor_id) const {
+bool ODescNode::send_position_est_req(uint8_t motor_id) {
+    {
+        std::lock_guard lock(position_mutex);
+        position_reply.reset();
+    }
+
     CanFrame frame {};
 
     frame.id = create_id(motor_id, GetEncoderEst);
     frame.is_rtr = true;
 
     pub_->publish(frame);
+
+    std::unique_lock lock(position_mutex);
+    if (!position_received_flag.wait_for(lock, 500ms, [&]{ return position_reply.has_value(); })) {
+        return false; // timeout
+    }
+
+    return true;
 }
 
 void ODescNode::send_position_target_req(

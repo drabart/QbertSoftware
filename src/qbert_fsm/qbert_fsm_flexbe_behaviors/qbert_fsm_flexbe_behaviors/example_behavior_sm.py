@@ -113,7 +113,7 @@ class ExampleBehaviorSM(Behavior):
             # x:349 y:506
             OperatableStateMachine.add('check_homed',
                                        CheckConditionState(predicate=lambda x: x == 1),
-                                       transitions={'true': 'set_pos'  # 509 475 -1 -1 -1 -1
+                                       transitions={'true': 'set_pos'  # 505 455 -1 -1 -1 -1
                                                     , 'false': 'delay3'  # 431 418 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
@@ -121,7 +121,7 @@ class ExampleBehaviorSM(Behavior):
 
             # x:571 y:105
             OperatableStateMachine.add('delay',
-                                       WaitState(wait_time=5),
+                                       WaitState(wait_time=30),
                                        transitions={'done': 'stop'  # 706 131 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
@@ -129,7 +129,7 @@ class ExampleBehaviorSM(Behavior):
             # x:227 y:152
             OperatableStateMachine.add('delay2',
                                        WaitState(wait_time=0.2),
-                                       transitions={'done': 'home'  # 343 189 -1 -1 -1 -1
+                                       transitions={'done': 'home'  # 348 187 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
@@ -143,7 +143,7 @@ class ExampleBehaviorSM(Behavior):
             # x:277 y:404
             OperatableStateMachine.add('get_state',
                                        MotorGetStateState(motor=1,
-                                                          get_state_topic='/get_motor_state'),
+                                                          get_state_topic='/odesc/get_state'),
                                        transitions={'state_acquired': 'check_homed'  # 348 494 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 207 426 -1 -1 -1 -1
                                                     },
@@ -181,7 +181,7 @@ class ExampleBehaviorSM(Behavior):
 
             # x:526 y:358
             OperatableStateMachine.add('set_pos',
-                                       UserdataState(data=-100.0),
+                                       UserdataState(data=-500.0),
                                        transitions={'done': 'move'  # 646 365 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},
