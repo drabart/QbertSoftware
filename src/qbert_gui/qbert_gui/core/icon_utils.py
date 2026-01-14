@@ -4,6 +4,7 @@ Simple utility for loading PNG icons.
 
 from PyQt6 import QtGui, QtCore, QtWidgets
 from PyQt6.QtWidgets import QPushButton, QLabel, QVBoxLayout
+from qbert_gui.core.shared_resource import get_from_shared
 import os
 
 
@@ -19,7 +20,7 @@ def set_button_icon(button: QPushButton, icon_path: str, size: int = 24, positio
     """
     # If path is relative, assume it's in assets/
     if not os.path.isabs(icon_path):
-        icon_path = os.path.join("assets", icon_path)
+        icon_path = get_from_shared(os.path.join("assets", icon_path))
     
     if not os.path.exists(icon_path):
         print(f"Warning: Icon file not found: {icon_path}")

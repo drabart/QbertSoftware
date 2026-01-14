@@ -6,9 +6,8 @@ import sys, os
 from pathlib import Path
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QThread
-from core import TranslationManager, Router, Navbar
-from screens import HomeScreen, SettingsScreen, DebugScreen
-from ros_worker import RosWorker
+from .core import TranslationManager, Router, Navbar, RosWorker
+from .screens import HomeScreen, SettingsScreen, DebugScreen
 from ament_index_python.packages import get_package_share_directory
 
 SHARE_DIR = Path(get_package_share_directory("qbert_gui"))
@@ -21,11 +20,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Qbert Software")
 
         # Set up ros thread
-        self.setup_ros_worker()
-
-        # self.home.homingButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_home"))
-        # self.home.startButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_start"))
-        # self.home.stopButton.clicked.connect(lambda: self.ros_worker.publish_empty("/gui_cancel"))
+        self._setup_ros_worker()
         
         # Translation
         self.translation_manager = TranslationManager()
@@ -37,7 +32,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.router = Router(self.stack)
         
         # Create screens
-        self.home_screen = HomeScreen(self)
+        self.home_screen = HomeScreen(self.ros_worker, self)
         self.settings_screen = SettingsScreen(self)
         self.debug_screen = DebugScreen(self)
         

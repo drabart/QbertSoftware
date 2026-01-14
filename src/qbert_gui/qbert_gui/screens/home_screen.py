@@ -1,9 +1,8 @@
 """Home Screen."""
 
 from PyQt6 import QtWidgets, QtCore
-from core.base_screen import BaseScreen
-from core.icon_utils import set_button_icon
-
+from qbert_gui.core.base_screen import BaseScreen
+from qbert_gui.core.icon_utils import set_button_icon
 
 class HomeScreen(BaseScreen):
     """Home screen with main controls."""
@@ -21,28 +20,28 @@ class HomeScreen(BaseScreen):
             set_button_icon(self.controlButton, "play.png", size=24, position="top")
         
         if hasattr(self, 'homingButton'):
-            self.homingButton.clicked.connect(self.handle_homing)
+            self.homingButton.clicked.connect(self._show_start_movement_confirmation(self._handle_homing))
     
     def handle_control_button(self):
         """Handle control button click - toggles between start and stop."""
         if not self.is_running:
             # Show confirmation modal before starting
-            self._show_start_confirmation()
+            self._show_start_movement_confirmation(self._handle_start)
         else:
             # Immediately stop
             self._handle_stop()
     
-    def _show_start_confirmation(self):
+    def _show_start_movement_confirmation(self, confirm_function):
         """Show confirmation modal before starting the robot."""
         from PyQt6.QtWidgets import QMessageBox
         
         msg_box = QMessageBox(self)
         msg_box.setIcon(QMessageBox.Icon.Warning)
         msg_box.setWindowTitle(self.tr("Confirm Start"))
-        msg_box.setText(self.tr("Warning: Starting the Robot"))
+        msg_box.setText(self.tr("Warning: Moving the Robot"))
         msg_box.setInformativeText(
-            self.tr("Are you sure you want to start the robot?\n\n"
-                   "This will cause the robot to move and might be dangerous.")
+            self.tr("The action you selected will cause the robot to move.\n\n"
+                   "Make sure the robot is ready to be started.")
         )
         msg_box.setStandardButtons(
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
@@ -52,12 +51,11 @@ class HomeScreen(BaseScreen):
         result = msg_box.exec()
         
         if result == QMessageBox.StandardButton.Yes:
-            self._handle_start()
+            confirm_function()
     
     def _handle_start(self):
         """Handle start command - send start command to robot."""
-        # TODO: Send start command to robot
-        # Example: robot_interface.send_start_command()
+        self.ros_worker.publish_empty("/gui_start")
         
         # Update UI to show stop button
         self.is_running = True
@@ -65,13 +63,16 @@ class HomeScreen(BaseScreen):
     
     def _handle_stop(self):
         """Handle stop command - immediately stop the robot."""
-        # TODO: Send stop command to robot
-        # Example: robot_interface.send_stop_command()
+        self.ros_worker.publish_empty("/gui_cancel")
         
         # Update UI to show start button
         self.is_running = False
         self._update_control_button_state()
     
+    def _handle_homing(self):
+        """Handle homing command - implement your logic here."""
+        self.ros_worker.publish_empty("/gui_home")
+
     def _update_control_button_state(self):
         """Update control button appearance based on robot state."""
         if not hasattr(self, 'controlButton'):
@@ -113,7 +114,7 @@ class HomeScreen(BaseScreen):
             """)
             # Update icon and text without recreating layout
             self._update_button_icon_text(button, "play.png", self.tr("Start"))
-    
+
     def _update_button_icon_text(self, button, icon_path, text):
         """
         Update button icon and text without recreating the layout.
@@ -140,11 +141,6 @@ class HomeScreen(BaseScreen):
         else:
             # Fallback if layout doesn't exist yet
             button.setText(text)
-    
-    def handle_homing(self):
-        """Handle homing command - implement your logic here."""
-        # Add your homing logic here
-        pass
     
     def retranslate_ui(self):
         """Retranslate UI elements."""

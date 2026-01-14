@@ -3,6 +3,7 @@ Base screen class that all screens should inherit from.
 """
 
 from PyQt6 import QtWidgets, QtCore
+from qbert_gui.core.shared_resource import get_from_shared
 import os
 
 
@@ -24,7 +25,7 @@ class BaseScreen(QtWidgets.QWidget):
     def _load_ui(self, ui_file: str):
         """Load the UI file."""
         from PyQt6 import uic
-        ui_path = os.path.join("ui", ui_file)
+        ui_path = get_from_shared(os.path.join("ui", ui_file))
         if not os.path.exists(ui_path):
             raise FileNotFoundError(f"UI file not found: {ui_path}")
         uic.loadUi(ui_path, self)

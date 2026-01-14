@@ -13,6 +13,7 @@ setup(
          ["resource/" + package_name]),
         ("share/" + package_name, ["package.xml"]),
 
+        (os.path.join("share", package_name, "assets"), glob(package_name + "/assets/*")),
         (os.path.join("share", package_name, "ui"), glob(package_name + "/ui/*.ui")),
         (os.path.join("share", package_name, "themes"), glob(package_name + "/themes/*.qss")),
         (os.path.join("share", package_name, "i18n"), glob(package_name + "/i18n/*.qm")),

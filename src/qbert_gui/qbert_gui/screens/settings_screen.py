@@ -1,8 +1,7 @@
 """Settings Screen."""
 
-from core.base_screen import BaseScreen
-from core.icon_utils import set_button_icon
-
+from qbert_gui.core.base_screen import BaseScreen
+from qbert_gui.core.icon_utils import set_button_icon
 
 class SettingsScreen(BaseScreen):
     """Settings screen."""
