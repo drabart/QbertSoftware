@@ -40,6 +40,7 @@ from flexbe_core import OperatableStateMachine
 from flexbe_core import PriorityContainer
 from flexbe_core import initialize_flexbe_core
 from flexbe_states.check_condition_state import CheckConditionState
+from flexbe_states.log_state import LogState
 from flexbe_states.user_data_state import UserdataState
 from flexbe_states.wait_state import WaitState
 from qbert_fsm_flexbe_states.motor_clear_errors_state import MotorClearErrorsState
@@ -101,6 +102,24 @@ class ExampleBehaviorSM(Behavior):
         # [/MANUAL_CREATE]
 
         with _state_machine:
+            # x:366 y:174
+            OperatableStateMachine.add('home',
+                                       MotorHomeState(id=1,
+                                                      homing_topic='/odesc/home'),
+                                       transitions={'state_set': 'delay3'  # 447 260 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 252 310 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
+
+            # x:349 y:506
+            OperatableStateMachine.add('check_homed',
+                                       CheckConditionState(predicate=lambda x: x == 1),
+                                       transitions={'true': 'finished'  # 194 469 -1 -1 -1 -1
+                                                    , 'false': 'delay3'  # 431 418 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
+                                       remapping={'input_value': 'motor_axis_state'})
+
             # x:59 y:74
             OperatableStateMachine.add('clear',
                                        MotorClearErrorsState(id=1,
@@ -109,15 +128,6 @@ class ExampleBehaviorSM(Behavior):
                                                     , 'failed': 'failed'  # 108 286 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
-
-            # x:349 y:506
-            OperatableStateMachine.add('check_homed',
-                                       CheckConditionState(predicate=lambda x: x == 1),
-                                       transitions={'true': 'set_pos'  # 505 455 -1 -1 -1 -1
-                                                    , 'false': 'delay3'  # 431 418 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-                                       remapping={'input_value': 'motor_axis_state'})
 
             # x:571 y:105
             OperatableStateMachine.add('delay',
@@ -153,25 +163,16 @@ class ExampleBehaviorSM(Behavior):
                                                   'motor_position': 'motor_position',
                                                   'motor_error': 'motor_error'})
 
-            # x:366 y:174
-            OperatableStateMachine.add('home',
-                                       MotorHomeState(id=1,
-                                                      homing_topic='/odesc/home'),
-                                       transitions={'state_set': 'get_state'  # 351 309 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 252 310 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
-
-            # x:665 y:315
+            # x:679 y:244
             OperatableStateMachine.add('move',
                                        MotorMoveToPosState(id=1,
-                                                           timeout=20.0,
+                                                           timeout=40.0,
                                                            action_topic='/odesc/move_to_pos',
                                                            setup_topic='/odesc/setup'),
-                                       transitions={'move_complete': 'finished'  # 351 389 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 400 388 -1 -1 -1 -1
-                                                    , 'canceled': 'failed'  # 402 383 -1 -1 -1 -1
-                                                    , 'timeout': 'failed'  # 402 380 -1 -1 -1 -1
+                                       transitions={'move_complete': 'finished'  # 617 641 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 409 369 -1 -1 -1 -1
+                                                    , 'canceled': 'failed'  # 409 369 -1 -1 -1 -1
+                                                    , 'timeout': 'timeout'  # 789 386 -1 -1 -1 -1
                                                     },
                                        autonomy={'move_complete': Autonomy.Off,
                                                  'failed': Autonomy.Off,
@@ -182,7 +183,7 @@ class ExampleBehaviorSM(Behavior):
             # x:526 y:358
             OperatableStateMachine.add('set_pos',
                                        UserdataState(data=-500.0),
-                                       transitions={'done': 'move'  # 646 365 -1 -1 -1 -1
+                                       transitions={'done': 'move'  # 658 353 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},
                                        remapping={'data': 'position'})
@@ -207,6 +208,14 @@ class ExampleBehaviorSM(Behavior):
                                                     },
                                        autonomy={'motor_stopped': Autonomy.Off,
                                                  'failed': Autonomy.Off})
+
+            # x:793 y:458
+            OperatableStateMachine.add('timeout',
+                                       LogState(text='Move timed out',
+                                                severity=2),
+                                       transitions={'done': 'failed'  # 465 453 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
 
         return _state_machine
 

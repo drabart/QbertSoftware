@@ -320,7 +320,8 @@ bool ODescNode::send_position_est_req(uint8_t motor_id) {
     pub_->publish(frame);
 
     std::unique_lock lock(position_mutex);
-    if (!position_received_flag.wait_for(lock, 500ms, [&]{ return position_reply.has_value(); })) {
+    // TODO: 50ms works for one motor on canbus, but might need to be revised if it fails with more devices on the bus
+    if (!position_received_flag.wait_for(lock, 50ms, [&]{ return position_reply.has_value(); })) {
         return false; // timeout
     }
 
