@@ -39,12 +39,10 @@ from flexbe_core import Logger
 from flexbe_core import OperatableStateMachine
 from flexbe_core import PriorityContainer
 from flexbe_core import initialize_flexbe_core
-from flexbe_states.check_condition_state import CheckConditionState
 from flexbe_states.log_state import LogState
 from flexbe_states.user_data_state import UserdataState
 from flexbe_states.wait_state import WaitState
 from qbert_fsm_flexbe_states.motor_clear_errors_state import MotorClearErrorsState
-from qbert_fsm_flexbe_states.motor_get_state_state import MotorGetStateState
 from qbert_fsm_flexbe_states.motor_home_state import MotorHomeState
 from qbert_fsm_flexbe_states.motor_set_vel_state import MotorSetVelState
 from qbert_fsm_flexbe_states.motor_stop_state import MotorStopState
@@ -105,20 +103,17 @@ class ExampleBehaviorSM(Behavior):
             # x:366 y:174
             OperatableStateMachine.add('home',
                                        MotorHomeState(id=1,
-                                                      homing_topic='/odesc/home'),
-                                       transitions={'state_set': 'get_state'  # 339 308 -1 -1 -1 -1
+                                                      timeout=-1,
+                                                      delay=0.2,
+                                                      homing_topic='/odesc/home',
+                                                      get_state_topic='/odesc/get_state'),
+                                       transitions={'state_set': 'finished'  # 204 308 -1 -1 -1 -1
+                                                    , 'timeout': 'failed'  # 252 310 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 252 310 -1 -1 -1 -1
                                                     },
-                                       autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
-
-            # x:349 y:506
-            OperatableStateMachine.add('check_homed',
-                                       CheckConditionState(predicate=lambda x: x == 1),
-                                       transitions={'true': 'finished'  # 194 469 -1 -1 -1 -1
-                                                    , 'false': 'delay3'  # 431 418 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-                                       remapping={'input_value': 'motor_axis_state'})
+                                       autonomy={'state_set': Autonomy.Off,
+                                                 'timeout': Autonomy.Off,
+                                                 'failed': Autonomy.Off})
 
             # x:59 y:74
             OperatableStateMachine.add('clear',
@@ -142,26 +137,6 @@ class ExampleBehaviorSM(Behavior):
                                        transitions={'done': 'home'  # 348 187 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
-
-            # x:423 y:285
-            OperatableStateMachine.add('delay3',
-                                       WaitState(wait_time=0.2),
-                                       transitions={'done': 'get_state'  # 388 365 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'done': Autonomy.Off})
-
-            # x:277 y:404
-            OperatableStateMachine.add('get_state',
-                                       MotorGetStateState(motor=1,
-                                                          get_state_topic='/odesc/get_state'),
-                                       transitions={'state_acquired': 'check_homed'  # 348 494 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 207 426 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'state_acquired': Autonomy.Off,
-                                                 'failed': Autonomy.Off},
-                                       remapping={'motor_axis_state': 'motor_axis_state',
-                                                  'motor_position': 'motor_position',
-                                                  'motor_error': 'motor_error'})
 
             # x:679 y:244
             OperatableStateMachine.add('move',
