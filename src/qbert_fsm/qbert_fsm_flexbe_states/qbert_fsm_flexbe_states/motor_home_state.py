@@ -49,22 +49,36 @@ class MotorHomeState(EventState):
 
         return response
 
-    def execute(self, userdata):
-        id_req = Motor.Request()
-        id_req.id = self._id
-
-        if not self._call_service(
-            self._homing_client,
-            self._homing_topic,
-            id_req,
-            "Homing",
-        ):
-            return 'failed'
-
-        return 'state_set'
-
     def on_enter(self, userdata):
-        pass
+        self._sent = False
+        self._start_time = None
+
+    def execute(self, userdata):
+        if not self._sent:
+            id_req = Motor.Request()
+            id_req.id = self._id
+
+            if not self._call_service(
+                self._homing_client,
+                self._homing_topic,
+                id_req,
+                "Homing",
+            ):
+                return 'failed'
+
+            self._sent = True
+            self._start_time = self._node.get_clock().now()
+            return None
+
+        elapsed = (
+            self._node.get_clock().now() - self._start_time
+        ).nanoseconds
+
+        if elapsed >= 200_000_000:  # 0.2 s
+            return 'state_set'
+
+        return None
+
 
     def on_exit(self, userdata):
         pass

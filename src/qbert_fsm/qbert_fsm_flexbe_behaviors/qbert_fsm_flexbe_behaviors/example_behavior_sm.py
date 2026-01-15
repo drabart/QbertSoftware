@@ -106,7 +106,7 @@ class ExampleBehaviorSM(Behavior):
             OperatableStateMachine.add('home',
                                        MotorHomeState(id=1,
                                                       homing_topic='/odesc/home'),
-                                       transitions={'state_set': 'delay3'  # 447 260 -1 -1 -1 -1
+                                       transitions={'state_set': 'get_state'  # 339 308 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 252 310 -1 -1 -1 -1
                                                     },
                                        autonomy={'state_set': Autonomy.Off, 'failed': Autonomy.Off})
