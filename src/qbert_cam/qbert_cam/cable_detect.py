@@ -7,14 +7,13 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.task import Future
 
+from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 from qbert_msgs.action import CableDetect
 
 import numpy as np
 
-from cv_bridge import CvBridge
-
-import asyncio
+from threading import Lock
 
 
 class CableDetector(Node):
@@ -27,6 +26,8 @@ class CableDetector(Node):
         self._future = None
         self._min_dist = 150
         self._max_dist = 300
+        self._lock = Lock()
+        self._shutdown = False
 
         self.create_subscription(
             Image,
@@ -46,46 +47,50 @@ class CableDetector(Node):
             callback_group=self._cb_group
         )
 
-    def destroy_node(self):
-        if self._future and not self._future.done():
-            self._future.cancel()
-        if self._active_goal:
-            self._active_goal.canceled()
-
-        super().destroy_node()
+        self.get_logger().info("Cable Detector Node initiated")
 
     def _goal_callback(self, goal_handle: ServerGoalHandle):
-        if (self._active_goal):
-            return GoalResponse.REJECT
+        with self._lock:
+            if (self._active_goal):
+                return GoalResponse.REJECT
 
         return GoalResponse.ACCEPT
 
     def _cancel_callback(self, goal_handle: ServerGoalHandle):
-        if self._future and not self._future.done():
-            self._future.cancel()
+        with self._lock:
+            if self._future and not self._future.done():
+                self._future.set_result(CableDetect.Result(success=False))
 
         return CancelResponse.ACCEPT
 
     async def _handle_goal(self, goal_handle: ServerGoalHandle):
-        self._active_goal = goal_handle
-        self._future = Future()
+        with self._lock:
+            self._active_goal = goal_handle
+            self._future = Future()
 
-        try:
-            result = await self._future
-        except asyncio.CancelledError:
-            result = CableDetect.Result(success=False)
+        self.get_logger().info("Started handling goal")
 
-        self._future = None
-        self._active_goal = None
-        if not goal_handle.is_cancel_requested:
+        result = await self._future
+        if goal_handle.is_cancel_requested:
+            goal_handle.canceled()
+        elif goal_handle.is_active:
             goal_handle.succeed()
+
+        with self._lock:
+            self._future = None
+            self._active_goal = None
+        self.get_logger().info("Finished handling goal")
+
         return result
 
     def _process_frame(self, img_msg: Image):
-        if not self._active_goal:
-            return
-        if not self._future or self._future.done():
-            return
+        with self._lock:
+            if not self._active_goal:
+                return
+            if not self._future or self._future.done():
+                return
+            goal = self._active_goal
+            future = self._future
 
         image = self._bridge.imgmsg_to_cv2(img_msg)
 
@@ -97,28 +102,27 @@ class CableDetector(Node):
             0,
             255
         )
+        detected = np.any(scaled[:, scaled.shape[1]//2:])
 
-        if self._active_goal:
-            self._active_goal.publish_feedback(CableDetect.Feedback())
-
-        if np.any(scaled[:, scaled.shape[1]//2:]):
-            if self._future and not self._future.done():
-                self._future.set_result(CableDetect.Result(success=True))
+        goal.publish_feedback(CableDetect.Feedback())
+        with self._lock:
+            if detected and not future.done():
+                future.set_result(CableDetect.Result(success=True))
 
 
-def main():
-    rclpy.init()
+def main(args=None):
+    rclpy.init(args=args)
     node = CableDetector()
-    executor = MultiThreadedExecutor()
 
+    executor = MultiThreadedExecutor()
     executor.add_node(node)
 
     try:
         executor.spin()
-        rclpy.shutdown()
     except KeyboardInterrupt:
         pass
     finally:
+        executor.shutdown()
         node.destroy_node()
 
 
