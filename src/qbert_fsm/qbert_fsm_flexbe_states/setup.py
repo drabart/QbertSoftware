@@ -34,6 +34,9 @@ setup(
             'motor_home_state = qbert_fsm_flexbe_states.motor_home_state',
             'motor_move_to_pos_state = qbert_fsm_flexbe_states.motor_move_to_pos_state',
             'motor_set_vel_state = qbert_fsm_flexbe_states.motor_set_vel_state',
+
+            'piston_move_to_pos_state = qbert_fsm_flexbe_states.piston_move_to_pos_state',
+            'gripper_extend_state = qbert_fsm_flexbe_states.gripper_extend_state',
         ],
     },
 )
