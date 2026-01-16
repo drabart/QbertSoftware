@@ -8,7 +8,7 @@ from flexbe_core.proxy import ProxyActionClient, ProxyServiceCaller
 from qbert_msgs.srv import MotorSetup
 from qbert_msgs.action import MoveToPos
 
-class MotorMoveToPosState(EventState):
+class PistonMoveToPosState(EventState):
     """
     State implementing moving a id to a desired position.
 
@@ -19,7 +19,6 @@ class MotorMoveToPosState(EventState):
     -- timeout             Maximum time allowed (seconds)
     -- id               Motor which should be moved
     -- action_topic        Topic on which the action is called
-    -- setup_topic          Topic for drive state setup
 
     Outputs
     <= move_complete       Move completed
@@ -34,8 +33,7 @@ class MotorMoveToPosState(EventState):
     """
 
     def __init__(self, id, timeout = 10.0,
-                 action_topic="/odesc/move_to_pos", 
-                 setup_topic="/odesc/setup"):
+                 action_topic="/esp/move_to_pos"):
         super().__init__(outcomes=['move_complete', 'failed', 'canceled', 'timeout'],
                          input_keys=['position'],
                          output_keys=['duration'])
@@ -43,20 +41,12 @@ class MotorMoveToPosState(EventState):
         self._timeout = Duration(seconds=timeout)
         self._timeout_sec = timeout
         self._topic = action_topic
-        self._setup_topic = setup_topic
         self._id = id
 
-        ProxyActionClient.initialize(MotorMoveToPosState._node)
+        ProxyActionClient.initialize(PistonMoveToPosState._node)
 
         self._client = ProxyActionClient({self._topic: MoveToPos},
                                          wait_duration=0.0)
-        
-        ProxyServiceCaller.initialize(MotorMoveToPosState._node)
-
-        self._setup_client = ProxyServiceCaller(
-            {self._setup_topic: MotorSetup},
-            wait_duration=0.0,
-        )
 
         self._error = False
         self._return = None
@@ -102,12 +92,6 @@ class MotorMoveToPosState(EventState):
             self._error = True
             Logger.logwarn("Input is %s. Expects an int or a float.", type(userdata.position).__name__)
             return
-        
-        request = MotorSetup.Request()
-        request.id = self._id
-        request.mode = MotorSetup.Request.MODE_POSITION
-        
-        self._setup_client.call(self._setup_topic, request)
 
         try:
             self._client.send_goal(self._topic, goal, wait_duration=self._timeout_sec)
