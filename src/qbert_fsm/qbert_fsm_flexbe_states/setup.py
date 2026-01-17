@@ -33,6 +33,7 @@ setup(
             'set_motor_state_state = qbert_fsm_flexbe_states.set_motor_state_state',
             'set_motor_vel_state = qbert_fsm_flexbe_states.set_motor_vel_state',
             'get_motor_state_state = qbert_fsm_flexbe_states.get_motor_state_state',
+            'detect_cable_state = qbert_fsm_flexbe_states.detect_cable_state',
         ],
     },
 )

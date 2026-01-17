@@ -11,6 +11,10 @@ empy
 PySide6
 lark
 pytest
+fastAPI==0.109.1
+pydantic
+websockets
+uvicorn
 
 # our GUI
 PyQt6

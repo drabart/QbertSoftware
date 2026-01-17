@@ -5,3 +5,12 @@
 [submodule "src/flexbe_webui"]
 	path = src/flexbe_webui
 	url = https://github.com/FlexBE/flexbe_webui.git
+[submodule "src/ros2_socketcan"]
+	path = src/ros2_socketcan
+	url = https://github.com/autowarefoundation/ros2_socketcan.git
+[submodule "src/realsense-ros"]
+	path = src/realsense-ros
+	url = https://github.com/realsenseai/realsense-ros.git
+[submodule "src/ros_canopen"]
+	path = src/ros_canopen
+	url = https://github.com/ros-industrial/ros_canopen.git
