@@ -77,7 +77,6 @@ class ExampleBehaviorSM(Behavior):
         # Additional initialization code can be added inside the following tags
         # [MANUAL_INIT]
 
-
         # [/MANUAL_INIT]
 
         # Behavior comments:
@@ -280,6 +279,5 @@ class ExampleBehaviorSM(Behavior):
 
     # Private functions can be added inside the following tags
     # [MANUAL_FUNC]
-
 
     # [/MANUAL_FUNC]
