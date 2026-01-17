@@ -473,37 +473,6 @@ void setup_pins() {
 //
 // MAIN
 
-void test(void* arg) {
-    QueueHandle_t replies = xQueueCreate(1, sizeof(float));
-    bool extend = false;
-
-    for (;;) {
-        float end_time = esp_timer_get_time() + (7 * 1000 * 1000);
-
-        if (extend) {
-            gpio_set_level(AXE_0_EXTEND_PIN, 1);
-            gpio_set_level(AXE_1_EXTEND_PIN, 1);
-        } else {
-            gpio_set_level(AXE_0_RETRACT_PIN, 1);
-            gpio_set_level(AXE_1_RETRACT_PIN, 1);
-        }
-
-        while (esp_timer_get_time() < end_time) {
-            float mV_0 = read_adc_q(replies, AXE_0_ADC_CHAN, 48);
-            float mV_1 = read_adc_q(replies, AXE_1_ADC_CHAN, 48);
-            printf("mV_0: %4.2f - mV_1: %4.2f\n", mV_0, mV_1);
-            vTaskDelay(1);
-        }
-
-        gpio_set_level(AXE_0_EXTEND_PIN, 0);
-        gpio_set_level(AXE_0_RETRACT_PIN, 0);
-        gpio_set_level(AXE_1_EXTEND_PIN, 0);
-        gpio_set_level(AXE_1_RETRACT_PIN, 0);
-
-        extend = !extend;
-    }
-}
-
 void app_main(void) {
     setup_can();
     setup_adc();
@@ -511,7 +480,6 @@ void app_main(void) {
     pos_queue = xQueueCreate(4, sizeof(float));
 
     xTaskCreate(adc_loop, "ADC reader", 2048, NULL, 8, NULL);
-    /*xTaskCreate(test, "test", 2048, NULL, 7, NULL);*/
     xTaskCreate(position, "axe position loop", 2048, NULL, 7, NULL);
     xTaskCreate(can_dispatch_cb, "CAN dispatch", 2048, NULL, 6, NULL);
     xTaskCreate(heartbeat, "heartbeat", 1028, NULL, 5, NULL);

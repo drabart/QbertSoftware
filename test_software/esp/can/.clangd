@@ -1,2 +1,0 @@
-CompileFlags:
-  Remove: [-mlongcalls, -fno-shrink-wrap, -fno-tree-switch-conversion, -fstrict-volatile-bitfields]
