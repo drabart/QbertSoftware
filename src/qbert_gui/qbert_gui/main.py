@@ -71,7 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self._setup_language_selector()
         
         # Load theme and language
-        self._load_theme(SHARE_DIR / "themes" / "dark.qss")
+        self._load_theme(SHARE_DIR / "themes" / "light.qss")
         self.translation_manager.set_language("en")
         
         # Set window size

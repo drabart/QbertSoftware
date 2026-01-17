@@ -4,7 +4,7 @@ from std_msgs.msg import Bool, String, Float64, Empty
 from PyQt6.QtCore import QObject, pyqtSignal, QThread, pyqtSlot
 
 class RosWorker(QObject):
-    message_received = pyqtSignal(str)
+    position_adjust_message_received = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -12,9 +12,16 @@ class RosWorker(QObject):
         self.node = Node("pyqt_ros_node")
         self.publishers = {}
 
-        self.get_publisher("/gui_home", Empty)
-        self.get_publisher("/gui_start", Empty)
-        self.get_publisher("/gui_cancel", Empty)
+        self.node.create_subscription(
+            Empty,
+            "/gui/position_adjust",
+            self.position_adjust_callback,
+            10
+        )
+
+        self.get_publisher("/gui/home", Empty)
+        self.get_publisher("/gui/start", Empty)
+        self.get_publisher("/gui/cancel", Empty)
 
     def get_publisher(self, topic, msg_type):
         if topic not in self.publishers:
@@ -46,8 +53,8 @@ class RosWorker(QObject):
         msg.data = value
         self.get_publisher(topic, String).publish(msg)
 
-    def callback(self, msg):
-        self.message_received.emit(msg.data)
+    def position_adjust_callback(self, msg):
+        self.position_adjust_message_received.emit()
 
     def spin(self):
         rclpy.spin(self.node)
