@@ -7,8 +7,9 @@ from qbert_gui.core.icon_utils import set_button_icon
 class HomeScreen(BaseScreen):
     """Home screen with main controls."""
     
-    def __init__(self, parent=None):
+    def __init__(self, ros_worker, parent=None):
         super().__init__("home.ui", parent)
+        self.ros_worker = ros_worker
         self.is_running = False  # Track robot state
     
     def setup_ui(self):
@@ -20,7 +21,7 @@ class HomeScreen(BaseScreen):
             set_button_icon(self.controlButton, "play.png", size=24, position="top")
         
         if hasattr(self, 'homingButton'):
-            self.homingButton.clicked.connect(self._show_start_movement_confirmation(self._handle_homing))
+            self.homingButton.clicked.connect(lambda: self._show_start_movement_confirmation(self._handle_homing))
     
     def handle_control_button(self):
         """Handle control button click - toggles between start and stop."""
