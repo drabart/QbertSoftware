@@ -1,4 +1,5 @@
 from launch import LaunchDescription
+from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
@@ -23,9 +24,16 @@ def generate_launch_description():
     include_flexbe_webui = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(flexbe_webui_launch)
     )
+    include_qbert_gui = Node(
+        package='qbert_gui',
+        executable='gui',
+        name='qbert_gui',
+        output='screen',
+    )
 
     return LaunchDescription([
         include_can,
         include_flexbe_onboard,
         include_flexbe_webui,
+        include_qbert_gui,
     ])
