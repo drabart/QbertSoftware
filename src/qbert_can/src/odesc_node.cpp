@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void ODescNode::CAN_recv(const can_msgs::msg::Frame& frame) {
+void ODescNode::CAN_recv(const CanFrame& frame) {
     uint8_t cmd = extract_cmd(frame.id);
     if (cmd != 1) {
         RCLCPP_INFO(get_logger(), "CAN: %d", cmd);
@@ -197,9 +197,11 @@ void ODescNode::get_state(
         return;
     }
 
-    res->state = motors_.at(req->id).axis_state;
-    res->error = motors_.at(req->id).error;
-    res->position = motors_.at(req->id).pos_est;
+    MotorState& motor_data = motors_.at(req->id);
+
+    res->state = motor_data.axis_state;
+    res->error = motor_data.error;
+    res->position = motor_data.pos_est;
     res->exists = true;
 }
 

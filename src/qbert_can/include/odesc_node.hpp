@@ -26,45 +26,47 @@ public:
     explicit ODescNode() : CanNode("ODesc_node") {
         using namespace std::placeholders;
 
+        rclcpp::QoS qos = rclcpp::ServicesQoS();
+
         reboot_srv_ = create_service<Motor>(
             "/odesc/reboot",
             std::bind(&ODescNode::reboot, this, _1, _2),
-            rmw_qos_profile_services_default,
+            qos,
             srv_group_
         );
 
         clear_error_srv_ = create_service<Motor>(
             "/odesc/clear_error",
             std::bind(&ODescNode::clear_error, this, _1, _2),
-            rmw_qos_profile_services_default,
+            qos,
             srv_group_
         );
 
         home_srv_ = create_service<Motor>(
             "/odesc/home",
             std::bind(&ODescNode::home, this, _1, _2),
-            rmw_qos_profile_services_default,
+            qos,
             srv_group_
         );
 
         setup_srv_ = create_service<MotorSetup>(
             "/odesc/setup",
             std::bind(&ODescNode::setup, this, _1, _2),
-            rmw_qos_profile_services_default,
+            qos,
             srv_group_
         );
 
         move_with_vel_srv_ = create_service<MoveWithVel>(
             "/odesc/move_with_velocity",
             std::bind(&ODescNode::move_with_vel, this, _1, _2),
-            rmw_qos_profile_services_default,
+            qos,
             srv_group_
         );
 
         motor_get_state_srv_ = create_service<MotorGetState>(
             "/odesc/get_state",
             std::bind(&ODescNode::get_state, this, _1, _2),
-            rmw_qos_profile_services_default,
+            qos,
             srv_group_
         );
 
@@ -121,7 +123,7 @@ private:
     //
     // Helper functions
 
-    void CAN_recv(const can_msgs::msg::Frame& frame) override;
+    void CAN_recv(const CanFrame& frame) override;
 
     bool is_active(uint8_t motor_id) const override;
 
