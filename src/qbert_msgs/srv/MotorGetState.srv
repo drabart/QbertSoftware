@@ -1,4 +1,4 @@
-int32 motor
+int32 id
 ---
 bool exists
 int32 state

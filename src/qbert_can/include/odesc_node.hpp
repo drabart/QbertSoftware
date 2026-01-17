@@ -8,14 +8,16 @@
 #include "qbert_msgs/action/move_to_pos.hpp"
 #include "qbert_msgs/srv/motor.hpp"
 #include "qbert_msgs/srv/move_with_vel.hpp"
-#include "qbert_msgs/srv/setup_drive.hpp"
+#include "qbert_msgs/srv/motor_setup.hpp"
+#include "qbert_msgs/srv/motor_get_state.hpp"
 
 #include "can_node.hpp"
 #include "odesc_msgs.hpp"
 
 using CanFrame = can_msgs::msg::Frame;
 using Motor = qbert_msgs::srv::Motor;
-using SetupDrive = qbert_msgs::srv::SetupDrive;
+using MotorSetup = qbert_msgs::srv::MotorSetup;
+using MotorGetState = qbert_msgs::srv::MotorGetState;
 using MoveWithVel = qbert_msgs::srv::MoveWithVel;
 using MoveToPos = qbert_msgs::action::MoveToPos;
 
@@ -24,34 +26,48 @@ public:
     explicit ODescNode() : CanNode("ODesc_node") {
         using namespace std::placeholders;
 
+        rclcpp::QoS qos = rclcpp::ServicesQoS();
+
         reboot_srv_ = create_service<Motor>(
             "/odesc/reboot",
-            std::bind(&ODescNode::reboot, this, _1, _2)
+            std::bind(&ODescNode::reboot, this, _1, _2),
+            qos,
+            srv_group_
         );
 
         clear_error_srv_ = create_service<Motor>(
             "/odesc/clear_error",
-            std::bind(&ODescNode::clear_error, this, _1, _2)
+            std::bind(&ODescNode::clear_error, this, _1, _2),
+            qos,
+            srv_group_
         );
 
         home_srv_ = create_service<Motor>(
             "/odesc/home",
-            std::bind(&ODescNode::home, this, _1, _2)
+            std::bind(&ODescNode::home, this, _1, _2),
+            qos,
+            srv_group_
         );
 
-        setup_srv_ = create_service<SetupDrive>(
+        setup_srv_ = create_service<MotorSetup>(
             "/odesc/setup",
-            std::bind(&ODescNode::setup, this, _1, _2)
+            std::bind(&ODescNode::setup, this, _1, _2),
+            qos,
+            srv_group_
         );
 
         move_with_vel_srv_ = create_service<MoveWithVel>(
             "/odesc/move_with_velocity",
-            std::bind(&ODescNode::move_with_vel, this, _1, _2)
+            std::bind(&ODescNode::move_with_vel, this, _1, _2),
+            qos,
+            srv_group_
         );
 
-        motor_ready_srv_ = create_service<Motor>(
-            "/odesc/ready",
-            std::bind(&ODescNode::motor_ready, this, _1, _2)
+        motor_get_state_srv_ = create_service<MotorGetState>(
+            "/odesc/get_state",
+            std::bind(&ODescNode::get_state, this, _1, _2),
+            qos,
+            srv_group_
         );
 
         move_to_pos_action_ = rclcpp_action::create_server<MoveToPos>(
@@ -88,8 +104,8 @@ private:
     rclcpp::Service<Motor>::SharedPtr reboot_srv_;
     rclcpp::Service<Motor>::SharedPtr clear_error_srv_;
     rclcpp::Service<Motor>::SharedPtr home_srv_;
-    rclcpp::Service<Motor>::SharedPtr motor_ready_srv_;
-    rclcpp::Service<SetupDrive>::SharedPtr setup_srv_;
+    rclcpp::Service<MotorGetState>::SharedPtr motor_get_state_srv_;
+    rclcpp::Service<MotorSetup>::SharedPtr setup_srv_;
     rclcpp::Service<MoveWithVel>::SharedPtr move_with_vel_srv_;
 
     rclcpp_action::Server<MoveToPos>::SharedPtr move_to_pos_action_;
@@ -138,25 +154,25 @@ private:
         std::shared_ptr<Motor::Response> res
     ) const;
 
-    void motor_ready(
-        const std::shared_ptr<Motor::Request> req,
-        std::shared_ptr<Motor::Response> res
-    ) const;
-
     bool request_state(
         uint8_t motor_id,
         uint8_t mode
     ) const;
 
     void setup(
-        const std::shared_ptr<SetupDrive::Request> req,
-        std::shared_ptr<SetupDrive::Response> res
+        const std::shared_ptr<MotorSetup::Request> req,
+        std::shared_ptr<MotorSetup::Response> res
     ) const;
 
     void move_with_vel(
         const std::shared_ptr<MoveWithVel::Request> req,
         std::shared_ptr<MoveWithVel::Response> res
     ) const;
+
+    void get_state(
+        const std::shared_ptr<MotorGetState::Request> req,
+        std::shared_ptr<MotorGetState::Response> res
+    );
 
     // Services
     //
@@ -183,7 +199,10 @@ private:
     //
     // Send requests
 
-    void send_position_est_req(uint8_t motor_id) const;
+    std::mutex position_mutex;
+    std::condition_variable position_received_flag;
+    std::optional<float> position_reply;
+    bool send_position_est_req(uint8_t motor_id);
 
     void send_position_target_req(
         uint8_t motor_id,
