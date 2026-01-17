@@ -27,8 +27,13 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'example_action_state = qbert_fsm_flexbe_states.example_action_state',
-            'example_state = qbert_fsm_flexbe_states.example_state',
+            'motor_clear_errors_state = qbert_fsm_flexbe_states.motor_clear_errors_state',
+            'motor_get_state_state = qbert_fsm_flexbe_states.motor_get_state_state',
+            
+            'motor_stop_state = qbert_fsm_flexbe_states.motor_stop_state',
+            'motor_home_state = qbert_fsm_flexbe_states.motor_home_state',
+            'motor_move_to_pos_state = qbert_fsm_flexbe_states.motor_move_to_pos_state',
+            'motor_set_vel_state = qbert_fsm_flexbe_states.motor_set_vel_state',
         ],
     },
 )

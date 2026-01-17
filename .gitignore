@@ -6,5 +6,6 @@ log
 .venv
 *.avi
 test_software/motor/bin
-.cache
 .clangd
+.cache
+dev_launch.sh

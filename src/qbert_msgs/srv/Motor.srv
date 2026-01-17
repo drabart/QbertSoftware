@@ -1,4 +1,3 @@
 int32 id
-float32 vel
 ---
 bool success

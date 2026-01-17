@@ -1,0 +1,8 @@
+uint8 MODE_IDLE=0
+uint8 MODE_POSITION=1
+uint8 MODE_VELOCITY=2
+
+int32 id
+uint8 mode
+---
+bool success

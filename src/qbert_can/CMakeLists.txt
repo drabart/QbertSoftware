@@ -8,7 +8,10 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(std_srvs REQUIRED)
 find_package(qbert_msgs REQUIRED)
+find_package(can_msgs REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -22,11 +25,23 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-add_executable(can_node src/can_node.cpp)
-ament_target_dependencies(can_node rclcpp qbert_msgs)
+add_executable(qbert_odesc_node src/odesc_node.cpp)
+ament_target_dependencies(qbert_odesc_node rclcpp rclcpp_action qbert_msgs std_srvs can_msgs)
+
+add_executable(qbert_esp_node src/esp_node.cpp)
+ament_target_dependencies(qbert_esp_node rclcpp rclcpp_action qbert_msgs std_srvs can_msgs)
+
+target_include_directories(qbert_odesc_node PUBLIC include)
+target_include_directories(qbert_esp_node PUBLIC include)
 
 install(TARGETS
-  can_node
+  qbert_odesc_node
+  qbert_esp_node
   DESTINATION lib/${PROJECT_NAME})
+
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()

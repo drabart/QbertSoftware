@@ -22,6 +22,7 @@ setup(
     entry_points={
         'console_scripts': [
             'example_behavior_sm = qbert_fsm_flexbe_behaviors.example_behavior_sm',
+            'qbert_state_machine_sm = qbert_fsm_flexbe_behaviors.qbert_state_machine_sm',
         ],
     },
 )
