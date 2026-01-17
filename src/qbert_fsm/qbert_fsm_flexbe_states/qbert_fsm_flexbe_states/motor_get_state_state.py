@@ -3,9 +3,9 @@
 from flexbe_core import EventState, Logger
 from flexbe_core.proxy import ProxyServiceCaller
 
-from qbert_msgs.srv import MotorState
+from qbert_msgs.srv import MotorGetState
 
-class GetMotorStateState(EventState):
+class MotorGetStateState(EventState):
     """
     State implementing retrieving of a current motor state
 
@@ -13,7 +13,7 @@ class GetMotorStateState(EventState):
 
     Elements defined here for UI
     Parameters
-    -- motor               Motor which should be moved
+    -- id               Motor which should be moved
     -- get_state_topic           Topic for setting the motor's velocity
 
     Outputs
@@ -33,14 +33,14 @@ class GetMotorStateState(EventState):
         self._get_state_topic = get_state_topic
         self._motor = motor
 
-        ProxyServiceCaller.initialize(GetMotorStateState._node)
+        ProxyServiceCaller.initialize(MotorGetStateState._node)
 
-        self._client = ProxyServiceCaller({self._get_state_topic: MotorState},
+        self._client = ProxyServiceCaller({self._get_state_topic: MotorGetState},
                                             wait_duration=0.0)
 
     def execute(self, userdata):
-        motor_goal = MotorState.Request()
-        motor_goal.motor = self._motor
+        motor_goal = MotorGetState.Request()
+        motor_goal.id = self._motor
 
         result = self._client.call(self._get_state_topic, motor_goal)
 
