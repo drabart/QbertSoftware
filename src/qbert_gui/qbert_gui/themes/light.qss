@@ -4,25 +4,22 @@ QPushButton[type="primary"] {
     background-color: #28E87C;
     border: none;
     border-radius: 10px;
-    color: black;
-    font-size: 24px;
-    font-weight: bold;
 }
 
 QPushButton[type="primary"]:pressed {
     background-color: #20D06C;
 }
 
-QPushButton[type="secondary"] {
-    background-color: #E0E0E0;
+QPushButton[type="homing"] {
+    background-color: #72ffff;
     border: none;
     border-radius: 8px;
     color: black;
     font-size: 16px;
 }
 
-QPushButton[type="secondary"]:pressed {
-    background-color: #D0D0D0;
+QPushButton[type="homing"]:pressed {
+    background-color: #5dd6d6;
 }
 
 /* ---------- Labels ---------- */
@@ -70,5 +67,25 @@ QPushButton[type="offset"]:pressed {
     background-color: #2c5fd6;
 }
 
+/* navbar */
 
+QFrame[type="navbar"] {
+    background-color: #535353;
+    border-top: 1px solid #000;
+}
 
+QPushButton[type="navbar"] {
+    background: transparent;
+    border: none;
+    color: black;
+    font-size: 14px;
+}
+
+QPushButton[type="navbar"]:pressed {
+    background-color: #393939;
+}
+
+QPushButton[type="navbar"][active="true"] {
+    color: #5c6bc0;
+    font-weight: bold;
+}

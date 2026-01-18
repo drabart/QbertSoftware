@@ -71,7 +71,6 @@ class HomeScreen(BaseScreen):
     
     def _handle_stop(self):
         """Handle stop command - immediately stop the robot."""
-         
         
         # Update UI to show start button
         self.is_running = False
@@ -95,12 +94,10 @@ class HomeScreen(BaseScreen):
                     background-color: #FF4040;
                     border: none;
                     border-radius: 10px;
-                    color: black;
-                    font-size: 24px;
-                    font-weight: bold;
                 }
                 QPushButton:pressed {
                     background-color: #E03030;
+                    color: black;
                 }
             """)
             # Update icon and text without recreating layout
@@ -112,12 +109,10 @@ class HomeScreen(BaseScreen):
                     background-color: #28E87C;
                     border: none;
                     border-radius: 10px;
-                    color: black;
-                    font-size: 24px;
-                    font-weight: bold;
                 }
                 QPushButton:pressed {
                     background-color: #20D06C;
+                    color: black;
                 }
             """)
             # Update icon and text without recreating layout

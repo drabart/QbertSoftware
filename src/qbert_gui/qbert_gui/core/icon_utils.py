@@ -52,7 +52,7 @@ def set_button_icon(button: QPushButton, icon_path: str, size: int = 24, positio
         # Create text label
         text_label = QLabel(button_text)
         text_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        text_label.setStyleSheet("background: transparent; border: none;")
+        text_label.setStyleSheet(f"background: transparent; border: none; color: black; font-size: {size}")
         
         # Copy font from button to text label
         font = button.font()

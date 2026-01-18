@@ -113,15 +113,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def _load_theme(self, theme_file: str):
         """Load a theme from QSS file."""
         theme_path = os.path.join(SHARE_DIR, "themes", theme_file)
-        common_path = os.path.join(SHARE_DIR, "themes", "common.qss")
         
         style = ""
-        if os.path.exists(common_path):
-            with open(common_path, 'r') as f:
-                style += f.read() + "\n"
         if os.path.exists(theme_path):
             with open(theme_path, 'r') as f:
-                style += f.read()
+                style = f.read()
         
         if style:
             self.setStyleSheet(style)
