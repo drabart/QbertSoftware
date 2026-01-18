@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<behavior name="Perform Gui Offset">
+<behavior name="Perform GUI Offset">
 
-    <executable package_path="qbert_fsm_flexbe_behaviors.perform_gui_offset_sm" class="PerformGuiOffsetSM" />
+    <executable package_path="qbert_fsm_flexbe_behaviors.perform_gui_offset_sm" class="PerformGUIOffsetSM" />
     <tagstring>qbert</tagstring>
     <author>Bartosz Drabinski</author>
     <date>Sat Jan 17 2026</date>
     <description>
-        Behavior for performing gui correction of the autoposition
+        Performs a motor offset
     </description>
 
 

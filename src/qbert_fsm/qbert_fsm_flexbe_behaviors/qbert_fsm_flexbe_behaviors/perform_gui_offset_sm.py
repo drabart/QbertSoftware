@@ -23,9 +23,9 @@
 ###########################################################
 
 """
-Define Perform Gui Offset.
+Define Perform GUI Offset.
 
-Behavior for performing gui correction of the autoposition
+Performs a motor offset
 
 Created on Sat Jan 17 2026
 @author: Bartosz Drabinski
@@ -45,7 +45,6 @@ from flexbe_states.publisher_empty_state import PublisherEmptyState
 from flexbe_states.subscriber_state import SubscriberState
 from flexbe_states.wait_state import WaitState
 from qbert_fsm_flexbe_states.motor_get_state_state import MotorGetStateState
-from qbert_fsm_flexbe_states.motor_home_state import MotorHomeState
 from qbert_fsm_flexbe_states.motor_move_to_pos_state import MotorMoveToPosState
 
 # Additional imports can be added inside the following tags
@@ -55,16 +54,16 @@ from flexbe_core.proxy.qos import QOS_DEFAULT
 # [/MANUAL_IMPORT]
 
 
-class PerformGuiOffsetSM(Behavior):
+class PerformGUIOffsetSM(Behavior):
     """
-    Define Perform Gui Offset.
+    Define Perform GUI Offset.
 
-    Behavior for performing gui correction of the autoposition
+    Performs a motor offset
     """
 
     def __init__(self, node):
         super().__init__()
-        self.name = 'Perform Gui Offset'
+        self.name = 'Perform GUI Offset'
 
         # parameters of this behavior
 
@@ -96,20 +95,32 @@ class PerformGuiOffsetSM(Behavior):
         # [/MANUAL_CREATE]
 
         with _state_machine:
-            # x:304 y:32
-            OperatableStateMachine.add('Home',
-                                       MotorHomeState(id=1,
-                                                      timeout=-1,
-                                                      delay=0.2,
-                                                      homing_topic='/odesc/home',
-                                                      get_state_topic='/odesc/get_state'),
-                                       transitions={'state_set': 'getpos'  # 490 49 -1 -1 -1 -1
-                                                    , 'timeout': 'failed'  # 222 241 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 222 241 -1 -1 -1 -1
+            # x:69 y:88
+            OperatableStateMachine.add('StartOffsetCalibration',
+                                       PublisherEmptyState(topic='/gui/position_adjust'),
+                                       transitions={'done': 'GetInitialPosition'  # 218 68 -1 -1 -1 -1
                                                     },
-                                       autonomy={'state_set': Autonomy.Off,
-                                                 'timeout': Autonomy.Off,
-                                                 'failed': Autonomy.Off})
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:369 y:375
+            OperatableStateMachine.add('Delay',
+                                       WaitState(wait_time=0.1),
+                                       transitions={'done': 'GetOffsetFinialized'  # 409 268 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:278 y:37
+            OperatableStateMachine.add('GetInitialPosition',
+                                       MotorGetStateState(motor=_state_machine.userdata.motor_id,
+                                                          get_state_topic='/odesc/get_state'),
+                                       transitions={'state_acquired': 'GetOffsetFinialized'  # 351 113 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 214 248 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'state_acquired': Autonomy.Off,
+                                                 'failed': Autonomy.Off},
+                                       remapping={'motor_axis_state': 'motor_axis_state',
+                                                  'motor_position': 'position',
+                                                  'motor_error': 'motor_error'})
 
             # x:370 y:139
             OperatableStateMachine.add('GetOffsetFinialized',
@@ -139,32 +150,6 @@ class PerformGuiOffsetSM(Behavior):
                                                  'unavailable': Autonomy.Off},
                                        remapping={'message': 'offset_message'})
 
-            # x:199 y:159
-            OperatableStateMachine.add('GetPosition0',
-                                       MotorGetStateState(motor=_state_machine.userdata.motor_id,
-                                                          get_state_topic='/odesc/get_state'),
-                                       transitions={'state_acquired': 'GetOffsetFinialized'  # 368 177 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 169 299 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'state_acquired': Autonomy.Off,
-                                                 'failed': Autonomy.Off},
-                                       remapping={'motor_axis_state': 'motor_axis_state',
-                                                  'motor_position': 'position',
-                                                  'motor_error': 'motor_error'})
-
-            # x:205 y:264
-            OperatableStateMachine.add('GetPosition1',
-                                       MotorGetStateState(motor=1,
-                                                          get_state_topic='/odesc/get_state'),
-                                       transitions={'state_acquired': 'GetOffsetFinialized'  # 369 230 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 171 353 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'state_acquired': Autonomy.Off,
-                                                 'failed': Autonomy.Off},
-                                       remapping={'motor_axis_state': 'motor_axis_state',
-                                                  'motor_position': 'position',
-                                                  'motor_error': 'motor_error'})
-
             # x:559 y:146
             OperatableStateMachine.add('OffsetFinallizedReceived',
                                        CheckConditionState(predicate=lambda x: x is not None),
@@ -178,39 +163,21 @@ class PerformGuiOffsetSM(Behavior):
             OperatableStateMachine.add('OffsetReceived',
                                        CheckConditionState(predicate=lambda x: x is not None),
                                        transitions={'true': 'UpdatePosition'  # 631 474 -1 -1 -1 -1
-                                                    , 'false': 'delay'  # 486 411 -1 -1 -1 -1
+                                                    , 'false': 'Delay'  # 486 411 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
                                        remapping={'input_value': 'offset_message'})
 
-            # x:26 y:216
-            OperatableStateMachine.add('SelectMotor0',
-                                       CheckConditionState(predicate=lambda x: x == 0),
-                                       transitions={'true': 'GetPosition0'  # 167 200 -1 -1 -1 -1
-                                                    , 'false': 'GetPosition1'  # 184 268 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-                                       remapping={'input_value': 'motor_id'})
-
-            # x:710 y:571
-            OperatableStateMachine.add('SelectMotor1',
-                                       CheckConditionState(predicate=lambda x: x == 0),
-                                       transitions={'true': 'SetOffsetPosition0'  # 711 682 743 624 -1 -1
-                                                    , 'false': 'SetOffsetPosition1'  # 844 670 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
-                                       remapping={'input_value': 'motor_id'})
-
-            # x:590 y:709
-            OperatableStateMachine.add('SetOffsetPosition0',
-                                       MotorMoveToPosState(id=0,
+            # x:483 y:560
+            OperatableStateMachine.add('SetOffsetPosition',
+                                       MotorMoveToPosState(id=_state_machine.userdata.motor_id,
                                                            timeout=10.0,
                                                            action_topic='/odesc/move_to_pos',
                                                            setup_topic='/odesc/setup'),
-                                       transitions={'move_complete': 'delay'  # 495 612 -1 -1 409 428
-                                                    , 'failed': 'failed'  # 365 600 -1 -1 -1 -1
-                                                    , 'canceled': 'failed'  # 365 600 -1 -1 -1 -1
-                                                    , 'timeout': 'delay'  # 495 612 -1 -1 409 428
+                                       transitions={'move_complete': 'Delay'  # 434 506 -1 -1 409 428
+                                                    , 'failed': 'failed'  # 310 504 -1 -1 -1 -1
+                                                    , 'canceled': 'failed'  # 310 504 -1 -1 -1 -1
+                                                    , 'timeout': 'Delay'  # 434 506 -1 -1 409 428
                                                     },
                                        autonomy={'move_complete': Autonomy.Off,
                                                  'failed': Autonomy.Off,
@@ -218,81 +185,18 @@ class PerformGuiOffsetSM(Behavior):
                                                  'timeout': Autonomy.Off},
                                        remapping={'position': 'offset_position',
                                                   'duration': 'duration'})
-
-            # x:793 y:713
-            OperatableStateMachine.add('SetOffsetPosition1',
-                                       MotorMoveToPosState(id=1,
-                                                           timeout=10.0,
-                                                           action_topic='/odesc/move_to_pos',
-                                                           setup_topic='/odesc/setup'),
-                                       transitions={'move_complete': 'delay'  # 606 598 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 466 586 -1 -1 -1 -1
-                                                    , 'canceled': 'failed'  # 466 586 -1 -1 -1 -1
-                                                    , 'timeout': 'delay'  # 606 598 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'move_complete': Autonomy.Off,
-                                                 'failed': Autonomy.Off,
-                                                 'canceled': Autonomy.Off,
-                                                 'timeout': Autonomy.Off},
-                                       remapping={'position': 'offset_position',
-                                                  'duration': 'duration'})
-
-            # x:69 y:88
-            OperatableStateMachine.add('StartOffsetCalibration',
-                                       PublisherEmptyState(topic='/gui/position_adjust'),
-                                       transitions={'done': 'GetPosition0'  # 166 164 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'done': Autonomy.Off})
 
             # x:672 y:467
             OperatableStateMachine.add('UpdatePosition',
                                        FlexibleCalculationState(calculation=lambda x: x[0] + x[1].data,
                                                                 input_keys=["position",
                                                                             "offset_message"]),
-                                       transitions={'done': 'SelectMotor1'  # 758 541 -1 -1 739 570
+                                       transitions={'done': 'SetOffsetPosition'  # 645 540 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},
                                        remapping={'position': 'position',
                                                   'offset_message': 'offset_message',
                                                   'output_value': 'offset_position'})
-
-            # x:369 y:375
-            OperatableStateMachine.add('delay',
-                                       WaitState(wait_time=0.1),
-                                       transitions={'done': 'GetOffsetFinialized'  # 409 268 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'done': Autonomy.Off})
-
-            # x:523 y:23
-            OperatableStateMachine.add('getpos',
-                                       MotorGetStateState(motor=1,
-                                                          get_state_topic='/odesc/get_state'),
-                                       transitions={'state_acquired': 'move'  # 734 64 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 329 231 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'state_acquired': Autonomy.Off,
-                                                 'failed': Autonomy.Off},
-                                       remapping={'motor_axis_state': 'motor_axis_state',
-                                                  'motor_position': 'motor_position',
-                                                  'motor_error': 'motor_error'})
-
-            # x:795 y:55
-            OperatableStateMachine.add('move',
-                                       MotorMoveToPosState(id=1,
-                                                           timeout=10.0,
-                                                           action_topic='/odesc/move_to_pos',
-                                                           setup_topic='/odesc/setup'),
-                                       transitions={'move_complete': 'finished'  # 421 244 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 470 255 -1 -1 -1 -1
-                                                    , 'canceled': 'failed'  # 471 254 -1 -1 -1 -1
-                                                    , 'timeout': 'failed'  # 471 250 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'move_complete': Autonomy.Off,
-                                                 'failed': Autonomy.Off,
-                                                 'canceled': Autonomy.Off,
-                                                 'timeout': Autonomy.Off},
-                                       remapping={'position': 'motor_position',
-                                                  'duration': 'duration'})
 
         return _state_machine
 
