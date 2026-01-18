@@ -84,8 +84,7 @@ class PerformGUIOffsetSM(Behavior):
         """Create state machine."""
         # Root state machine
         # x:30 y:400, x:130 y:400
-        _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['position', 'motor_id'])
-        _state_machine.userdata.position = 0.0
+        _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['motor_id'])
         _state_machine.userdata.motor_id = 1
 
         # Additional creation code can be added inside the following tags

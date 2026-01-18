@@ -24,7 +24,7 @@ class GripperExtendState(EventState):
 
     def __init__(self, id,
                  extended=False,
-                 gripper_topic="/odesc/setup"):
+                 gripper_topic="/esp/gripper_state"):
         super().__init__(outcomes=['gripper_moved', 'failed'],
                          input_keys=[],
                          output_keys=[])
