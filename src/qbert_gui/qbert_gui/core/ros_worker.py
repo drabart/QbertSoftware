@@ -5,6 +5,7 @@ from PyQt6.QtCore import QObject, pyqtSignal, QThread, pyqtSlot
 
 class RosWorker(QObject):
     position_adjust_message_received = pyqtSignal()
+    confirm_request_received = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -14,8 +15,14 @@ class RosWorker(QObject):
 
         self.node.create_subscription(
             Empty,
-            "/gui/position_adjust",
+            "/gui/request_position_adjust",
             self.position_adjust_callback,
+            10
+        )
+        self.node.create_subscription(
+            String,
+            "/gui/request_confirm",
+            self.request_confirm_callback,
             10
         )
 
@@ -52,6 +59,9 @@ class RosWorker(QObject):
         msg = String()
         msg.data = value
         self.get_publisher(topic, String).publish(msg)
+
+    def request_confirm_callback(self, msg):
+        self.confirm_request_received.emit(msg.data)
 
     def position_adjust_callback(self, msg):
         self.position_adjust_message_received.emit()

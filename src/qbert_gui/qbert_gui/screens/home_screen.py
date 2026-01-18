@@ -5,6 +5,7 @@ from qbert_gui.core.base_screen import BaseScreen
 from qbert_gui.core.ros_worker import RosWorker
 from qbert_gui.core.icon_utils import set_button_icon
 from qbert_gui.popups.offset_popup import PositionAdjustDialog
+from qbert_gui.popups.continue_action_popup import ConfirmContinueDialog
 from qbert_gui.popups.move_confirm_popup import ConfirmStartDialog
 from PyQt6.QtWidgets import QMessageBox
 
@@ -15,6 +16,7 @@ class HomeScreen(BaseScreen):
         super().__init__("home.ui", parent)
         self.ros_worker = ros_worker
         self.ros_worker.position_adjust_message_received.connect(self._position_adjust_callback)
+        self.ros_worker.confirm_request_received.connect(self._confirm_request_callback)
 
         self.is_running = False  # Track robot state
     
@@ -45,9 +47,20 @@ class HomeScreen(BaseScreen):
             confirm_function()
 
     def _position_adjust_callback(self):
-        dlg = PositionAdjustDialog(self.ros_worker)
+        dlg = PositionAdjustDialog(self.ros_worker, self)
+
         dlg.exec()
-    
+
+    def _confirm_request_callback(self, text):
+        dlg = ConfirmContinueDialog(text, self)
+
+        response = dlg.exec()
+
+        if response == QMessageBox.StandardButton.Yes:
+            self.ros_worker.publish_bool('/gui/confirm', True)
+        else:
+            self.ros_worker.publish_bool('/gui/confirm', False)
+
     def _handle_start(self):
         """Handle start command - send start command to robot."""
         self.ros_worker.publish_empty("/gui/start")
