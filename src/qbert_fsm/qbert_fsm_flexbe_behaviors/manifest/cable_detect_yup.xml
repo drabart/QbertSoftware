@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="cable_detect_yup">
+
+    <executable package_path="qbert_fsm_flexbe_behaviors.cable_detect_yup_sm" class="cable_detect_yupSM" />
+    <tagstring></tagstring>
+    <author>Lucas</author>
+    <date>Sat Jan 17 2026</date>
+    <description>
+        Detects if cable detected
+    </description>
+
+
+    <!-- Contained Behaviors -->
+
+    <!-- Available Parameters -->
+
+</behavior>
