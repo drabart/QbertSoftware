@@ -92,7 +92,7 @@ class RequestGUIConfirmSM(Behavior):
         with _state_machine:
             # x:225 y:136
             OperatableStateMachine.add('RequestConfirm',
-                                       PublisherStringState(topic='/gui/request_confirm'),
+                                       PublisherStringState(topic='/gui/request/confirm'),
                                        transitions={'done': 'WaitForConfirm'  # 432 133 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},

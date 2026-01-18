@@ -4,8 +4,10 @@ from std_msgs.msg import Bool, String, Float64, Empty
 from PyQt6.QtCore import QObject, pyqtSignal, QThread, pyqtSlot
 
 class RosWorker(QObject):
-    position_adjust_message_received = pyqtSignal()
-    confirm_request_received = pyqtSignal(str)
+    position_adjust_received = pyqtSignal()
+    confirm_received = pyqtSignal(str)
+    log_received = pyqtSignal(str)
+    progress_received = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -15,14 +17,26 @@ class RosWorker(QObject):
 
         self.node.create_subscription(
             Empty,
-            "/gui/request_position_adjust",
+            "/gui/request/position_adjust",
             self.position_adjust_callback,
             10
         )
         self.node.create_subscription(
             String,
-            "/gui/request_confirm",
-            self.request_confirm_callback,
+            "/gui/request/confirm",
+            self.confirm_callback,
+            10
+        )
+        self.node.create_subscription(
+            String,
+            "/gui/request/log",
+            self.log_callback,
+            10
+        )
+        self.node.create_subscription(
+            String,
+            "/gui/request/progress",
+            self.progress_callback,
             10
         )
 
@@ -60,11 +74,21 @@ class RosWorker(QObject):
         msg.data = value
         self.get_publisher(topic, String).publish(msg)
 
-    def request_confirm_callback(self, msg):
-        self.confirm_request_received.emit(msg.data)
-
     def position_adjust_callback(self, msg):
-        self.position_adjust_message_received.emit()
+        print("Position adjust received")
+        self.position_adjust_received.emit()
+
+    def confirm_callback(self, msg):
+        print(f"Confirm received {msg.data}")
+        self.confirm_received.emit(msg.data)
+
+    def log_callback(self, msg):
+        print(f"Log received {msg.data}")
+        self.log_received.emit(msg.data)
+
+    def progress_callback(self, msg):
+        print(f"Progress received {msg.data}")
+        self.progress_received.emit(msg.data)
 
     def spin(self):
         rclpy.spin(self.node)

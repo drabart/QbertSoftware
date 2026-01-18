@@ -8,6 +8,7 @@ from qbert_gui.popups.offset_popup import PositionAdjustDialog
 from qbert_gui.popups.continue_action_popup import ConfirmContinueDialog
 from qbert_gui.popups.move_confirm_popup import ConfirmStartDialog
 from PyQt6.QtWidgets import QMessageBox
+from datetime import datetime
 
 class HomeScreen(BaseScreen):
     """Home screen with main controls."""
@@ -15,8 +16,10 @@ class HomeScreen(BaseScreen):
     def __init__(self, ros_worker: RosWorker, parent=None):
         super().__init__("home.ui", parent)
         self.ros_worker = ros_worker
-        self.ros_worker.position_adjust_message_received.connect(self._position_adjust_callback)
-        self.ros_worker.confirm_request_received.connect(self._confirm_request_callback)
+        self.ros_worker.position_adjust_received.connect(self._position_adjust_callback)
+        self.ros_worker.confirm_received.connect(self._confirm_request_callback)
+        self.ros_worker.log_received.connect(self._log_request_callback)
+        self.ros_worker.progress_received.connect(self._progress_request_callback)
 
         self.is_running = False  # Track robot state
     
@@ -60,6 +63,13 @@ class HomeScreen(BaseScreen):
             self.ros_worker.publish_bool('/gui/confirm', True)
         else:
             self.ros_worker.publish_bool('/gui/confirm', False)
+
+    def _log_request_callback(self, text):
+        ts = datetime.now().strftime("%H:%M:%S")
+        self.logText.append(f"[{ts}] {text}")
+
+    def _progress_request_callback(self, text):
+        self.progressBar.setValue(int(text))
 
     def _handle_start(self):
         """Handle start command - send start command to robot."""

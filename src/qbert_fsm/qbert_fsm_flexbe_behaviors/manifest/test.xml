@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Test">
+
+    <executable package_path="qbert_fsm_flexbe_behaviors.test_sm" class="TestSM" />
+    <tagstring></tagstring>
+    <author>Bartosz Drabinski</author>
+    <date>Sun Jan 18 2026</date>
+    <description>
+        test behavior
+    </description>
+
+
+    <!-- Contained Behaviors -->
+
+    <!-- Available Parameters -->
+
+</behavior>

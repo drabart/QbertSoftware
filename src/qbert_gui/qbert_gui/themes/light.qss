@@ -36,6 +36,7 @@ QTextEdit[type="log"] {
     border: 1px solid #D0D0D0;
     border-radius: 5px;
     padding: 10px;
+    color: black;
     font-family: monospace;
     font-size: 12px;
 }
