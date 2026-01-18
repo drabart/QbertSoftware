@@ -97,7 +97,7 @@ class PerformGUIOffsetSM(Behavior):
         with _state_machine:
             # x:69 y:88
             OperatableStateMachine.add('StartOffsetCalibration',
-                                       PublisherEmptyState(topic='/gui/position_adjust'),
+                                       PublisherEmptyState(topic='/gui/request/position_adjust'),
                                        transitions={'done': 'GetInitialPosition'  # 218 68 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
