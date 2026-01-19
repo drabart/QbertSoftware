@@ -42,7 +42,9 @@ from flexbe_core import initialize_flexbe_core
 from flexbe_states.check_condition_state import CheckConditionState
 from flexbe_states.flexible_calculation_state import FlexibleCalculationState
 from flexbe_states.publisher_empty_state import PublisherEmptyState
+from flexbe_states.publisher_string_state import PublisherStringState
 from flexbe_states.subscriber_state import SubscriberState
+from flexbe_states.user_data_state import UserdataState
 from flexbe_states.wait_state import WaitState
 from qbert_fsm_flexbe_states.motor_get_state_state import MotorGetStateState
 from qbert_fsm_flexbe_states.motor_move_to_pos_state import MotorMoveToPosState
@@ -66,6 +68,7 @@ class PerformGUIOffsetSM(Behavior):
         self.name = 'Perform GUI Offset'
 
         # parameters of this behavior
+        self.add_parameter('motor_id', 1)
 
         # Initialize ROS node information
         initialize_flexbe_core(node)
@@ -83,9 +86,8 @@ class PerformGUIOffsetSM(Behavior):
     def create(self):
         """Create state machine."""
         # Root state machine
-        # x:30 y:400, x:130 y:400
-        _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['motor_id'])
-        _state_machine.userdata.motor_id = 1
+        # x:1116 y:56, x:1215 y:22
+        _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
@@ -101,6 +103,18 @@ class PerformGUIOffsetSM(Behavior):
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
+            # x:863 y:154
+            OperatableStateMachine.add('AddOffsetValue',
+                                       FlexibleCalculationState(calculation=lambda x: x[0] + str(x[1].data),
+                                                                input_keys=["log_text",
+                                                                            "offset_message"]),
+                                       transitions={'done': 'PublishLog'  # 894 101 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'log_text': 'log_text',
+                                                  'offset_message': 'offset_message',
+                                                  'output_value': 'output_value'})
+
             # x:369 y:375
             OperatableStateMachine.add('Delay',
                                        WaitState(wait_time=0.1),
@@ -112,8 +126,8 @@ class PerformGUIOffsetSM(Behavior):
             OperatableStateMachine.add('GetInitialPosition',
                                        MotorGetStateState(motor=_state_machine.userdata.motor_id,
                                                           get_state_topic='/odesc/get_state'),
-                                       transitions={'state_acquired': 'GetOffsetFinialized'  # 351 113 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 214 248 -1 -1 -1 -1
+                                       transitions={'state_acquired': 'GetOffsetMessage'  # 498 176 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 633 33 -1 -1 -1 -1
                                                     },
                                        autonomy={'state_acquired': Autonomy.Off,
                                                  'failed': Autonomy.Off},
@@ -128,8 +142,8 @@ class PerformGUIOffsetSM(Behavior):
                                                        blocking=False,
                                                        clear=False,
                                                        qos=QOS_DEFAULT),
-                                       transitions={'received': 'OffsetFinallizedReceived'  # 518 144 -1 -1 -1 -1
-                                                    , 'unavailable': 'failed'  # 253 291 -1 -1 -1 -1
+                                       transitions={'received': 'OffsetFinallizedReceived'  # 524 156 -1 -1 -1 -1
+                                                    , 'unavailable': 'failed'  # 651 87 452 138 -1 -1
                                                     },
                                        autonomy={'received': Autonomy.Off,
                                                  'unavailable': Autonomy.Off},
@@ -143,7 +157,7 @@ class PerformGUIOffsetSM(Behavior):
                                                        clear=False,
                                                        qos=QOS_DEFAULT),
                                        transitions={'received': 'OffsetReceived'  # 617 355 -1 -1 -1 -1
-                                                    , 'unavailable': 'failed'  # 360 347 -1 -1 -1 -1
+                                                    , 'unavailable': 'failed'  # 1093 222 -1 -1 -1 -1
                                                     },
                                        autonomy={'received': Autonomy.Off,
                                                  'unavailable': Autonomy.Off},
@@ -152,7 +166,7 @@ class PerformGUIOffsetSM(Behavior):
             # x:559 y:146
             OperatableStateMachine.add('OffsetFinallizedReceived',
                                        CheckConditionState(predicate=lambda x: x is not None),
-                                       transitions={'true': 'finished'  # 297 311 -1 -1 -1 -1
+                                       transitions={'true': 'SetText'  # 723 123 -1 -1 -1 -1
                                                     , 'false': 'GetOffsetMessage'  # 625 234 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
@@ -167,6 +181,14 @@ class PerformGUIOffsetSM(Behavior):
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
                                        remapping={'input_value': 'offset_message'})
 
+            # x:940 y:80
+            OperatableStateMachine.add('PublishLog',
+                                       PublisherStringState(topic='/gui/request/log'),
+                                       transitions={'done': 'finished'  # 1080 80 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'value': 'log_text'})
+
             # x:483 y:560
             OperatableStateMachine.add('SetOffsetPosition',
                                        MotorMoveToPosState(id=_state_machine.userdata.motor_id,
@@ -174,8 +196,8 @@ class PerformGUIOffsetSM(Behavior):
                                                            action_topic='/odesc/move_to_pos',
                                                            setup_topic='/odesc/setup'),
                                        transitions={'move_complete': 'Delay'  # 434 506 -1 -1 409 428
-                                                    , 'failed': 'failed'  # 310 504 -1 -1 -1 -1
-                                                    , 'canceled': 'failed'  # 310 504 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 966 572 -1 -1 -1 -1
+                                                    , 'canceled': 'failed'  # 966 572 -1 -1 -1 -1
                                                     , 'timeout': 'Delay'  # 434 506 -1 -1 409 428
                                                     },
                                        autonomy={'move_complete': Autonomy.Off,
@@ -184,6 +206,14 @@ class PerformGUIOffsetSM(Behavior):
                                                  'timeout': Autonomy.Off},
                                        remapping={'position': 'offset_position',
                                                   'duration': 'duration'})
+
+            # x:738 y:156
+            OperatableStateMachine.add('SetText',
+                                       UserdataState(data="Finished offset with offset: "),
+                                       transitions={'done': 'AddOffsetValue'  # 835 126 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'log_text'})
 
             # x:672 y:467
             OperatableStateMachine.add('UpdatePosition',

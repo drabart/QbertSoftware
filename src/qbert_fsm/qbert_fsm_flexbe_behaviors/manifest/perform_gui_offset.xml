@@ -14,5 +14,14 @@
     <!-- Contained Behaviors -->
 
     <!-- Available Parameters -->
+    <params>
+
+        <param type="numeric" name="motor_id" default="1" label="motor_id" hint="Sets the motor which will be offset">
+            <min value="0" />
+            <max value="1" />
+        </param>
+
+    </params>
+
 
 </behavior>

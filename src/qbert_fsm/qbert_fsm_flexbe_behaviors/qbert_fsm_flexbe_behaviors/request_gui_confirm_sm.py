@@ -39,9 +39,11 @@ from flexbe_core import Logger
 from flexbe_core import OperatableStateMachine
 from flexbe_core import PriorityContainer
 from flexbe_core import initialize_flexbe_core
+from flexbe_states.calculation_state import CalculationState
 from flexbe_states.check_condition_state import CheckConditionState
 from flexbe_states.publisher_string_state import PublisherStringState
 from flexbe_states.subscriber_state import SubscriberState
+from flexbe_states.user_data_state import UserdataState
 
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -62,6 +64,7 @@ class RequestGUIConfirmSM(Behavior):
         self.name = 'Request GUI Confirm'
 
         # parameters of this behavior
+        self.add_parameter('confirm_string', 'Please confirm that the robot is ready to perform the next move')
 
         # Initialize ROS node information
         initialize_flexbe_core(node)
@@ -79,9 +82,9 @@ class RequestGUIConfirmSM(Behavior):
     def create(self):
         """Create state machine."""
         # Root state machine
-        # x:755 y:262, x:363 y:278
-        _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['confirm_string'])
-        _state_machine.userdata.confirm_string = "Please confirm the machine is ready to perform the next action"
+        # x:1280 y:190, x:363 y:278
+        _state_machine = OperatableStateMachine(outcomes=['finished', 'failed'], input_keys=['progress'])
+        _state_machine.userdata.progress = 0
 
         # Additional creation code can be added inside the following tags
         # [MANUAL_CREATE]
@@ -90,22 +93,55 @@ class RequestGUIConfirmSM(Behavior):
         # [/MANUAL_CREATE]
 
         with _state_machine:
-            # x:225 y:136
-            OperatableStateMachine.add('RequestConfirm',
-                                       PublisherStringState(topic='/gui/request/confirm'),
-                                       transitions={'done': 'WaitForConfirm'  # 432 133 -1 -1 -1 -1
+            # x:118 y:128
+            OperatableStateMachine.add('SetText',
+                                       UserdataState(data=self.confirm_string),
+                                       transitions={'done': 'RequestConfirm'  # 246 137 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},
-                                       remapping={'value': 'confirm_string'})
+                                       remapping={'data': 'text'})
 
             # x:504 y:241
             OperatableStateMachine.add('CheckSuccess',
                                        CheckConditionState(predicate=lambda x: x.data == True),
-                                       transitions={'true': 'finished'  # 684 256 -1 -1 -1 -1
+                                       transitions={'true': 'SendLog'  # 721 220 -1 -1 -1 -1
                                                     , 'false': 'failed'  # 449 290 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
                                        remapping={'input_value': 'message'})
+
+            # x:1014 y:209
+            OperatableStateMachine.add('ConvertToString',
+                                       CalculationState(calculation=lambda x: str(x)),
+                                       transitions={'done': 'SendProgress'  # 1074 286 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'input_value': 'progress',
+                                                  'output_value': 'progress'})
+
+            # x:288 y:138
+            OperatableStateMachine.add('RequestConfirm',
+                                       PublisherStringState(topic='/gui/request/confirm'),
+                                       transitions={'done': 'WaitForConfirm'  # 450 133 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'value': 'text'})
+
+            # x:789 y:197
+            OperatableStateMachine.add('SendLog',
+                                       PublisherStringState(topic='/gui/request/log'),
+                                       transitions={'done': 'ConvertToString'  # 969 231 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'value': 'text'})
+
+            # x:1008 y:312
+            OperatableStateMachine.add('SendProgress',
+                                       PublisherStringState(topic='/gui/request/progress'),
+                                       transitions={'done': 'finished'  # 1196 273 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'value': 'progress'})
 
             # x:517 y:133
             OperatableStateMachine.add('WaitForConfirm',

@@ -14,5 +14,11 @@
     <!-- Contained Behaviors -->
 
     <!-- Available Parameters -->
+    <params>
+
+        <param type="text" name="confirm_string" default="Please confirm that the robot is ready to perform the next move" label="confirm_string" hint="Sets the message shown in the GUI" />
+
+    </params>
+
 
 </behavior>
