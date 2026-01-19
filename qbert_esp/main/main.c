@@ -36,12 +36,12 @@
 #define AXE_1_IN_PIN            GPIO_NUM_33
 #define AXE_1_ADC_CHAN          ADC_CHANNEL_5
 
-#define AXE_0_EXTEND_PIN        GPIO_NUM_16
-#define AXE_0_RETRACT_PIN       GPIO_NUM_17
-#define AXE_1_EXTEND_PIN        GPIO_NUM_18
+#define AXE_0_EXTEND_PIN        GPIO_NUM_22
+#define AXE_0_RETRACT_PIN       GPIO_NUM_23
+#define AXE_1_EXTEND_PIN        GPIO_NUM_21
 #define AXE_1_RETRACT_PIN       GPIO_NUM_19
-#define GRIPPERS_EXTEND_PIN     GPIO_NUM_22
-#define GRIPPERS_RETRACT_PIN    GPIO_NUM_23
+#define GRIPPERS_EXTEND_PIN     GPIO_NUM_5
+#define GRIPPERS_RETRACT_PIN    GPIO_NUM_18
 
 #define NODE_ID                 0b111111
 #define ADC_BITWIDTH            ADC_BITWIDTH_12
