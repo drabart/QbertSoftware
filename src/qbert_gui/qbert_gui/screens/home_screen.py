@@ -9,6 +9,7 @@ from qbert_gui.popups.continue_action_popup import ConfirmContinueDialog
 from qbert_gui.popups.move_confirm_popup import ConfirmStartDialog
 from PyQt6.QtWidgets import QMessageBox
 from datetime import datetime
+from playsound3 import playsound
 
 class HomeScreen(BaseScreen):
     """Home screen with main controls."""
