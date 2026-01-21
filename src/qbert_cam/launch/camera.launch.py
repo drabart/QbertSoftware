@@ -25,5 +25,5 @@ def generate_launch_description():
     return LaunchDescription([
         camera,
         cable_detect,
-        section_detect,
+        #section_detect,
     ])

@@ -113,7 +113,7 @@ class CableDetector(Node):
                 return
 
         orig = self._bridge.imgmsg_to_cv2(img_msg)
-        image = orig[150:290, 390:475]
+        image = orig[150:290, 415:475]
 
         mask = (image >= self._min_dist) & (image <= self._max_dist)
         scaled = np.zeros_like(image, dtype=np.uint8)
@@ -124,7 +124,7 @@ class CableDetector(Node):
             255
         )
         scaled[~mask] = 0
-        final = cv.erode(scaled, cv.getStructuringElement(cv.MORPH_RECT, (7, 7)))
+        final = cv.erode(scaled, cv.getStructuringElement(cv.MORPH_RECT, (9, 9)))
 
         self._display_img = final
         detected = np.any(final)
