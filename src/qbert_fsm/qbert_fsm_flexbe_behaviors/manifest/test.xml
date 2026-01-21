@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<behavior name="Qbert State Machine">
+<behavior name="Test">
 
-    <executable package_path="qbert_fsm_flexbe_behaviors.qbert_state_machine_sm" class="QbertStateMachineSM" />
-    <tagstring>qbert</tagstring>
+    <executable package_path="qbert_fsm_flexbe_behaviors.test_sm" class="TestSM" />
+    <tagstring></tagstring>
     <author>Bartosz Drabinski</author>
-    <date>Thu Jan 08 2026</date>
+    <date>Sun Jan 18 2026</date>
     <description>
-        Main state machine for qbert cable splitting robot
+        test behavior
     </description>
 
 

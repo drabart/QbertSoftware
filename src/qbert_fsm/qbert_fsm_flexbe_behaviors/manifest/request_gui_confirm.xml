@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Request GUI Confirm">
+
+    <executable package_path="qbert_fsm_flexbe_behaviors.request_gui_confirm_sm" class="RequestGUIConfirmSM" />
+    <tagstring>gui</tagstring>
+    <author>Bartosz Drabinski</author>
+    <date>Sun Jan 18 2026</date>
+    <description>
+        Blocks execution until the popup in GUI is resolved
+    </description>
+
+
+    <!-- Contained Behaviors -->
+
+    <!-- Available Parameters -->
+    <params>
+
+        <param type="text" name="confirm_string" default="Please confirm that the robot is ready to perform the next move" label="confirm_string" hint="Sets the message shown in the GUI" />
+
+    </params>
+
+
+</behavior>

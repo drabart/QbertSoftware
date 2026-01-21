@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Perform GUI Offset">
+
+    <executable package_path="qbert_fsm_flexbe_behaviors.perform_gui_offset_sm" class="PerformGUIOffsetSM" />
+    <tagstring>qbert</tagstring>
+    <author>Bartosz Drabinski</author>
+    <date>Sat Jan 17 2026</date>
+    <description>
+        Performs a motor offset
+    </description>
+
+
+    <!-- Contained Behaviors -->
+
+    <!-- Available Parameters -->
+    <params>
+
+        <param type="numeric" name="motor_id" default="1" label="motor_id" hint="Sets the motor which will be offset">
+            <min value="0" />
+            <max value="1" />
+        </param>
+
+    </params>
+
+
+</behavior>
