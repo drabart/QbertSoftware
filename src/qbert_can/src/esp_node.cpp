@@ -123,7 +123,7 @@ void EspNode::move_to_pos_accepted(
 /// @brief goal function to adjust the precision we expect
 /// @return true if current pos is close enough to the goal
 bool goal_achieved(double current_pos, double goal) {
-    return goal - 0.3 < current_pos && current_pos < goal + 0.3;
+    return goal - 0.75 < current_pos && current_pos < goal + 0.75;
 }
 
 void EspNode::move_to_pos_execute(
