@@ -1,28 +1,43 @@
 """Home Screen."""
 
+import os
 from PyQt6 import QtWidgets, QtCore
 from qbert_gui.core.base_screen import BaseScreen
+from qbert_gui.core.ros_worker import RosWorker
 from qbert_gui.core.icon_utils import set_button_icon
+from qbert_gui.core.shared_resource import get_from_shared
+from qbert_gui.popups.offset_popup import PositionAdjustDialog
+from qbert_gui.popups.continue_action_popup import ConfirmContinueDialog
+from qbert_gui.popups.move_confirm_popup import ConfirmStartDialog
+from PyQt6.QtWidgets import QMessageBox
+from datetime import datetime
+from playsound3 import playsound
 
 class HomeScreen(BaseScreen):
     """Home screen with main controls."""
     
-    def __init__(self, parent=None):
+    def __init__(self, ros_worker: RosWorker, parent=None):
         super().__init__("home.ui", parent)
+        self.ros_worker = ros_worker
+        self.ros_worker.position_adjust_received.connect(self._position_adjust_callback)
+        self.ros_worker.confirm_received.connect(self._confirm_request_callback)
+        self.ros_worker.log_received.connect(self._log_request_callback)
+        self.ros_worker.progress_received.connect(self._progress_request_callback)
+
         self.is_running = False  # Track robot state
     
     def setup_ui(self):
         """Setup UI connections."""
         # Connect control button (toggles between start/stop)
         if hasattr(self, 'controlButton'):
-            self.controlButton.clicked.connect(self.handle_control_button)
+            self.controlButton.clicked.connect(self._handle_control_button)
             # Add PNG icon to control button (play icon initially)
             set_button_icon(self.controlButton, "play.png", size=24, position="top")
         
         if hasattr(self, 'homingButton'):
-            self.homingButton.clicked.connect(self._show_start_movement_confirmation(self._handle_homing))
+            self.homingButton.clicked.connect(lambda: self._show_start_movement_confirmation(self._handle_homing))
     
-    def handle_control_button(self):
+    def _handle_control_button(self):
         """Handle control button click - toggles between start and stop."""
         if not self.is_running:
             # Show confirmation modal before starting
@@ -33,29 +48,37 @@ class HomeScreen(BaseScreen):
     
     def _show_start_movement_confirmation(self, confirm_function):
         """Show confirmation modal before starting the robot."""
-        from PyQt6.QtWidgets import QMessageBox
         
-        msg_box = QMessageBox(self)
-        msg_box.setIcon(QMessageBox.Icon.Warning)
-        msg_box.setWindowTitle(self.tr("Confirm Start"))
-        msg_box.setText(self.tr("Warning: Moving the Robot"))
-        msg_box.setInformativeText(
-            self.tr("The action you selected will cause the robot to move.\n\n"
-                   "Make sure the robot is ready to be started.")
-        )
-        msg_box.setStandardButtons(
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        msg_box.setDefaultButton(QMessageBox.StandardButton.No)
-        
-        result = msg_box.exec()
-        
-        if result == QMessageBox.StandardButton.Yes:
+        if ConfirmStartDialog(self).exec() == QMessageBox.StandardButton.Yes:
+            playsound(get_from_shared(os.path.join("assets", "beep.mp3")))
             confirm_function()
-    
+
+    def _position_adjust_callback(self):
+        dlg = PositionAdjustDialog(self.ros_worker, self)
+
+        dlg.exec()
+
+    def _confirm_request_callback(self, text):
+        dlg = ConfirmContinueDialog(text, self)
+
+        response = dlg.exec()
+
+        if response == QMessageBox.StandardButton.Yes:
+            playsound(get_from_shared(os.path.join("assets", "beep.mp3")))
+            self.ros_worker.publish_bool('/gui/confirm', True)
+        else:
+            self.ros_worker.publish_bool('/gui/confirm', False)
+
+    def _log_request_callback(self, text):
+        ts = datetime.now().strftime("%H:%M:%S")
+        self.logText.append(f"[{ts}] {text}")
+
+    def _progress_request_callback(self, text):
+        self.progressBar.setValue(int(text))
+
     def _handle_start(self):
         """Handle start command - send start command to robot."""
-        self.ros_worker.publish_empty("/gui_start")
+        self.ros_worker.publish_empty("/gui/start")
         
         # Update UI to show stop button
         self.is_running = True
@@ -63,7 +86,6 @@ class HomeScreen(BaseScreen):
     
     def _handle_stop(self):
         """Handle stop command - immediately stop the robot."""
-        self.ros_worker.publish_empty("/gui_cancel")
         
         # Update UI to show start button
         self.is_running = False
@@ -71,7 +93,7 @@ class HomeScreen(BaseScreen):
     
     def _handle_homing(self):
         """Handle homing command - implement your logic here."""
-        self.ros_worker.publish_empty("/gui_home")
+        self.ros_worker.publish_empty("/gui/home")
 
     def _update_control_button_state(self):
         """Update control button appearance based on robot state."""
@@ -87,12 +109,10 @@ class HomeScreen(BaseScreen):
                     background-color: #FF4040;
                     border: none;
                     border-radius: 10px;
-                    color: black;
-                    font-size: 24px;
-                    font-weight: bold;
                 }
                 QPushButton:pressed {
                     background-color: #E03030;
+                    color: black;
                 }
             """)
             # Update icon and text without recreating layout
@@ -104,12 +124,10 @@ class HomeScreen(BaseScreen):
                     background-color: #28E87C;
                     border: none;
                     border-radius: 10px;
-                    color: black;
-                    font-size: 24px;
-                    font-weight: bold;
                 }
                 QPushButton:pressed {
                     background-color: #20D06C;
+                    color: black;
                 }
             """)
             # Update icon and text without recreating layout

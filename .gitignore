@@ -9,3 +9,4 @@ test_software/motor/bin
 .clangd
 .cache
 dev_launch.sh
+example_behavior_sm.py
