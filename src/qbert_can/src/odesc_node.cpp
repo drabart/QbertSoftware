@@ -23,6 +23,9 @@ int main(int argc, char *argv[])
 
 void ODescNode::CAN_recv(const CanFrame& frame) {
     uint8_t cmd = extract_cmd(frame.id);
+    if (frame.is_rtr) {
+        return;
+    }
     if (cmd != 1) {
         RCLCPP_INFO(get_logger(), "CAN: %d", cmd);
     }
@@ -70,11 +73,14 @@ void ODescNode::encoder_est(const CanFrame& frame) {
 
     MotorState& motor = motors_.at(id);
     
-    RCLCPP_INFO(get_logger(), "received position estimate");
+    RCLCPP_INFO(get_logger(), "received position estimate %f", est.pos_estimate);
     motor.pos_est = est.pos_estimate;
 
     std::lock_guard lock(position_mutex);
     position_reply = motor.pos_est;
+
+    RCLCPP_INFO(get_logger(), "In encoder_est: %f", motor.pos_est);
+
     position_received_flag.notify_one();
 }
 
@@ -198,6 +204,7 @@ void ODescNode::get_state(
     }
 
     MotorState& motor_data = motors_.at(req->id);
+    RCLCPP_INFO(get_logger(), "In get_state: %f", motor_data.pos_est);
 
     res->state = motor_data.axis_state;
     res->error = motor_data.error;
@@ -326,6 +333,8 @@ bool ODescNode::send_position_est_req(uint8_t motor_id) {
     if (!position_received_flag.wait_for(lock, 50ms, [&]{ return position_reply.has_value(); })) {
         return false; // timeout
     }
+
+    RCLCPP_INFO(get_logger(), "In send_position_est_req: %f", motors_.at(motor_id).pos_est);
 
     return true;
 }

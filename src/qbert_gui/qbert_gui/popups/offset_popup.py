@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLab
 from PyQt6.QtCore import Qt
 
 class PositionAdjustDialog(QDialog):
-    def __init__(self, ros_worker):
-        super().__init__()
+    def __init__(self, ros_worker, parent=None):
+        super().__init__(parent)
         self.ros_worker = ros_worker
         self.offset = 0.0
 

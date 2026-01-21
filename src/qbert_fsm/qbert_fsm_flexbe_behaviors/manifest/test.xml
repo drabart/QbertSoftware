@@ -12,6 +12,8 @@
 
 
     <!-- Contained Behaviors -->
+    <contains name="Perform GUI Offset" />
+    <contains name="Request GUI Confirm" />
 
     <!-- Available Parameters -->
 

@@ -1,9 +1,11 @@
 """Home Screen."""
 
+import os
 from PyQt6 import QtWidgets, QtCore
 from qbert_gui.core.base_screen import BaseScreen
 from qbert_gui.core.ros_worker import RosWorker
 from qbert_gui.core.icon_utils import set_button_icon
+from qbert_gui.core.shared_resource import get_from_shared
 from qbert_gui.popups.offset_popup import PositionAdjustDialog
 from qbert_gui.popups.continue_action_popup import ConfirmContinueDialog
 from qbert_gui.popups.move_confirm_popup import ConfirmStartDialog
@@ -48,6 +50,7 @@ class HomeScreen(BaseScreen):
         """Show confirmation modal before starting the robot."""
         
         if ConfirmStartDialog(self).exec() == QMessageBox.StandardButton.Yes:
+            playsound(get_from_shared(os.path.join("assets", "beep.mp3")))
             confirm_function()
 
     def _position_adjust_callback(self):
@@ -61,6 +64,7 @@ class HomeScreen(BaseScreen):
         response = dlg.exec()
 
         if response == QMessageBox.StandardButton.Yes:
+            playsound(get_from_shared(os.path.join("assets", "beep.mp3")))
             self.ros_worker.publish_bool('/gui/confirm', True)
         else:
             self.ros_worker.publish_bool('/gui/confirm', False)

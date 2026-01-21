@@ -39,8 +39,10 @@ from flexbe_core import Logger
 from flexbe_core import OperatableStateMachine
 from flexbe_core import PriorityContainer
 from flexbe_core import initialize_flexbe_core
+from flexbe_states.calculation_state import CalculationState
 from flexbe_states.check_condition_state import CheckConditionState
 from flexbe_states.flexible_calculation_state import FlexibleCalculationState
+from flexbe_states.log_key_state import LogKeyState
 from flexbe_states.publisher_empty_state import PublisherEmptyState
 from flexbe_states.publisher_string_state import PublisherStringState
 from flexbe_states.subscriber_state import SubscriberState
@@ -99,21 +101,21 @@ class PerformGUIOffsetSM(Behavior):
             # x:69 y:88
             OperatableStateMachine.add('StartOffsetCalibration',
                                        PublisherEmptyState(topic='/gui/request/position_adjust'),
-                                       transitions={'done': 'GetInitialPosition'  # 218 68 -1 -1 -1 -1
+                                       transitions={'done': 'GetInitialPosition'  # 332 63 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
             # x:863 y:154
             OperatableStateMachine.add('AddOffsetValue',
-                                       FlexibleCalculationState(calculation=lambda x: x[0] + str(x[1].data),
+                                       FlexibleCalculationState(calculation=lambda log_text, message_data: log_text + str(message_data),
                                                                 input_keys=["log_text",
-                                                                            "offset_message"]),
+                                                                            "message_data"]),
                                        transitions={'done': 'PublishLog'  # 894 101 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},
                                        remapping={'log_text': 'log_text',
-                                                  'offset_message': 'offset_message',
-                                                  'output_value': 'output_value'})
+                                                  'message_data': 'message_data',
+                                                  'output_value': 'log_text'})
 
             # x:369 y:375
             OperatableStateMachine.add('Delay',
@@ -122,12 +124,21 @@ class PerformGUIOffsetSM(Behavior):
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
-            # x:278 y:37
+            # x:799 y:329
+            OperatableStateMachine.add('ExtractMessage',
+                                       CalculationState(calculation=lambda x: x.data),
+                                       transitions={'done': 'LogOffsetMess'  # 925 402 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'input_value': 'offset_message',
+                                                  'output_value': 'message_data'})
+
+            # x:438 y:25
             OperatableStateMachine.add('GetInitialPosition',
-                                       MotorGetStateState(motor=_state_machine.userdata.motor_id,
+                                       MotorGetStateState(motor=self.motor_id,
                                                           get_state_topic='/odesc/get_state'),
-                                       transitions={'state_acquired': 'GetOffsetMessage'  # 498 176 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 633 33 -1 -1 -1 -1
+                                       transitions={'state_acquired': 'SetInitialOffset'  # 336 108 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 732 24 -1 -1 -1 -1
                                                     },
                                        autonomy={'state_acquired': Autonomy.Off,
                                                  'failed': Autonomy.Off},
@@ -163,6 +174,33 @@ class PerformGUIOffsetSM(Behavior):
                                                  'unavailable': Autonomy.Off},
                                        remapping={'message': 'offset_message'})
 
+            # x:880 y:433
+            OperatableStateMachine.add('LogOffsetMess',
+                                       LogKeyState(text="message data {}",
+                                                   severity=2),
+                                       transitions={'done': 'UpdatePosition'  # 817 493 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'message_data'})
+
+            # x:600 y:587
+            OperatableStateMachine.add('LogOffsetPos',
+                                       LogKeyState(text="position to set {}",
+                                                   severity=2),
+                                       transitions={'done': 'SetOffsetPosition'  # 639 684 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'offset_position'})
+
+            # x:235 y:282
+            OperatableStateMachine.add('LogPosition',
+                                       LogKeyState(text="initial position: {}",
+                                                   severity=2),
+                                       transitions={'done': 'GetOffsetMessage'  # 453 288 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'position'})
+
             # x:559 y:146
             OperatableStateMachine.add('OffsetFinallizedReceived',
                                        CheckConditionState(predicate=lambda x: x is not None),
@@ -175,7 +213,7 @@ class PerformGUIOffsetSM(Behavior):
             # x:561 y:389
             OperatableStateMachine.add('OffsetReceived',
                                        CheckConditionState(predicate=lambda x: x is not None),
-                                       transitions={'true': 'UpdatePosition'  # 631 474 -1 -1 -1 -1
+                                       transitions={'true': 'ExtractMessage'  # 744 380 -1 -1 -1 -1
                                                     , 'false': 'Delay'  # 486 411 -1 -1 -1 -1
                                                     },
                                        autonomy={'true': Autonomy.Off, 'false': Autonomy.Off},
@@ -189,16 +227,24 @@ class PerformGUIOffsetSM(Behavior):
                                        autonomy={'done': Autonomy.Off},
                                        remapping={'value': 'log_text'})
 
-            # x:483 y:560
+            # x:191 y:164
+            OperatableStateMachine.add('SetInitialOffset',
+                                       UserdataState(data=0.0),
+                                       transitions={'done': 'LogPosition'  # 246 268 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'message_data'})
+
+            # x:437 y:662
             OperatableStateMachine.add('SetOffsetPosition',
-                                       MotorMoveToPosState(id=_state_machine.userdata.motor_id,
+                                       MotorMoveToPosState(id=self.motor_id,
                                                            timeout=10.0,
                                                            action_topic='/odesc/move_to_pos',
                                                            setup_topic='/odesc/setup'),
-                                       transitions={'move_complete': 'Delay'  # 434 506 -1 -1 409 428
-                                                    , 'failed': 'failed'  # 966 572 -1 -1 -1 -1
-                                                    , 'canceled': 'failed'  # 966 572 -1 -1 -1 -1
-                                                    , 'timeout': 'Delay'  # 434 506 -1 -1 409 428
+                                       transitions={'move_complete': 'Delay'  # 408 578 -1 -1 409 428
+                                                    , 'failed': 'failed'  # 950 572 -1 -1 -1 -1
+                                                    , 'canceled': 'failed'  # 950 572 -1 -1 -1 -1
+                                                    , 'timeout': 'Delay'  # 408 578 -1 -1 409 428
                                                     },
                                        autonomy={'move_complete': Autonomy.Off,
                                                  'failed': Autonomy.Off,
@@ -215,16 +261,16 @@ class PerformGUIOffsetSM(Behavior):
                                        autonomy={'done': Autonomy.Off},
                                        remapping={'data': 'log_text'})
 
-            # x:672 y:467
+            # x:745 y:526
             OperatableStateMachine.add('UpdatePosition',
-                                       FlexibleCalculationState(calculation=lambda x: x[0] + x[1].data,
+                                       FlexibleCalculationState(calculation=lambda position, offset_message: position + offset_message,
                                                                 input_keys=["position",
                                                                             "offset_message"]),
-                                       transitions={'done': 'SetOffsetPosition'  # 645 540 -1 -1 -1 -1
+                                       transitions={'done': 'LogOffsetPos'  # 714 568 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},
                                        remapping={'position': 'position',
-                                                  'offset_message': 'offset_message',
+                                                  'offset_message': 'message_data',
                                                   'output_value': 'offset_position'})
 
         return _state_machine
