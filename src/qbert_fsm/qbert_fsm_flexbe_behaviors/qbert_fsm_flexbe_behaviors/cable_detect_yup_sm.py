@@ -156,7 +156,7 @@ class cable_detect_yupSM(Behavior):
             # x:244 y:158
             OperatableStateMachine.add('StartMove',
                                        MotorSetVelState(id=1,
-                                                        target_velocity=-25.0,
+                                                        target_velocity=-20.0,
                                                         vel_topic='/odesc/move_with_velocity',
                                                         setup_topic='/odesc/setup'),
                                        transitions={'velocity_set': 'DetectCable'  # 408 136 -1 -1 -1 -1

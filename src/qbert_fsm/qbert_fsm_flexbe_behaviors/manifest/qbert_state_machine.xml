@@ -14,6 +14,7 @@
     <!-- Contained Behaviors -->
     <contains name="Perform GUI Offset" />
     <contains name="Request GUI Confirm" />
+    <contains name="cable_detect_yup" />
 
     <!-- Available Parameters -->
 

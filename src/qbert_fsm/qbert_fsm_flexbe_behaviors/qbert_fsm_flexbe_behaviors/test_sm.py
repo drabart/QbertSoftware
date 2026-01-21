@@ -100,14 +100,13 @@ class TestSM(Behavior):
         # [/MANUAL_CREATE]
 
         with _state_machine:
-            # x:167 y:120
-            OperatableStateMachine.add('clear2',
-                                       MotorClearErrorsState(id=0,
-                                                             topic='/odesc/clear_error'),
-                                       transitions={'done': 'vel2'  # 284 231 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 154 285 -1 -1 -1 -1
+            # x:438 y:464
+            OperatableStateMachine.add('pistonSet',
+                                       UserdataState(data=100.0),
+                                       transitions={'done': 'piston'  # 642 516 -1 -1 -1 -1
                                                     },
-                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
+                                       autonomy={'done': Autonomy.Off},
+                                       remapping={'data': 'piston'})
 
             # x:1021 y:604
             OperatableStateMachine.add('GetPos',
@@ -192,6 +191,15 @@ class TestSM(Behavior):
                                                     },
                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
+            # x:167 y:120
+            OperatableStateMachine.add('clear2',
+                                       MotorClearErrorsState(id=0,
+                                                             topic='/odesc/clear_error'),
+                                       transitions={'done': 'vel2'  # 284 231 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 154 285 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
+
             # x:560 y:44
             OperatableStateMachine.add('delay',
                                        WaitState(wait_time=5),
@@ -250,14 +258,6 @@ class TestSM(Behavior):
                                                  'canceled': Autonomy.Off,
                                                  'timeout': Autonomy.Off},
                                        remapping={'position': 'piston', 'duration': 'duration'})
-
-            # x:438 y:464
-            OperatableStateMachine.add('pistonSet',
-                                       UserdataState(data=0.0),
-                                       transitions={'done': 'piston'  # 642 516 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'done': Autonomy.Off},
-                                       remapping={'data': 'piston'})
 
             # x:293 y:546
             OperatableStateMachine.add('progress',

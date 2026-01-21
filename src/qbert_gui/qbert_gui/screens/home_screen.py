@@ -74,7 +74,7 @@ class HomeScreen(BaseScreen):
         self.logText.append(f"[{ts}] {text}")
 
     def _progress_request_callback(self, text):
-        self.progressBar.setValue(int(text))
+        self.progressBar.setValue(int(float(text)))
 
     def _handle_start(self):
         """Handle start command - send start command to robot."""

@@ -45,6 +45,7 @@ from flexbe_states.log_state import LogState
 from flexbe_states.subscriber_state import SubscriberState
 from flexbe_states.user_data_state import UserdataState
 from flexbe_states.wait_state import WaitState
+from qbert_fsm_flexbe_behaviors.cable_detect_yup_sm import cable_detect_yupSM
 from qbert_fsm_flexbe_behaviors.perform_gui_offset_sm import PerformGUIOffsetSM
 from qbert_fsm_flexbe_behaviors.request_gui_confirm_sm import RequestGUIConfirmSM
 from qbert_fsm_flexbe_states.gripper_extend_state import GripperExtendState
@@ -80,6 +81,7 @@ class QbertStateMachineSM(Behavior):
         # references to used behaviors
         self.add_behavior(PerformGUIOffsetSM, 'Unstrand/MoveMotors/FindCableEnd/Perform GUI Offset', node)
         self.add_behavior(RequestGUIConfirmSM, 'Unstrand/MoveMotors/FindCableEnd/Request GUI Confirm', node)
+        self.add_behavior(cable_detect_yupSM, 'Unstrand/MoveMotors/FindCableEnd/cable_detect_yup', node)
         self.add_behavior(PerformGUIOffsetSM, 'Unstrand/MoveMotors/FindSection/Perform GUI Offset', node)
         self.add_behavior(RequestGUIConfirmSM, 'Unstrand/MoveMotors/FindSection/Request GUI Confirm', node)
         self.add_behavior(RequestGUIConfirmSM, 'Unstrand/MoveMotors/MoveBackToHome/Request GUI Confirm', node)
@@ -156,7 +158,7 @@ class QbertStateMachineSM(Behavior):
                                        transitions={'move_complete': 'finished'  # 1034 434 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 834 398 -1 -1 -1 -1
                                                     , 'canceled': 'failed'  # 834 398 -1 -1 -1 -1
-                                                    , 'timeout': 'failed'  # 834 398 -1 -1 -1 -1
+                                                    , 'timeout': 'finished'  # 1034 434 -1 -1 -1 -1
                                                     },
                                        autonomy={'move_complete': Autonomy.Off,
                                                  'failed': Autonomy.Off,
@@ -172,7 +174,7 @@ class QbertStateMachineSM(Behavior):
                                        transitions={'move_complete': 'UpdateProgress2'  # 646 237 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 550 429 -1 -1 -1 -1
                                                     , 'canceled': 'failed'  # 550 429 -1 -1 -1 -1
-                                                    , 'timeout': 'failed'  # 550 429 -1 -1 -1 -1
+                                                    , 'timeout': 'UpdateProgress2'  # 646 237 -1 -1 -1 -1
                                                     },
                                        autonomy={'move_complete': Autonomy.Off,
                                                  'failed': Autonomy.Off,
@@ -425,20 +427,12 @@ class QbertStateMachineSM(Behavior):
                                        autonomy={'gripper_moved': Autonomy.Off,
                                                  'failed': Autonomy.Off})
 
-            # x:207 y:278
-            OperatableStateMachine.add('MockFindEnd',
-                                       LogState(text="TODO: Find cable end here",
-                                                severity=2),
-                                       transitions={'done': 'Perform GUI Offset'  # 266 347 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'done': Autonomy.Off})
-
-            # x:220 y:367
+            # x:242 y:423
             OperatableStateMachine.add('Perform GUI Offset',
                                        self.use_behavior(PerformGUIOffsetSM, 'Unstrand/MoveMotors/FindCableEnd/Perform GUI Offset',
                                                          parameters={'motor_id': GANTRY_MOTOR}),
-                                       transitions={'finished': 'Grip'  # 458 340 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 481 526 315 426 -1 -1
+                                       transitions={'finished': 'Grip'  # 465 384 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 488 547 337 482 -1 -1
                                                     },
                                        autonomy={'finished': Autonomy.Inherit,
                                                  'failed': Autonomy.Inherit})
@@ -447,12 +441,21 @@ class QbertStateMachineSM(Behavior):
             OperatableStateMachine.add('Request GUI Confirm',
                                        self.use_behavior(RequestGUIConfirmSM, 'Unstrand/MoveMotors/FindCableEnd/Request GUI Confirm',
                                                          parameters={'confirm_string': "Robot will start finding the cable end"}),
-                                       transitions={'finished': 'MockFindEnd'  # 261 259 -1 -1 -1 -1
+                                       transitions={'finished': 'cable_detect_yup'  # 205 259 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 191 560 -1 -1 -1 -1
                                                     },
                                        autonomy={'finished': Autonomy.Inherit,
                                                  'failed': Autonomy.Inherit},
                                        remapping={'progress': 'progress'})
+
+            # x:227 y:288
+            OperatableStateMachine.add('cable_detect_yup',
+                                       self.use_behavior(cable_detect_yupSM, 'Unstrand/MoveMotors/FindCableEnd/cable_detect_yup'),
+                                       transitions={'finished': 'Perform GUI Offset'  # 299 414 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 499 486 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
 
         # x:1282 y:490, x:379 y:721
         _sm_movemotors_6 = OperatableStateMachine(outcomes=['finished', 'failed'])
@@ -519,7 +522,7 @@ class QbertStateMachineSM(Behavior):
 
             # x:695 y:114
             OperatableStateMachine.add('LoopStart',
-                                       UserdataState(data=3),
+                                       UserdataState(data=6),
                                        transitions={'done': 'LoopCheckEnd'  # 812 116 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off},
@@ -597,12 +600,26 @@ class QbertStateMachineSM(Behavior):
                                                  'unavailable': Autonomy.Off},
                                        remapping={'message': 'message'})
 
+            # x:353 y:168
+            OperatableStateMachine.add('Delay1',
+                                       WaitState(wait_time=1),
+                                       transitions={'done': 'PistonExtended'  # 465 165 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
+            # x:869 y:164
+            OperatableStateMachine.add('Delay2',
+                                       WaitState(wait_time=2),
+                                       transitions={'done': 'HomeGantry'  # 979 172 -1 -1 1016 149
+                                                    },
+                                       autonomy={'done': Autonomy.Off})
+
             # x:228 y:83
             OperatableStateMachine.add('Grip',
                                        GripperExtendState(id=ESP_ID,
                                                           extended=True,
                                                           gripper_topic='/esp/gripper_state'),
-                                       transitions={'gripper_moved': 'PistonExtended'  # 412 72 -1 -1 -1 -1
+                                       transitions={'gripper_moved': 'Delay1'  # 303 165 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 202 317 -1 -1 -1 -1
                                                     },
                                        autonomy={'gripper_moved': Autonomy.Off,
@@ -649,12 +666,12 @@ class QbertStateMachineSM(Behavior):
             # x:598 y:80
             OperatableStateMachine.add('PistonMove',
                                        PistonMoveToPosState(id=ESP_ID,
-                                                            timeout=10.0,
+                                                            timeout=5.0,
                                                             action_topic='/esp/move_to_pos'),
-                                       transitions={'move_complete': 'Ungrip'  # 751 56 -1 -1 -1 -1
+                                       transitions={'move_complete': 'Ungrip'  # 764 39 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 386 327 -1 -1 -1 -1
                                                     , 'canceled': 'failed'  # 386 327 -1 -1 -1 -1
-                                                    , 'timeout': 'failed'  # 386 327 -1 -1 -1 -1
+                                                    , 'timeout': 'Ungrip'  # 764 39 -1 -1 -1 -1
                                                     },
                                        autonomy={'move_complete': Autonomy.Off,
                                                  'failed': Autonomy.Off,
@@ -667,7 +684,7 @@ class QbertStateMachineSM(Behavior):
                                        GripperExtendState(id=ESP_ID,
                                                           extended=False,
                                                           gripper_topic='/esp/gripper_state'),
-                                       transitions={'gripper_moved': 'HomeGantry'  # 952 68 -1 -1 -1 -1
+                                       transitions={'gripper_moved': 'Delay2'  # 823 157 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 477 364 -1 -1 -1 -1
                                                     },
                                        autonomy={'gripper_moved': Autonomy.Off,
@@ -717,6 +734,13 @@ class QbertStateMachineSM(Behavior):
     @staticmethod
     def millimeters_to_rotations(x: float):
         return x * 2.0
+
+
+
+
+
+
+
 
 
 

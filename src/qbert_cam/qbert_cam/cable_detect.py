@@ -99,12 +99,7 @@ class CableDetector(Node):
             future.cancel()
             return
         with self._lock:
-            samples = self._samples
-            self._samples = []
-
-        detected = False
-        if len(samples) > 3:
-            detected = np.any(np.median(np.stack(samples, axis=0), axis=0))
+            detected = self._detected
 
         if detected:
             future.set_result(CableDetect.Result(success=True))
@@ -132,9 +127,11 @@ class CableDetector(Node):
         final = cv.erode(scaled, cv.getStructuringElement(cv.MORPH_RECT, (9, 9)))
 
         self._display_img = final
+        detected = np.any(final)
 
-        with self._lock:
-            self._samples.append(final)
+        if detected:
+            with self._lock:
+                self._detected = True
 
 
 def main(args=None):
