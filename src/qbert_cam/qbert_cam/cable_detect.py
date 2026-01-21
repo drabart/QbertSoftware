@@ -24,7 +24,7 @@ class CableDetector(Node):
         self._min_dist = 100
         self._max_dist = 300
         self._lock = Lock()
-        self._detected = False
+        self._samples = []
         self._display_img = None
 
         self.create_subscription(
@@ -99,7 +99,12 @@ class CableDetector(Node):
             future.cancel()
             return
         with self._lock:
-            detected = self._detected
+            samples = self._samples
+            self._samples = []
+
+        detected = False
+        if len(samples) > 3:
+            detected = np.any(np.median(np.stack(samples, axis=0), axis=0))
 
         if detected:
             future.set_result(CableDetect.Result(success=True))
@@ -127,11 +132,9 @@ class CableDetector(Node):
         final = cv.erode(scaled, cv.getStructuringElement(cv.MORPH_RECT, (9, 9)))
 
         self._display_img = final
-        detected = np.any(final)
 
-        if detected:
-            with self._lock:
-                self._detected = True
+        with self._lock:
+            self._samples.append(final)
 
 
 def main(args=None):
