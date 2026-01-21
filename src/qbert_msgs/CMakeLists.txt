@@ -13,6 +13,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "action/MoveToPos.action"
   "action/CableDetect.action"
+  "action/SectionDetect.action"
 
   "srv/Motor.srv"
   "srv/MotorSetup.srv"
