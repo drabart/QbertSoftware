@@ -13,7 +13,13 @@ def generate_launch_description():
         executable='cable_detector_node'
     )
 
+    section_detect = Node(
+        package='qbert_cam',
+        executable='section_detector_node'
+    )
+
     return LaunchDescription([
         camera,
         cable_detect,
+        section_detect,
     ])

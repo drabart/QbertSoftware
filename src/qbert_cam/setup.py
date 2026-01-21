@@ -27,6 +27,7 @@ setup(
     entry_points={
         'console_scripts': [
             'cable_detector_node = qbert_cam.cable_detect:main',
-        ],
+            'section_detector_node = qbert_cam.section_detect:main',
+        ]
     },
 )

@@ -51,7 +51,7 @@ class SectionDetector(Node):
 
     def _show_img(self):
         if self._display_image is not None:
-            cv.imshow("adjImage", self._display_image)
+            cv.imshow("img", self._display_image)
             cv.waitKey(1)
 
     async def _execute_callback(self, goal_handle: ServerGoalHandle):
@@ -121,32 +121,18 @@ class SectionDetector(Node):
                 return
 
         orig = self._bridge.imgmsg_to_cv2(color_img, desired_encoding='bgr8')
-        cropped = orig[130:400, 200:490]
-
-#       (h, w) = orig.shape[:2]
-#       center = (w // 2, h // 2)
-#       rotMat = cv.getRotationMatrix2D(center, -5, 1.0)
-
-#       cos = np.abs(rotMat[0, 0])
-#       sin = np.abs(rotMat[0, 1])
-#       new_w = int((h * sin) + (w * cos))
-#       new_h = int((h * cos) + (w * sin))
-
-#       rotMat[0, 2] += (new_w / 2) - center[0]
-#       rotMat[1, 2] += (new_h / 2) - center[1]
-
-#       cimage = cv.warpAffine(orig, rotMat, (new_w, new_h))
-#       cable_image = cimage[(cimage.shape[0]//4):(cimage.shape[0]*4//5), :]
+        cropped = orig[140:360, 270:430]
 
 #       blurred = cv.GaussianBlur(cable_image, (3, 3), 0)
-        blurred = cv.bilateralFilter(cropped, 5, 75, 75)
-        grayscale = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
+#       blurred = cv.bilateralFilter(cropped, 5, 75, 75)
+#       grayscale = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
 
-        lines = cv.Canny(grayscale, 150, 300)
-        lines_3c = cv.cvtColor(lines, cv.COLOR_GRAY2BGR)
-        grid = np.hstack((cropped, lines_3c))
+#       lines = cv.Canny(grayscale, 150, 300)
+#       lines_3c = cv.cvtColor(lines, cv.COLOR_GRAY2BGR)
+#       grid = np.hstack((cropped, lines_3c))
+        final = cropped
 
-        self._display_image = grid
+        self._display_image = final
 
         self.get_logger().info("processed sample")
         with self._lock:
