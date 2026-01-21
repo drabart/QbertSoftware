@@ -21,8 +21,6 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'cable_detect_sm = qbert_fsm_flexbe_behaviors.cable_detect_yup_sm',
-            'example_behavior_sm = qbert_fsm_flexbe_behaviors.example_behavior_sm',
             'qbert_state_machine_sm = qbert_fsm_flexbe_behaviors.qbert_state_machine_sm',
         ],
     },

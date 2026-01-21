@@ -1,9 +1,92 @@
-QWidget {
-    background-color: #ffffff;
-    color: #000000;
+/* ---------- Buttons ---------- */
+
+QPushButton[type="primary"] {
+    background-color: #28E87C;
+    border: none;
+    border-radius: 10px;
 }
 
-QPushButton {
-    background-color: #efefef;
-    padding: 6px;
+QPushButton[type="primary"]:pressed {
+    background-color: #20D06C;
+}
+
+QPushButton[type="homing"] {
+    background-color: #72ffff;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-size: 16px;
+}
+
+QPushButton[type="homing"]:pressed {
+    background-color: #5dd6d6;
+}
+
+/* ---------- Labels ---------- */
+
+QLabel[type="sectionTitle"] {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ---------- Log ---------- */
+
+QTextEdit[type="log"] {
+    background-color: white;
+    border: 1px solid #D0D0D0;
+    border-radius: 5px;
+    padding: 10px;
+    color: black;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* ---------- Progress ---------- */
+
+QProgressBar[type="progress"] {
+    border: none;
+    border-radius: 15px;
+    background-color: #E0E0E0;
+}
+
+QProgressBar[type="progress"]::chunk {
+    background-color: #5C6BC0;
+    border-radius: 15px;
+}
+
+/* ---------- Popups ---------- */
+
+QPushButton[type="offset"] {
+    background-color: #3a7afe;
+    color: white;
+    border-radius: 6px;
+    min-height: 40px;
+    font-size: 14px;
+}
+
+QPushButton[type="offset"]:pressed {
+    background-color: #2c5fd6;
+}
+
+/* navbar */
+
+QFrame[type="navbar"] {
+    background-color: #535353;
+    border-top: 1px solid #000;
+}
+
+QPushButton[type="navbar"] {
+    background: transparent;
+    border: none;
+    color: black;
+    font-size: 14px;
+}
+
+QPushButton[type="navbar"]:pressed {
+    background-color: #393939;
+}
+
+QPushButton[type="navbar"][active="true"] {
+    color: #5c6bc0;
+    font-weight: bold;
 }

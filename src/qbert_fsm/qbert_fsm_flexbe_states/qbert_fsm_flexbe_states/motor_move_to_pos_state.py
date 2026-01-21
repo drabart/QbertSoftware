@@ -19,6 +19,7 @@ class MotorMoveToPosState(EventState):
     -- timeout             Maximum time allowed (seconds)
     -- id               Motor which should be moved
     -- action_topic        Topic on which the action is called
+    -- setup_topic          Topic for drive state setup
 
     Outputs
     <= move_complete       Move completed

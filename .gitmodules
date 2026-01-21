@@ -1,4 +1,3 @@
-
 [submodule "src/flexbe_behavior_engine"]
 	path = src/flexbe_behavior_engine
 	url = https://github.com/FlexBE/flexbe_behavior_engine.git

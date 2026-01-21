@@ -26,7 +26,7 @@ class MotorGetStateState(EventState):
     #> motor_error                Is motor throwing an error
     """
 
-    def __init__(self, motor, get_state_topic="/get_motor_state"):
+    def __init__(self, motor, get_state_topic="/odesc/get_state"):
         super().__init__(outcomes=['state_acquired', 'failed'],
                          output_keys=['motor_axis_state', 'motor_position', 'motor_error'])
         

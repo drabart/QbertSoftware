@@ -18,6 +18,7 @@ uvicorn
 
 # our GUI
 PyQt6
+playsound3
 
 # internal dependencies
 jinja2
