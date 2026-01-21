@@ -100,6 +100,15 @@ class TestSM(Behavior):
         # [/MANUAL_CREATE]
 
         with _state_machine:
+            # x:167 y:120
+            OperatableStateMachine.add('clear2',
+                                       MotorClearErrorsState(id=0,
+                                                             topic='/odesc/clear_error'),
+                                       transitions={'done': 'vel2'  # 284 231 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 154 285 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
+
             # x:1021 y:604
             OperatableStateMachine.add('GetPos',
                                        MotorGetStateState(motor=1,
@@ -118,7 +127,7 @@ class TestSM(Behavior):
                                        GripperExtendState(id=63,
                                                           extended=True,
                                                           gripper_topic='/esp/gripper_state'),
-                                       transitions={'gripper_moved': 'delay2'  # 522 695 -1 -1 -1 -1
+                                       transitions={'gripper_moved': 'finished'  # 727 400 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 214 561 -1 -1 -1 -1
                                                     },
                                        autonomy={'gripper_moved': Autonomy.Off,
@@ -180,15 +189,6 @@ class TestSM(Behavior):
                                                              topic='/odesc/clear_error'),
                                        transitions={'done': 'vel'  # 259 53 -1 -1 -1 -1
                                                     , 'failed': 'failed'  # 126 250 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
-
-            # x:167 y:120
-            OperatableStateMachine.add('clear2',
-                                       MotorClearErrorsState(id=0,
-                                                             topic='/odesc/clear_error'),
-                                       transitions={'done': 'vel2'  # 284 231 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 154 285 -1 -1 -1 -1
                                                     },
                                        autonomy={'done': Autonomy.Off, 'failed': Autonomy.Off})
 
