@@ -7,6 +7,7 @@ import os
 
 def generate_launch_description():
     pkg_can = get_package_share_directory('qbert_can')
+    pkg_cam = get_package_share_directory('qbert_cam')
     pkg_flexbe_onboard = get_package_share_directory('flexbe_onboard')
     pkg_flexbe_webui = get_package_share_directory('flexbe_webui')
 
@@ -14,9 +15,13 @@ def generate_launch_description():
     can_launch = os.path.join(pkg_can, 'launch', 'can.launch.py')
     flexbe_onboard_launch = os.path.join(pkg_flexbe_onboard, 'behavior_onboard.launch.py')
     flexbe_webui_launch = os.path.join(pkg_flexbe_webui, 'launch', 'flexbe_ocs.launch.py')
+    cam_launch = os.path.join(pkg_cam, 'launch', 'camera.launch.py')
 
     include_can = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(can_launch)
+    )
+    include_cam = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(cam_launch)
     )
     include_flexbe_onboard = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(flexbe_onboard_launch)
@@ -33,7 +38,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         include_can,
+        include_cam,
         include_flexbe_onboard,
         include_flexbe_webui,
-        include_qbert_gui,
+        # include_qbert_gui,
     ])

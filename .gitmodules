@@ -1,22 +1,21 @@
-
 [submodule "src/flexbe_behavior_engine"]
 	path = src/flexbe_behavior_engine
 	url = https://github.com/FlexBE/flexbe_behavior_engine.git
 [submodule "src/flexbe_webui"]
 	path = src/flexbe_webui
 	url = https://github.com/FlexBE/flexbe_webui.git
-[submodule "src/realsense-ros"]
-	path = src/realsense-ros
-	url = https://github.com/realsenseai/realsense-ros.git
 [submodule "src/ros2_socketcan"]
 	path = src/ros2_socketcan
 	url = https://github.com/autowarefoundation/ros2_socketcan.git
+[submodule "src/realsense-ros"]
+	path = src/realsense-ros
+	url = https://github.com/realsenseai/realsense-ros.git
 [submodule "src/ros_canopen"]
 	path = src/ros_canopen
 	url = https://github.com/ros-industrial/ros_canopen.git
-[submodule "src/vision_opencv"]
-	path = src/vision_opencv
-	url = https://github.com/ros-perception/vision_opencv.git
 [submodule "src/diagnostics"]
 	path = src/diagnostics
 	url = https://github.com/ros/diagnostics.git
+[submodule "src/vision_opencv"]
+	path = src/vision_opencv
+	url = https://github.com/ros-perception/vision_opencv.git

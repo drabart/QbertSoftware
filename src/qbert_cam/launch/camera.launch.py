@@ -1,0 +1,29 @@
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+    camera = Node(
+        package='realsense2_camera',
+        executable='realsense2_camera_node',
+        parameters=[{
+            'enable_color': True,
+            'enable_depth': True,
+        }]
+    )
+
+    cable_detect = Node(
+        package='qbert_cam',
+        executable='cable_detector_node'
+    )
+
+    section_detect = Node(
+        package='qbert_cam',
+        executable='section_detector_node'
+    )
+
+    return LaunchDescription([
+        camera,
+        cable_detect,
+        #section_detect,
+    ])

@@ -16,9 +16,7 @@ int main(int argc, char** argv) {
 
 void EspNode::CAN_recv(const CanFrame& frame) {
     uint8_t cmd = extract_cmd(frame.id);
-    if (frame.is_rtr) {
-        return;
-    }
+    if (frame.is_rtr) { return; }
     if (auto func = callbacks_.find(static_cast<EspCommand>(cmd)); func != callbacks_.end()) { func->second(frame); }
 }
 
