@@ -48,13 +48,12 @@ class DetectCableState(EventState):
 
         if self._client.has_result(self._topic):
             _ = self._client.get_result(self._topic)
-            userdata.duration = now - self._start_time
             Logger.loginfo('Cable detected')
             self._return = 'success'
             return self._return
 
-        if self._timeout > 0:
-            if (now - self._start_time).nanoseconds * 1e-9 >= self._timeout:
+        if self._timeout_sec > 0:
+            if (now - self._start_time).nanoseconds * 1e-9 >= self._timeout.nanoseconds:
                 self._return = 'timeout'
                 return 'timeout'
 

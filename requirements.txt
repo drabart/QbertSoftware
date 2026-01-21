@@ -6,7 +6,7 @@ odrive
 
 # FlexBE
 pyyaml
-numpy<2
+numpy
 empy
 PySide6
 lark

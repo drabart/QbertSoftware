@@ -13,7 +13,11 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + "/launch", glob.glob('launch/*.launch.py')),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'setuptools'
+        'numpy',
+        'opencv-python',
+    ],
     zip_safe=True,
     maintainer='lucas',
     maintainer_email='L.B.paul@student.tudelft.nl',
@@ -27,6 +31,7 @@ setup(
     entry_points={
         'console_scripts': [
             'cable_detector_node = qbert_cam.cable_detect:main',
+            'section_detector_node = qbert_cam.section_detect:main',
         ],
     },
 )

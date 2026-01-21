@@ -7,7 +7,7 @@ export PYTHONPATH="$PYTHONPATH:$(pwd)/.venv/lib/python3.12/site-packages"
 source /opt/ros/jazzy/setup.bash
 source .venv/bin/activate
 
-colcon build --symlink-install
-source install/setup.bash
+colcon build
+source install/local_setup.bash
 
 ros2 launch qbert_bringup full.launch.py

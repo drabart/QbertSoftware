@@ -43,8 +43,8 @@ from flexbe_states.check_condition_state import CheckConditionState
 from flexbe_states.wait_state import WaitState
 from qbert_fsm_flexbe_states.detect_cable_state import DetectCableState
 from qbert_fsm_flexbe_states.motor_get_state_state import MotorGetStateState
-from qbert_fsm_flexbe_states.motor_home_state import MotorHomeState
 from qbert_fsm_flexbe_states.motor_set_vel_state import MotorSetVelState
+from qbert_fsm_flexbe_states.motor_stop_state import MotorStopState
 
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -124,7 +124,7 @@ class cable_detect_yupSM(Behavior):
                                                     },
                                        autonomy={'done': Autonomy.Off})
 
-        # x:30 y:400, x:178 y:80, x:473 y:82, x:330 y:400, x:430 y:400, x:629 y:362, x:630 y:400
+        # x:612 y:189, x:171 y:72, x:460 y:73, x:290 y:395, x:430 y:400, x:629 y:362, x:630 y:400
         _sm_detectcable_1 = ConcurrencyContainer(outcomes=['finished', 'failed'],
                                                  conditions=[('failed', [('TooFar', 'finished')]),
                                                              ('failed', [('TooFar', 'failed')]),
@@ -153,34 +153,10 @@ class cable_detect_yupSM(Behavior):
                                                  'failed': Autonomy.Inherit})
 
         with _state_machine:
-            # x:34 y:252
-            OperatableStateMachine.add('MotorHome',
-                                       MotorHomeState(id=1,
-                                                      timeout=-1,
-                                                      delay=0.2,
-                                                      homing_topic='/odesc/home',
-                                                      get_state_topic='/odesc/get_state'),
-                                       transitions={'state_set': 'StartMove'  # 146 196 -1 -1 -1 -1
-                                                    , 'timeout': 'failed'  # 244 339 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 244 339 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'state_set': Autonomy.Off,
-                                                 'timeout': Autonomy.Off,
-                                                 'failed': Autonomy.Off})
-
-            # x:441 y:152
-            OperatableStateMachine.add('DetectCable',
-                                       _sm_detectcable_1,
-                                       transitions={'finished': 'StopGood'  # 514 457 -1 -1 -1 -1
-                                                    , 'failed': 'StopBad'  # 647 203 -1 -1 -1 -1
-                                                    },
-                                       autonomy={'finished': Autonomy.Inherit,
-                                                 'failed': Autonomy.Inherit})
-
             # x:244 y:158
             OperatableStateMachine.add('StartMove',
                                        MotorSetVelState(id=1,
-                                                        target_velocity=-20.0,
+                                                        target_velocity=-25.0,
                                                         vel_topic='/odesc/move_with_velocity',
                                                         setup_topic='/odesc/setup'),
                                        transitions={'velocity_set': 'DetectCable'  # 408 136 -1 -1 -1 -1
@@ -189,28 +165,33 @@ class cable_detect_yupSM(Behavior):
                                        autonomy={'velocity_set': Autonomy.Off,
                                                  'failed': Autonomy.Off})
 
-            # x:727 y:188
-            OperatableStateMachine.add('StopBad',
-                                       MotorSetVelState(id=1,
-                                                        target_velocity=0,
-                                                        vel_topic='/odesc/move_with_velocity',
-                                                        setup_topic='/odesc/setup'),
-                                       transitions={'velocity_set': 'failed'  # 643 338 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 643 338 -1 -1 -1 -1
+            # x:441 y:152
+            OperatableStateMachine.add('DetectCable',
+                                       _sm_detectcable_1,
+                                       transitions={'finished': 'StopGood'  # 572 346 525 211 -1 -1
+                                                    , 'failed': 'StopBad'  # 616 206 -1 -1 -1 -1
                                                     },
-                                       autonomy={'velocity_set': Autonomy.Off,
+                                       autonomy={'finished': Autonomy.Inherit,
+                                                 'failed': Autonomy.Inherit})
+
+            # x:647 y:253
+            OperatableStateMachine.add('StopBad',
+                                       MotorStopState(id=1,
+                                                      setup_topic='/odesc/setup'),
+                                       transitions={'motor_stopped': 'failed'  # 466 319 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 466 319 -1 -1 -1 -1
+                                                    },
+                                       autonomy={'motor_stopped': Autonomy.Off,
                                                  'failed': Autonomy.Off})
 
-            # x:505 y:556
+            # x:585 y:463
             OperatableStateMachine.add('StopGood',
-                                       MotorSetVelState(id=1,
-                                                        target_velocity=0,
-                                                        vel_topic='/odesc/move_with_velocity',
-                                                        setup_topic='/odesc/setup'),
-                                       transitions={'velocity_set': 'finished'  # 368 601 -1 -1 -1 -1
-                                                    , 'failed': 'failed'  # 379 513 -1 -1 -1 -1
+                                       MotorStopState(id=1,
+                                                      setup_topic='/odesc/setup'),
+                                       transitions={'motor_stopped': 'finished'  # 470 574 -1 -1 -1 -1
+                                                    , 'failed': 'failed'  # 453 443 -1 -1 -1 -1
                                                     },
-                                       autonomy={'velocity_set': Autonomy.Off,
+                                       autonomy={'motor_stopped': Autonomy.Off,
                                                  'failed': Autonomy.Off})
 
         return _state_machine
