@@ -1,6 +1,9 @@
 # QbertSoftware
 
 This project contains software used to operate Qbert - a robot developed by CavoLab - a student team from TU Delft for Robotics Minor.
+
+![Photo of the robot](docs/QbertPhoto.jpg)
+
 The robot was ordered by Prysmian - a high voltage cable manufacturer. 
 The robot's aim is to prepare the conductor for welding it with another end of a cable to install a joint.
 
@@ -11,13 +14,17 @@ The software in this repository is split into 2:
  - qbert_esp - ESPIDF repository with code for the ESP device handling low level functionalities
 
 The overview of the system can be seen here:
-[![System Diagram](docs/DataSystemDiagram.drawio.png)]
+![System Diagram](docs/DataSystemDiagram.drawio.png)
+
+### FlexBE State Machine
 
 Main logic of the actions performed by the robot is created using FlexBE - a ROS2 module for creating state machines.
 
 To run FlexBE it requires 2 ros launch files:
  - FlexBE OCS - starts FlexBE GUI where the state machine can be modified and started
  - FlexBE onboard - starts FlexBE state machine executor
+
+![State Diagram](docs/FlexbeStates.png)
 
 To implement functionality for the robot we also created 3 additional packages interacting with different hardware.
 
@@ -86,9 +93,3 @@ To explain its contents:
  - For running FlexBE adding the python venv to the PYTHONPATH is necessary (as it cannot find the required packages otherwise), and can be done with `export PYTHONPATH="$PYTHONPATH:$(pwd)/.venv/lib/CORRECT_PYTHON_VERSION/site-packages`
  - After plugging in the USB to CAN adapter the network needs to be set up. It can be done on linux with `sudo ip link set can0 up type can bitrate 250000` command.
  - The packages can then be started with `ros2 launch qbert_bringup full.launch.py`, which launches the 5 packages described above.
-
-## Further Development Recommendations
-
-There also is a dbc file covering the CAN protocol, but we did not find a good tool to decode it in C++, for any further development switching the motor controllers to the more expensive version - ODrive - or putting more time into figuring out the .dbc integration would be good to ensure more robustness.
-Rock 4d vs other ARM vs x86-64 vs ?
-
