@@ -40,24 +40,14 @@ To make the communication easy to use with FlexBE, it happens over ROS topics us
 
 ### Qbert CAN
 
-A node used for communicating with the robot's hardware components. To do this CAN Bus was chosen (see Design Report for reasoning).
-This package uses SocketCAN to allow for easy interaction with the CAN, which is facilitated by a USB to CAN adapter connected to the PC running the executor.
+This package is responsible for handling all devices communicating over CAN bus. This includes 2 ODescs and the ESP32 inside the robot.
+The package uses SocketCAN to publish all CAN messages to a topic which the different nodes can subscribe to.
+The [ODrive v0.5.6 CAN protocol](https://docs.odriverobotics.com/v/0.5.6/can-protocol.html) was extended for use by the other devices. To differentiate between different device types, the highest bit of the device ID was reserved.
 
-As because of budget constraint we chose a cheaper alternative for motor controllers (ODesc), we had to create a basic interface for their CAN protocol (CAN Simple) for handling receiving and sending messages in the expected format. 
+The ODesc node handles all the communication from and to the different ODescs. Only the needed parts of the ODrive CAN protocol were implemented, these can be found in `odesc_msgs.h`. <br>
+The ESP node handles the communication from and to the ESP32. Custom messages were created for this which can be found in `esp_msgs.h`
 
-Due to time constraints our implementation does not cover the entire [ODrive CAN protocol](https://docs.odriverobotics.com/v/0.5.6/can-protocol.html), but only the most essential parts.
-
-This package also contains our code for handling communication with the ESP32.
-We decided to slightly extend CAN Simple for this use. We reserved the highest bit of the device ID for differentiating between ODesc and ESP32 devices. Otherwise the protocol implements the messages:
- - 0x01 - heartbeat
- - 0x02 - setPosAxe
- - 0x03 - setGripState
- - 0x04 - getPosAxe
- - 0x05 - getGripState
-
-For all relevant messages we also implemented higher level services and actions.
-For example the `/odesc/move_to_pos` action or `/esp/gripper_state` service.
-For further development the topics should probably be slightly refactored to follow some convention such as REST.
+Suitable actions and services for higher-level control of the devices were implemented and split into their own namespaces. services and actions related to the ODescs are found in `/odesc/` and those for the ESP32 in `/esp/`.
 
 ### Qbert Camera
 
